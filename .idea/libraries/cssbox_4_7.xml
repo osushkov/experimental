@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="cssbox-4.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/CSSBox/cssbox-4.7/cssbox-4.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="edu.mit.jwi_2.3.3_jdk">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/Wordnet/edu.mit.jwi_2.3.3_jdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/Wordnet/edu.mit.jwi_2.3.3_jdk.jar!/" />
+    </SOURCES>
+  </library>
+</component>

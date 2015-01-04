@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="jstyleparser-1.19">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/jStyleParser/jstyleparser-1.19/jstyleparser-1.19.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/jStyleParser/jstyleparser-1.19/lib/antlr-runtime-3.5.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/jStyleParser/jstyleparser-1.19/lib/nekohtml-1.9.21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/jStyleParser/jstyleparser-1.19/lib/slf4j-api-1.7.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/jStyleParser/jstyleparser-1.19/lib/unbescape-1.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/jStyleParser/jstyleparser-1.19/lib/xercesImpl-2.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/jStyleParser/jstyleparser-1.19/lib/xml-apis-1.4.01.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
