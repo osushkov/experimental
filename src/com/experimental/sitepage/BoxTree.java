@@ -1,6 +1,7 @@
 package com.experimental.sitepage;
 
 import com.google.common.base.Preconditions;
+import org.fit.cssbox.layout.Box;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +14,14 @@ import java.util.Map;
 public class BoxTree {
 
   private static class BoxTreeNode {
-    List<Box> childBoxes;
-    List<BoxTreeNode> childNodes;
-    BoxTreeNode parent;
-    double numElements;
+    final List<PageBox> childBoxes = new ArrayList<PageBox>();
+    final List<BoxTreeNode> childNodes = new ArrayList<BoxTreeNode>();
+    final BoxTreeNode parent;
+    double numElements = 0.0;
+
+    private BoxTreeNode(BoxTreeNode parent) {
+      this.parent = parent;
+    }
 
     private List<BoxTreeNode> getAncestors() {
       List<BoxTreeNode> result = new ArrayList<BoxTreeNode>();
@@ -32,18 +37,58 @@ public class BoxTree {
     }
   }
 
-  private final BoxTreeNode root = new BoxTreeNode();
-  private final Map<Box, BoxTreeNode> boxMap = new HashMap<Box, BoxTreeNode>();
+  private final BoxTreeNode root = new BoxTreeNode(null);
+  private final Map<PageBox, BoxTreeNode> boxMap = new HashMap<PageBox, BoxTreeNode>();
 
-  public BoxTree() {
+  public BoxTree(Box rootBox) {
+    insertBoxIntoTree(rootBox, root);
+    populateNumElements(root);
+  }
+
+  private void insertBoxIntoTree(Box box, BoxTreeNode parent) {
+    Preconditions.checkNotNull(box);
+    Preconditions.checkNotNull(parent);
+
+    BoxTreeNode newNode = new BoxTreeNode(parent);
+  }
+
+  private double populateNumElements(BoxTreeNode node) {
+    double childrenSum = 0.0;
+    for (BoxTreeNode child : node.childNodes) {
+      childrenSum += populateNumElements(child);
+    }
+
+    double boxesSum = 0.0;
+    for (PageBox childBox : node.childBoxes) {
+      boxesSum += childBox.getNumElementsInBox();
+    }
+
+    node.numElements = childrenSum + boxesSum;
+    return node.numElements;
+  }
+
+
+  public BoxTree(String filepath) {
 
   }
 
-  public List<Box> getAllBoxes() {
-    return null;
+  public List<PageBox> getAllBoxes() {
+    return getAllBoxes(root);
   }
 
-  public double similarityBetween(Box boxA, Box boxB) {
+  private List<PageBox> getAllBoxes(BoxTreeNode node) {
+    Preconditions.checkNotNull(node);
+    List<PageBox> result = new ArrayList<PageBox>();
+
+    result.addAll(node.childBoxes);
+    for (BoxTreeNode child : node.childNodes) {
+      result.addAll(getAllBoxes(child));
+    }
+
+    return result;
+  }
+
+  public double similarityBetween(PageBox boxA, PageBox boxB) {
     // implemented using the Lin similarity measure.
     // TODO: if the LCS is the root, then the similarity will be 0. This may not be desirable for a website.
 
