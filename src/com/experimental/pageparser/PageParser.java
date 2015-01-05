@@ -61,7 +61,8 @@ public class PageParser {
       System.err.println("Computing style...");
       da.stylesToDomInherited();
 
-      printTextBoxes(browser.getViewport(), da);
+      printTextBoxes2(browser.getViewport());
+//      printTextBoxes(browser.getViewport(), da);
 
       OutputStream os = new FileOutputStream(outputPath);
       Output out = new NormalOutput(doc);
@@ -79,17 +80,59 @@ public class PageParser {
 
 
     for (String line : elementText.values()) {
-      System.out.println(line + " **");
+      System.out.println(line + " ** ");
     }
   }
 
-  private void printTextBoxes(Box root, DOMAnalyzer da)
+  private static void printTextBoxes2(Box root)
   {
     if (root instanceof TextBox)
     {
       //text boxes are just printed
-//      TextBox text = (TextBox) root;
-//      System.out.println(text.getText());
+      TextBox text = (TextBox) root;
+      if (isBoxVisible(root)) {
+        System.out.println("x=" + text.getAbsoluteBounds().x + " y=" + text.getAbsoluteBounds().y + " text=" + text.getText());
+      }
+    }
+    else if (root instanceof ElementBox)
+    {
+      //element boxes must be just traversed
+      ElementBox el = (ElementBox) root;
+      for (int i = el.getStartChild(); i < el.getEndChild(); i++)
+        printTextBoxes2(el.getSubBox(i));
+    }
+  }
+
+  private static boolean isBoxVisible(Box box) {
+    if (!box.isDisplayed() || !box.isDeclaredVisible()) {
+      return false;
+    }
+
+
+    if (box instanceof ElementBox) {
+      ElementBox el = (ElementBox) box;
+
+      System.out.println(el.getStyle().getProperty("display"));
+      if ("none".equals(el.getStyle().getProperty("display"))) {
+        return false;
+      }
+    }
+
+    if (box.getParent() != null) {
+      return isBoxVisible(box.getParent());
+    }
+
+    return true;
+  }
+
+
+  private void printTextBoxes(Box root, DOMAnalyzer da) {
+
+    if (root instanceof TextBox)
+    {
+      //text boxes are just printed
+      TextBox text = (TextBox) root;
+      System.out.println(text.getText());
 //      System.out.println(text.getVisualContext().getFont().getSize() + " " + text.getVisualContext().getFont().isBold() +
 //          " " + text.getVisualContext().getFont().isItalic());
 
@@ -102,7 +145,7 @@ public class PageParser {
       //element boxes must be just traversed
       ElementBox el = (ElementBox) root;
 
-      printDirectChildText(el);
+//      printDirectChildText(el);
 
       if (el.getElement().getTagName().equals("img")) {
 //        System.out.println("image=" + el.getElement().getAttribute("src"));
