@@ -13,4 +13,15 @@ public class Sentence {
   public Sentence(List<WordToken> tokens) {
     this.tokens = Preconditions.checkNotNull(tokens);
   }
+
+  public String unrolledText() {
+    StringBuffer buf = new StringBuffer();
+    for (WordToken token : tokens) {
+      buf.append(token.raw);
+      buf.append(" ");
+    }
+    buf.append(". ");
+
+    return buf.toString();
+  }
 }

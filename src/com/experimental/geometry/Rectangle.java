@@ -77,4 +77,9 @@ public class Rectangle {
 
     return Math.sqrt(xDist * xDist + yDist * yDist);
   }
+
+  @Override
+  public String toString() {
+    return "Rectangle (" + x + "," + y + "  " + width + "x" + height + ")";
+  }
 }

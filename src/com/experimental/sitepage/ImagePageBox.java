@@ -37,7 +37,9 @@ public class ImagePageBox implements PageBox {
   }
 
   @Override
-  public double getNumElementsInBox() {
-    return 1.0;
+  public String toString() {
+    return "[ImagePageBox]\n" +
+        rectangle.toString() + "\n" +
+        imageUrl;
   }
 }

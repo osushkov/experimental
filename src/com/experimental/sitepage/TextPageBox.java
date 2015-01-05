@@ -17,16 +17,18 @@ import java.util.List;
 public class TextPageBox implements PageBox {
 
   public static class TextStyle {
-    final double fontSize;
-    final boolean isBold;
-    final boolean isUnderlined;
-    final boolean isItalic;
+    public final double fontSize;
+    public final boolean isBold;
+    public final boolean isUnderlined;
+    public final boolean isItalic;
+    public final boolean isLink;
 
-    public TextStyle (double fontSize, boolean isBold, boolean isUnderlined, boolean isItalic) {
+    public TextStyle (double fontSize, boolean isBold, boolean isUnderlined, boolean isItalic, boolean isLink) {
       this.fontSize = fontSize;
       this.isBold = isBold;
       this.isUnderlined = isUnderlined;
       this.isItalic = isItalic;
+      this.isLink = isLink;
     }
 
     public TextStyle(TextBox textBox) {
@@ -36,33 +38,19 @@ public class TextPageBox implements PageBox {
       this.isBold = textBox.getVisualContext().getFont().isBold();
       this.isItalic = textBox.getVisualContext().getFont().isItalic();
       this.isUnderlined = textBox.getVisualContext().getTextDecoration().contains(CSSProperty.TextDecoration.UNDERLINE);
+      this.isLink = PageUtils.isElementALink(textBox.getParent());
     }
   }
 
-  public final List<Sentence> sentences;
+  public final String text;
   public final TextStyle textStyle;
 
   private final Rectangle rectangle;
 
-
-  public TextPageBox(String rawText, TextStyle textStyle, Rectangle rectangle) {
-    this.sentences = tokenizeRawText(Preconditions.checkNotNull(rawText));
+  public TextPageBox(String text, TextStyle textStyle, Rectangle rectangle) {
+    this.text = Preconditions.checkNotNull(text);
     this.textStyle = Preconditions.checkNotNull(textStyle);
     this.rectangle = Preconditions.checkNotNull(rectangle);
-  }
-
-  // TODO: tokenize the string properly using Stanford NLP library.
-  private List<Sentence> tokenizeRawText(String rawText) {
-    List<WordToken> sentence = new ArrayList<WordToken>();
-
-    String[] tokens = rawText.split(" ");
-    for (int i = 0; i < tokens.length; i++) {
-      if (tokens[i].length() > 0) {
-        sentence.add(new WordToken(tokens[i]));
-      }
-    }
-
-    return Lists.newArrayList(new Sentence(sentence));
   }
 
   @Override
@@ -71,11 +59,9 @@ public class TextPageBox implements PageBox {
   }
 
   @Override
-  public double getNumElementsInBox() {
-    double sum = 0.0;
-    for (Sentence s : sentences) {
-      sum += s.tokens.size();
-    }
-    return sum;
+  public String toString() {
+    return "[TextPageBox]\n" +
+        rectangle.toString() + "\n" +
+        text;
   }
 }

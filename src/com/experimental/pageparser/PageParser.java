@@ -1,5 +1,7 @@
 package com.experimental.pageparser;
 
+import com.experimental.sitepage.BoxTree;
+import com.experimental.sitepage.PageBox;
 import cz.vutbr.web.css.NodeData;
 import org.fit.cssbox.css.CSSNorm;
 import org.fit.cssbox.css.DOMAnalyzer;
@@ -50,8 +52,8 @@ public class PageParser {
       //Create the browser canvas
       BrowserCanvas browser = new BrowserCanvas(da.getRoot(), da, docSource.getURL());
       //Disable the image loading
-      browser.getConfig().setLoadImages(false);
-      browser.getConfig().setLoadBackgroundImages(false);
+      browser.getConfig().setLoadImages(true);
+      browser.getConfig().setLoadBackgroundImages(true);
 
 
       //Create the layout for 1000x600 pixels
@@ -61,7 +63,14 @@ public class PageParser {
       System.err.println("Computing style...");
       da.stylesToDomInherited();
 
-      printTextBoxes2(browser.getViewport());
+      System.out.println("document uri: " + url);
+      BoxTree boxTree = new BoxTree(url, browser.getViewport(), doc);
+      List<PageBox> allBoxes = boxTree.getAllBoxes();
+      for (PageBox pageBox : allBoxes) {
+        System.out.println(pageBox);
+      }
+
+//      printTextBoxes2(browser.getViewport());
 //      printTextBoxes(browser.getViewport(), da);
 
       OutputStream os = new FileOutputStream(outputPath);
@@ -79,9 +88,9 @@ public class PageParser {
     }
 
 
-    for (String line : elementText.values()) {
-      System.out.println(line + " ** ");
-    }
+//    for (String line : elementText.values()) {
+//      System.out.println(line + " ** ");
+//    }
   }
 
   private static void printTextBoxes2(Box root)

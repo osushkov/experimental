@@ -7,8 +7,10 @@ import org.fit.cssbox.layout.Box;
 import org.fit.cssbox.layout.ElementBox;
 import org.fit.cssbox.layout.TextBox;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.css.Rect;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +25,6 @@ public class BoxTree {
     final List<PageBox> childBoxes = new ArrayList<PageBox>();
     final List<BoxTreeNode> childNodes = new ArrayList<BoxTreeNode>();
     final BoxTreeNode parent;
-    double numElements = 0.0;
 
     private BoxTreeNode(BoxTreeNode parent) {
       this.parent = parent;
@@ -46,74 +47,122 @@ public class BoxTree {
     }
   }
 
+  private static class ElementContent {
+    final Element element;
+    final List<TextPageBox> containedText = new ArrayList<TextPageBox>();
+    final List<ImagePageBox> containedImages = new ArrayList<ImagePageBox>();
+
+    ElementContent(Element element) {
+      this.element = Preconditions.checkNotNull(element);
+    }
+  }
+
   private final String pageUrl;
   private final BoxTreeNode root = new BoxTreeNode(null);
   private final Map<PageBox, BoxTreeNode> boxMap = new HashMap<PageBox, BoxTreeNode>();
 
-  public BoxTree(String pageUrl, Box rootBox) {
+  public BoxTree(String pageUrl, Box rootBox, Node rootNode) {
     this.pageUrl = Preconditions.checkNotNull(pageUrl);
 
-    insertBoxIntoTree(rootBox, root);
-    populateNumElements(root);
+    Map<Element, ElementContent> elementContentsMap = new HashMap<Element, ElementContent>();
+    populateElementContentMap(rootBox, elementContentsMap);
+
+      System.out.println("bleh: " + rootNode);
+      buildTree(rootNode, root, elementContentsMap);
   }
 
-  private void insertBoxIntoTree(Box box, BoxTreeNode parent) {
+  private void populateElementContentMap(Box box, Map<Element, ElementContent> elementContentsMap) {
     Preconditions.checkNotNull(box);
-    Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(elementContentsMap);
 
-    if (!box.isDisplayed() || !box.isDeclaredVisible()) {
+    if (!PageUtils.isBoxVisible(box)) {
       return;
     }
 
     if (box instanceof ElementBox) {
       ElementBox elementBox = (ElementBox) box;
+      Element element = elementBox.getElement();
 
-      BoxTreeNode newNode = new BoxTreeNode(parent);
+      List<TextPageBox> childTextBoxes = textBoxesFromElement(elementBox);
+      List<ImagePageBox> childImageBoxes = imageBoxesFromElement(elementBox);
 
-      List<PageBox> childPageBoxes = Lists.newArrayList();
-      childPageBoxes.addAll(textBoxesFromElement(elementBox));
-      childPageBoxes.addAll(imageBoxesFromElement(elementBox));
+      if (childTextBoxes.size() > 0 || childImageBoxes.size() > 0) {
+        if (!elementContentsMap.containsKey(element)) {
+          elementContentsMap.put(element, new ElementContent(element));
+        }
 
-      BoxTreeNode newParent = parent;
-      if (childPageBoxes.size() > 0) {
-        newParent = new BoxTreeNode(parent);
-        newParent.childBoxes.addAll(childPageBoxes);
+        ElementContent elementContent = elementContentsMap.get(element);
+        elementContent.containedImages.addAll(childImageBoxes);
+        elementContent.containedText.addAll(childTextBoxes);
       }
 
       for (int i = elementBox.getStartChild(); i < elementBox.getEndChild(); i++) {
-        insertBoxIntoTree(elementBox.getSubBox(i), newParent);
+        populateElementContentMap(elementBox.getSubBox(i), elementContentsMap);
       }
     }
   }
 
-  private List<TextPageBox> textBoxesFromElement(ElementBox elementBox) {
-    String text = "";
-    TextPageBox.TextStyle textStyle = null;
-    List<Rectangle> boundRectangles = new ArrayList<Rectangle>();
+  private void buildTree(Node curNode, BoxTreeNode parent, Map<Element, ElementContent> elementContentsMap) {
+    System.out.println("wee: " + curNode);
+    BoxTreeNode newNode = new BoxTreeNode(parent);
+    if (curNode instanceof Element) {
+      if (elementContentsMap.containsKey((Element) curNode)) {
+        System.out.println("bleh");
+        ElementContent elementContent = elementContentsMap.get((Element) curNode);
 
+        newNode.childBoxes.addAll(elementContent.containedImages);
+
+        TextPageBox textPageBox = mergeTextBoxes(elementContent.containedText);
+        if (textPageBox != null) {
+          newNode.childBoxes.add(textPageBox);
+        }
+      }
+    }
+
+    for (int i = 0; i < curNode.getChildNodes().getLength(); i++) {
+      Node childNode = curNode.getChildNodes().item(i);
+        buildTree(childNode, newNode, elementContentsMap);
+    }
+  }
+
+  private TextPageBox mergeTextBoxes(List<TextPageBox> boxes) {
+    Preconditions.checkNotNull(boxes);
+
+    if (boxes.size() == 0) {
+      return null;
+    }
+
+    StringBuffer mergedText = new StringBuffer();
+    List<Rectangle> allRectangles = new ArrayList<Rectangle>();
+    TextPageBox.TextStyle textStyle = boxes.get(0).textStyle;
+
+    for (TextPageBox box : boxes) {
+      if (box != boxes.get(0)) {
+        mergedText.append(" ");
+      }
+      mergedText.append(box.text);
+      allRectangles.add(box.getRectangle());
+    }
+
+    return new TextPageBox(mergedText.toString(), textStyle, new Rectangle(allRectangles));
+  }
+
+  private List<TextPageBox> textBoxesFromElement(ElementBox elementBox) {
+    List<TextPageBox> result = new ArrayList<TextPageBox>();
     for (int i = elementBox.getStartChild(); i < elementBox.getEndChild(); i++) {
       Box childBox = elementBox.getSubBox(i);
       if (childBox instanceof TextBox) {
         TextBox childTextBox = (TextBox) childBox;
-        text = text + " " + childTextBox.getText();
 
-        if (textStyle == null) {
-          textStyle = new TextPageBox.TextStyle(childTextBox);
-        }
+        Rectangle rect = new Rectangle(
+            childTextBox.getAbsoluteBounds().getX(), childTextBox.getAbsoluteBounds().getY(),
+            childTextBox.getAbsoluteBounds().getWidth(), childTextBox.getAbsoluteBounds().getHeight());
 
-        boundRectangles.add(new Rectangle(childTextBox.getContentX(), childTextBox.getContentY(),
-            childTextBox.getContentWidth(), childTextBox.getContentHeight()));
+        result.add(new TextPageBox(childTextBox.getText(), new TextPageBox.TextStyle(childTextBox), rect));
       }
     }
 
-    if (text.length() > 0) {
-      Preconditions.checkState(textStyle != null);
-      Preconditions.checkState(boundRectangles.size() > 0);
-
-      return Lists.newArrayList(new TextPageBox(text, textStyle, new Rectangle(boundRectangles)));
-    } else {
-      return Lists.newArrayList();
-    }
+    return result;
   }
 
   private List<ImagePageBox> imageBoxesFromElement(ElementBox elementBox) {
@@ -124,27 +173,18 @@ public class BoxTree {
       if (childBox instanceof ElementBox) {
         ElementBox childElementBox = (ElementBox) childBox;
         if (childElementBox.getElement().getTagName().equals("img")) {
-          childElementBox.getElement().getAttribute("src");
+          String imageSrc = childElementBox.getElement().getAttribute("src");
+          if (imageSrc != null) {
+            Rectangle imageRect = new Rectangle(
+                childElementBox.getAbsoluteBounds().getX(), childElementBox.getAbsoluteBounds().getY(),
+                childElementBox.getAbsoluteBounds().getWidth(), childElementBox.getAbsoluteBounds().getHeight());
+            result.add(new ImagePageBox(pageUrl, imageSrc, imageRect));
+          }
         }
       }
     }
 
     return result;
-  }
-
-  private double populateNumElements(BoxTreeNode node) {
-    double childrenSum = 0.0;
-    for (BoxTreeNode child : node.childNodes) {
-      childrenSum += populateNumElements(child);
-    }
-
-    double boxesSum = 0.0;
-    for (PageBox childBox : node.childBoxes) {
-      boxesSum += childBox.getNumElementsInBox();
-    }
-
-    node.numElements = childrenSum + boxesSum;
-    return node.numElements;
   }
 
 
@@ -168,21 +208,21 @@ public class BoxTree {
     return result;
   }
 
-  public double similarityBetween(PageBox boxA, PageBox boxB) {
-    // implemented using the Lin similarity measure.
-    // TODO: if the LCS is the root, then the similarity will be 0. This may not be desirable for a website.
-
-    BoxTreeNode nodeA = Preconditions.checkNotNull(boxMap.get(boxA));
-    BoxTreeNode nodeB = Preconditions.checkNotNull(boxMap.get(boxB));
-
-    BoxTreeNode lcs = findFirstCommonAncestor(nodeA, nodeB);
-
-    double numerator = 2.0 * Math.log(lcs.numElements / root.numElements);
-    double denominator =
-        Math.log(nodeA.numElements / root.numElements) + Math.log(nodeB.numElements / root.numElements);
-
-    return numerator / denominator;
-  }
+//  public double similarityBetween(PageBox boxA, PageBox boxB) {
+//    // implemented using the Lin similarity measure.
+//    // TODO: if the LCS is the root, then the similarity will be 0. This may not be desirable for a website.
+//
+//    BoxTreeNode nodeA = Preconditions.checkNotNull(boxMap.get(boxA));
+//    BoxTreeNode nodeB = Preconditions.checkNotNull(boxMap.get(boxB));
+//
+//    BoxTreeNode lcs = findFirstCommonAncestor(nodeA, nodeB);
+//
+//    double numerator = 2.0 * Math.log(lcs.numElements / root.numElements);
+//    double denominator =
+//        Math.log(nodeA.numElements / root.numElements) + Math.log(nodeB.numElements / root.numElements);
+//
+//    return numerator / denominator;
+//  }
 
   private BoxTreeNode findFirstCommonAncestor(BoxTreeNode nodeA, BoxTreeNode nodeB) {
     List<BoxTreeNode> ancestorsOfA = nodeA.getAncestors();
