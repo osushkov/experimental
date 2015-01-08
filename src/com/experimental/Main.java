@@ -1,13 +1,15 @@
 package com.experimental;
 
 import com.experimental.crawler.CrawlerController;
+import com.experimental.nlp.Demo;
 import com.experimental.pageparser.PageParser;
 
 import java.io.IOException;
 
 public class Main {
   public static void main(String[] args) {
-    cssBoxExperiment();
+    stanfordNlpDemo();
+//    cssBoxExperiment();
   }
 
   public static void webCrawlExperiment() {
@@ -31,6 +33,10 @@ public class Main {
   public static void cssBoxExperiment() {
     PageParser pageParser = new PageParser();
     pageParser.parsePage("http://www.familylawyers.net.au/contact", "page.html");
+  }
+
+  public static void stanfordNlpDemo() {
+    Demo.runDemo();
   }
 
 }

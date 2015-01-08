@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="stanford-corenlp-3.5.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/stanford-corenlp-3.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/ejml-0.23.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/javax.json.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/joda-time.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/jollyday.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/xom.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/stanford-corenlp-3.5.0-models.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/stanford-corenlp-3.5.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/javax.json-api-1.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/joda-time-2.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/jollyday-0.4.7-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/stanford-corenlp-3.5.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Ads/Libraries/StanfordNLP/stanford-corenlp-full-2014-10-31/xom-1.2.10-src.jar!/src" />
+    </SOURCES>
+  </library>
+</component>
