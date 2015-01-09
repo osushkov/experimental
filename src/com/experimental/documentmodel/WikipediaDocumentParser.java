@@ -4,7 +4,10 @@ import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Created by sushkov on 8/01/15.
@@ -18,53 +21,25 @@ public class WikipediaDocumentParser {
   private static final double H4_WEIGHT = 2.0;
   private static final double H5_WEIGHT = 1.5;
   private static final double LIST_WEIGHT = 1.5;
+  private static final double DEFAULT_EMPHASIS = 1.0;
 
-  private final String rootDirectory;
   private final DocumentNameGenerator documentNameGenerator;
   private final SentenceProcessor sentenceProcessor;
 
   private StringBuffer sentenceBuffer = new StringBuffer();
   private StringBuffer rawTextBuffer = new StringBuffer();
+  private TopicalDocument currentDocument = null;
 
+  private String previousEmphasisedLine = null;
 
-  public WikipediaDocumentParser(String rootDirectory, DocumentNameGenerator documentNameGenerator,
+  public WikipediaDocumentParser(DocumentNameGenerator documentNameGenerator,
                                  SentenceProcessor sentenceProcessor) {
 
-    this.rootDirectory = Preconditions.checkNotNull(rootDirectory);
     this.documentNameGenerator = Preconditions.checkNotNull(documentNameGenerator);
     this.sentenceProcessor = Preconditions.checkNotNull(sentenceProcessor);
   }
 
-  public void parseDocument() {
-    parseDocuments(rootDirectory);
-  }
-
-  private void parseDocuments(String directoryPath) {
-    Log.out(TAG, "parsing document in " + directoryPath);
-
-    File dir = new File(directoryPath);
-    if (!dir.exists()) {
-      return;
-    }
-    File[] children = dir.listFiles();
-    for (File child : children) {
-      if (child.isDirectory()) {
-        parseDocuments(directoryPath);
-      } else {
-        try {
-          String filePath = child.getAbsolutePath();
-          if (isWikipediaDataFile(filePath)) {
-            parseDocument(filePath);
-          }
-        } catch (IOException e) {
-          e.printStackTrace();
-          continue;
-        }
-      }
-    }
-  }
-
-  private void parseDocument(String documentPath) throws IOException {
+  public void parseDocument(String documentPath) throws IOException {
     BufferedReader br = null;
     try {
       br = new BufferedReader(new FileReader(documentPath));
@@ -87,20 +62,67 @@ public class WikipediaDocumentParser {
 
   private void processLine(String line) {
     if (isLineStartOfDocument(line)) {
+      Preconditions.checkState(currentDocument == null);
+      currentDocument = createNewDocument();
+
+      String title = getDocumentTitle(line);
+      previousEmphasisedLine = title;
+      rawTextBuffer.append(title).append("\n");
+      currentDocument.addSentences(sentenceProcessor.processString(title, TITLE_WEIGHT));
 
     } else if (isLineEndOfDocument(line)) {
+      Preconditions.checkState(currentDocument != null);
 
+      currentDocument.setText(rawTextBuffer.toString());
+      String sentencesString = sentenceBuffer.toString();
+      if (sentencesString.length() > 0) {
+        currentDocument.addSentences(sentenceProcessor.processString(sentencesString, DEFAULT_EMPHASIS));
+      }
+
+      if (shouldSaveDocument(currentDocument)) {
+        try {
+          currentDocument.save();
+        } catch (IOException e) {
+          e.printStackTrace();
+          Log.out(TAG, "Failed to save document: " + currentDocument.getRawText());
+        }
+      }
+
+      rawTextBuffer = new StringBuffer();
+      sentenceBuffer = new StringBuffer();
+      currentDocument = null;
+      previousEmphasisedLine = null;
     } else if (isLineWeighted(line)) {
+      String sentenceBufferString = sentenceBuffer.toString();
+      if (sentenceBufferString.length() > 0) {
+        currentDocument.addSentences(sentenceProcessor.processString(sentenceBufferString, DEFAULT_EMPHASIS));
+      }
+      sentenceBuffer = new StringBuffer();
+
+      String cleanLine = cleanupLine(line);
+      previousEmphasisedLine = cleanLine;
+
+      rawTextBuffer.append(cleanLine).append("\n");
+      currentDocument.addSentences(sentenceProcessor.processString(cleanLine, getLineWeight(line)));
 
     } else {
       String cleanLine = cleanupLine(line);
-      sentenceBuffer.append(cleanLine).append("\n");
-      rawTextBuffer.append(cleanLine).append("\n");
+      if (!cleanLine.equals(previousEmphasisedLine) &&
+          !cleanLine.equals(previousEmphasisedLine.substring(0, previousEmphasisedLine.length()-1))) {
+        sentenceBuffer.append(cleanLine).append("\n");
+        rawTextBuffer.append(cleanLine).append("\n");
+      }
+      previousEmphasisedLine = null;
     }
   }
 
-  private List<Sentence> processBuffer() {
-    return null;
+  private TopicalDocument createNewDocument() {
+    String documentName = documentNameGenerator.getAndStoreNewDocumentName(DocumentNameGenerator.DocumentType.TOPICAL);
+    Path documentPath =
+        new File(documentNameGenerator.getAbsoluteRootPath(DocumentNameGenerator.DocumentType.TOPICAL, documentName))
+            .toPath().toAbsolutePath().resolve(documentName);
+
+    return new TopicalDocument(documentPath.toString());
   }
 
   private boolean isLineWeighted(String line) {
@@ -151,6 +173,23 @@ public class WikipediaDocumentParser {
     String result = line.replaceAll("<[a-zA-Z0-9]*>", "");
     result = result.replaceAll("</[a-zA-Z0-9]*>", "");
     return result;
+  }
+
+  private boolean shouldSaveDocument(Document document) {
+    if (document.getSentences().size() < 5) {
+      return false;
+    }
+
+    int numTokens = 0;
+    for (Sentence sentence : document.getSentences()) {
+      numTokens += sentence.tokens.size();
+    }
+
+    if (numTokens < 20) {
+      return false;
+    }
+
+    return true;
   }
 
 

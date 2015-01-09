@@ -26,17 +26,10 @@ public class Demo {
     PrintWriter xmlOut = null;
 
     Properties props = new Properties();
-    props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
+    props.put("annotators", "tokenize, ssplit, pos, lemma");
     props.put("threads", "4");
     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-    Annotation annotation = new Annotation("The area around Sydney has been inhabited by indigenous Australians for tens " +
-        "of millennia. The first British settlers arrived in 1788 with Captain Arthur Phillip and founded Sydney as " +
-        "a penal colony. Successive colonial Governors assisted to transform the settlement into a thriving and " +
-        "independent metropolis. Since convict transportation ended in the mid 1800s the city has become a global " +
-        "cultural and economic centre. The population of Sydney at the time of the 2011 census was 4.39 million. " +
-        "About 1.5 million of this total were born overseas and represent many different countries from around the world. " +
-        "There are more than 250 different languages spoken in Sydney and about one-third of residents speak a language " +
-        "other than English at home. dsfsdfsfsf");
+    Annotation annotation = new Annotation("We should give thanks to the 300 Spartans.");
 
     pipeline.annotate(annotation);
     pipeline.prettyPrint(annotation, out);

@@ -1,5 +1,8 @@
 package com.experimental.documentmodel;
 
+import com.experimental.nlp.NounPhrase;
+import com.experimental.nlp.NounPhraseExtractor;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 import edu.stanford.nlp.trees.Tree;
 
@@ -57,6 +60,9 @@ public abstract class Document {
 
   public void save() throws IOException {
     File rootDir = new File(rootDirectoryPath);
+    if (!rootDir.exists()) {
+      rootDir.mkdirs();
+    }
     writeRawText(rootDir.toPath().resolve(RAW_TEXT_FILENAME).toString());
     writeSentences(rootDir.toPath().resolve(TOKENISED_SENTENCES_FILENAME).toString());
     writeSpecificData();

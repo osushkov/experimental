@@ -1,6 +1,10 @@
 package com.experimental;
 
 import com.experimental.crawler.CrawlerController;
+import com.experimental.documentmodel.DocumentNameGenerator;
+import com.experimental.documentmodel.SentenceProcessor;
+import com.experimental.documentmodel.WikipediaDocumentParser;
+import com.experimental.documentmodel.WikipediaDocumentsParser;
 import com.experimental.nlp.Demo;
 import com.experimental.pageparser.PageParser;
 
@@ -8,7 +12,8 @@ import java.io.IOException;
 
 public class Main {
   public static void main(String[] args) {
-    stanfordNlpDemo();
+    wikiParserDemo();
+//    stanfordNlpDemo();
 //    cssBoxExperiment();
   }
 
@@ -39,4 +44,12 @@ public class Main {
     Demo.runDemo();
   }
 
+  public static void wikiParserDemo() {
+    DocumentNameGenerator documentNameGeneratpr = new DocumentNameGenerator(Constants.DOCUMENTS_OUTPUT_PATH);
+    SentenceProcessor sentenceProcessor = new SentenceProcessor();
+    WikipediaDocumentsParser wikiParser =
+        new WikipediaDocumentsParser(Constants.WIKI_ROOT_PATH, documentNameGeneratpr, sentenceProcessor);
+    wikiParser.parseDocuments();
+
+  }
 }

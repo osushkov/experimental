@@ -11,4 +11,8 @@ public class Log {
   public static void out(String tag, String message) {
     outWriter.println(tag + " > " + message);
   }
+
+  public static void out(String message) {
+    outWriter.println("> " + message);
+  }
 }
