@@ -15,12 +15,12 @@ import java.util.concurrent.Executors;
 public class WikipediaDocumentParser {
   private static final String TAG = "WikipediaDocumentParser";
 
-  private static final double TITLE_WEIGHT = 5.0;
-  private static final double H2_WEIGHT = 3.0;
-  private static final double H3_WEIGHT = 2.5;
-  private static final double H4_WEIGHT = 2.0;
-  private static final double H5_WEIGHT = 1.5;
-  private static final double LIST_WEIGHT = 1.5;
+  private static final double TITLE_WEIGHT = 4.0;
+  private static final double H2_WEIGHT = 2.0;
+  private static final double H3_WEIGHT = 1.75;
+  private static final double H4_WEIGHT = 1.5;
+  private static final double H5_WEIGHT = 1.25;
+  private static final double LIST_WEIGHT = 1.25;
   private static final double DEFAULT_EMPHASIS = 1.0;
 
   private final DocumentNameGenerator documentNameGenerator;
@@ -108,7 +108,7 @@ public class WikipediaDocumentParser {
     } else {
       String cleanLine = cleanupLine(line);
       if (!cleanLine.equals(previousEmphasisedLine) &&
-          !cleanLine.equals(previousEmphasisedLine.substring(0, previousEmphasisedLine.length()-1))) {
+          !cleanLine.substring(0, Math.max(0, cleanLine.length()-1)).equals(previousEmphasisedLine)) {
         sentenceBuffer.append(cleanLine).append("\n");
         rawTextBuffer.append(cleanLine).append("\n");
       }

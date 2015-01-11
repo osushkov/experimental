@@ -1,5 +1,6 @@
 package com.experimental.documentmodel;
 
+import com.experimental.languagemodel.Lemma;
 import com.experimental.nlp.POSTag;
 import com.google.common.base.Preconditions;
 
@@ -45,5 +46,4 @@ public class Token {
 
     return new Token(splitStrings[0], splitStrings[1], POSTag.valueOf(splitStrings[2]));
   }
-
 }

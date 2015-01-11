@@ -1,10 +1,6 @@
 package com.experimental.documentmodel;
 
-import com.experimental.nlp.NounPhrase;
-import com.experimental.nlp.NounPhraseExtractor;
-import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
-import edu.stanford.nlp.trees.Tree;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,10 +12,12 @@ import java.util.List;
 public abstract class Document {
   private static final String RAW_TEXT_FILENAME = "raw.txt";
   private static final String TOKENISED_SENTENCES_FILENAME = "sentences.txt";
+  private static final String BAG_OF_LEMMAS_FILENAME = "bag_of_lemmas.txt";
 
   private String rootDirectoryPath;
   private final List<Sentence> sentences = new ArrayList<Sentence>();
   private String rawText = "";
+  private BagOfWeightedLemmas bagOfLemmas = null;
 
   public Document(String rootDirectoryPath) {
     this.rootDirectoryPath = Preconditions.checkNotNull(rootDirectoryPath);
@@ -46,6 +44,14 @@ public abstract class Document {
     return sentences;
   }
 
+  public BagOfWeightedLemmas getBagOfLemmas() {
+    if (bagOfLemmas == null) {
+      generateBagOfLemmas();
+    }
+
+    return Preconditions.checkNotNull(bagOfLemmas);
+  }
+
   public void addSentence(Sentence sentence) {
     this.sentences.add(Preconditions.checkNotNull(sentence));
   }
@@ -66,6 +72,10 @@ public abstract class Document {
     writeRawText(rootDir.toPath().resolve(RAW_TEXT_FILENAME).toString());
     writeSentences(rootDir.toPath().resolve(TOKENISED_SENTENCES_FILENAME).toString());
     writeSpecificData();
+  }
+
+  private void generateBagOfLemmas() {
+    bagOfLemmas = new BagOfWeightedLemmas(sentences);
   }
 
   private void writeRawText(String filePath) throws IOException {

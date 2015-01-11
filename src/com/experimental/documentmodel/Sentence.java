@@ -7,6 +7,7 @@ import edu.stanford.nlp.trees.Tree;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,15 +18,13 @@ public class Sentence {
 
   public final double emphasis;
   public final List<Token> tokens;
-  public final List<NounPhrase> nounPhrases;
 
-  public Sentence(List<Token> tokens, List<NounPhrase> nounPhrases) {
-    this(tokens, nounPhrases, DEFAULT_EMPHASIS);
+  public Sentence(List<Token> tokens) {
+    this(tokens, DEFAULT_EMPHASIS);
   }
 
-  public Sentence(List<Token> tokens, List<NounPhrase> nounPhrases, double emphasis) {
+  public Sentence(List<Token> tokens, double emphasis) {
     this.tokens = Preconditions.checkNotNull(tokens);
-    this.nounPhrases = Preconditions.checkNotNull(nounPhrases);
     this.emphasis = emphasis;
 
     Preconditions.checkArgument(emphasis > 0.0);
@@ -33,7 +32,19 @@ public class Sentence {
 
   public static Sentence readFrom(BufferedReader in) throws IOException {
     Preconditions.checkNotNull(in);
-    return null;
+
+    String line = Preconditions.checkNotNull(in.readLine());
+    double emphasis = Double.parseDouble(line);
+
+    line = Preconditions.checkNotNull(in.readLine());
+    int numTokens = Integer.parseInt(line);
+
+    List<Token> tokens = new ArrayList<Token>();
+    for (int i = 0; i < numTokens; i++) {
+      tokens.add(Token.readFrom(in));
+    }
+
+    return new Sentence(tokens, emphasis);
   }
 
   public void writeTo(BufferedWriter bw) throws IOException {
@@ -44,11 +55,6 @@ public class Sentence {
     bw.write(Integer.toString(tokens.size())); bw.write("\n");
     for (Token token : tokens) {
       token.writeTo(bw);
-    }
-
-    bw.write(Integer.toString(nounPhrases.size())); bw.write("\n");
-    for (NounPhrase nounPhrase : nounPhrases) {
-      nounPhrase.writeTo(bw);
     }
   }
 

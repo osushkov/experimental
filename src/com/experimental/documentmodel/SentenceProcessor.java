@@ -63,16 +63,7 @@ public class SentenceProcessor {
         ));
       }
 
-      List<NounPhrase> nounPhrases = nounPhraseExtractor.extractNounPhrases(resultSentenceTokens);
-      List<NounPhrase> compositePhrases = new ArrayList<NounPhrase>();
-
-      for (NounPhrase nounPhrase : nounPhrases) {
-        if (nounPhrase.isCompositePhrase()) {
-          compositePhrases.add(nounPhrase);
-        }
-      }
-
-      result.add(new Sentence(resultSentenceTokens, compositePhrases, emphasis));
+      result.add(new Sentence(resultSentenceTokens, emphasis));
     }
 
     return result;
