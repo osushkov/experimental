@@ -31,6 +31,7 @@ public class BagOfWeightedLemmas {
   }
 
   private final Map<Lemma, WeightedLemmaEntry> bag = new HashMap<Lemma, WeightedLemmaEntry>();
+  private double sumWeight = 0.0;
 
   public BagOfWeightedLemmas(List<Sentence> sentences) {
     Preconditions.checkNotNull(sentences);
@@ -45,6 +46,7 @@ public class BagOfWeightedLemmas {
         }
 
         curEntry.weight += sentence.emphasis;
+        sumWeight += sentence.emphasis;
       }
     }
   }
@@ -53,4 +55,7 @@ public class BagOfWeightedLemmas {
     return bag.values();
   }
 
+  public double getSumWeight() {
+    return sumWeight;
+  }
 }

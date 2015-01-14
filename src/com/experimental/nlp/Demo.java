@@ -29,7 +29,7 @@ public class Demo {
     props.put("annotators", "tokenize, ssplit, pos, lemma");
     props.put("threads", "4");
     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-    Annotation annotation = new Annotation("We should give thanks to the 300 Spartans.");
+    Annotation annotation = new Annotation("lawyers.");
 
     pipeline.annotate(annotation);
     pipeline.prettyPrint(annotation, out);
@@ -51,14 +51,13 @@ public class Demo {
 //      }
 //      tree.pennPrint(out);
 
-//      for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-//        String word = token.get(CoreAnnotations.TextAnnotation.class);
-//        String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
-//        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-//        String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
-//
-//        out.println(word + " : " + lemma + " " + pos + " " + ne);
-//      }
+      for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+        String word = token.get(CoreAnnotations.TextAnnotation.class);
+        String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
+        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+
+        out.println(word + " : " + lemma + " " + pos);
+      }
     }
 
 //    if (sentences != null && sentences.size() > 0) {
@@ -88,7 +87,7 @@ public class Demo {
     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
     // read some text in the text variable
-    String text = "Kosgi Santosh sent an email to Stanford University. He didn't get a reply.";
+    String text = "Photography.";
 
     // create an empty Annotation just with the given text
     Annotation document = new Annotation(text);

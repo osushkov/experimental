@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by sushkov on 8/01/15.
  */
-public class WikipediaDocumentParser {
+public class WikipediaDocumentParser implements ThirdPartyDocumentParser {
   private static final String TAG = "WikipediaDocumentParser";
 
   private static final double TITLE_WEIGHT = 4.0;
@@ -39,7 +39,10 @@ public class WikipediaDocumentParser {
     this.sentenceProcessor = Preconditions.checkNotNull(sentenceProcessor);
   }
 
-  public void parseDocument(String documentPath) throws IOException {
+  @Override
+  public void parseThirdPartyDocument(String documentPath) throws IOException {
+    Preconditions.checkNotNull(documentPath);
+
     BufferedReader br = null;
     try {
       br = new BufferedReader(new FileReader(documentPath));
@@ -73,7 +76,7 @@ public class WikipediaDocumentParser {
     } else if (isLineEndOfDocument(line)) {
       Preconditions.checkState(currentDocument != null);
 
-      currentDocument.setText(rawTextBuffer.toString());
+//      currentDocument.setText(rawTextBuffer.toString());
       String sentencesString = sentenceBuffer.toString();
       if (sentencesString.length() > 0) {
         currentDocument.addSentences(sentenceProcessor.processString(sentencesString, DEFAULT_EMPHASIS));
@@ -84,7 +87,7 @@ public class WikipediaDocumentParser {
           currentDocument.save();
         } catch (IOException e) {
           e.printStackTrace();
-          Log.out(TAG, "Failed to save document: " + currentDocument.getRawText());
+          Log.out(TAG, "Failed to save document");
         }
       }
 
@@ -191,6 +194,5 @@ public class WikipediaDocumentParser {
 
     return true;
   }
-
 
 }

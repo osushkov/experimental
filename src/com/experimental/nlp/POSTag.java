@@ -73,4 +73,16 @@ public enum POSTag {
     return this == POSTag.JJ || this == POSTag.JJR || this == POSTag.JJS;
   }
 
+  public SimplePOSTag getSimplePOSTag() {
+    if (isNoun()) {
+      return SimplePOSTag.NOUN;
+    } else if (isAdjective()) {
+      return SimplePOSTag.ADJECTIVE;
+    } else if (isVerb()) {
+      return SimplePOSTag.VERB;
+    } else {
+      return SimplePOSTag.OTHER;
+    }
+  }
+
 }

@@ -17,10 +17,7 @@ public class TextCollectionDocument extends Document {
   public static TextCollectionDocument readFrom(String rootDirectoryPath) throws IOException {
     Preconditions.checkNotNull(rootDirectoryPath);
 
-    TextCollectionDocument newDocument = new TextCollectionDocument(rootDirectoryPath);
-    newDocument.loadFromDirectory();
-
-    return newDocument;
+    return new TextCollectionDocument(rootDirectoryPath);
   }
 
   @Override

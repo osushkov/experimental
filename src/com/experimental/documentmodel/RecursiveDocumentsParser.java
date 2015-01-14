@@ -11,57 +11,72 @@ import java.util.concurrent.Executors;
 /**
  * Created by sushkov on 9/01/15.
  */
-public class WikipediaDocumentsParser {
-  private static final String TAG = "WikipediaDocumentsParser";
+public class RecursiveDocumentsParser {
+  private static final String TAG = "RecursiveDocumentsParser";
 
   private final String rootDirectory;
+  private final ThirdPartyDocumentParserFactory parserFactory;
   private final DocumentNameGenerator documentNameGenerator;
   private final SentenceProcessor sentenceProcessor;
 
   private final Executor executor = Executors.newFixedThreadPool(4);
 
 
-  public WikipediaDocumentsParser(String rootDirectory, DocumentNameGenerator documentNameGenerator,
-                                 SentenceProcessor sentenceProcessor) {
+  public RecursiveDocumentsParser(String rootDirectory,
+                                  ThirdPartyDocumentParserFactory parserFactory,
+                                  DocumentNameGenerator documentNameGenerator,
+                                  SentenceProcessor sentenceProcessor) {
 
     this.rootDirectory = Preconditions.checkNotNull(rootDirectory);
+    this.parserFactory = Preconditions.checkNotNull(parserFactory);
     this.documentNameGenerator = Preconditions.checkNotNull(documentNameGenerator);
     this.sentenceProcessor = Preconditions.checkNotNull(sentenceProcessor);
   }
 
   public void parseDocuments() {
-    parseDocuments(rootDirectory);
+    parseDocuments(-1);
   }
 
-  private void parseDocuments(String directoryPath) {
+  public void parseDocuments(int limit) {
+    parseDocuments(rootDirectory, limit);
+  }
+
+  private int parseDocuments(String directoryPath, int limit) {
     Log.out(TAG, "parsing document in " + directoryPath);
 
     File dir = new File(directoryPath);
-    if (!dir.exists()) {
-      return;
+    if (!dir.exists() || limit == 0) {
+      return limit;
     }
     File[] children = dir.listFiles();
     for (File child : children) {
+      if (limit == 0) {
+        return limit;
+      }
+
       if (child.isDirectory()) {
-        parseDocuments(child.getAbsolutePath());
+        limit = parseDocuments(child.getAbsolutePath(), limit);
       } else {
         String filePath = child.getAbsolutePath();
-        if (isWikipediaDataFile(filePath)) {
+        if (parserFactory.isValidDocumentFile(filePath)) {
           parseDocument(filePath);
+          limit--;
         }
       }
     }
+
+    return limit;
   }
 
   private void parseDocument(final String documentPath) {
     executor.execute(new Runnable() {
       @Override
       public void run() {
-        WikipediaDocumentParser documentParser =
-            new WikipediaDocumentParser(documentNameGenerator, sentenceProcessor);
+        ThirdPartyDocumentParser documentParser =
+            parserFactory.create(documentNameGenerator, sentenceProcessor);
 
         try {
-          documentParser.parseDocument(documentPath);
+          documentParser.parseThirdPartyDocument(documentPath);
         } catch (IOException e) {
           e.printStackTrace();
         }

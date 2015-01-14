@@ -17,10 +17,7 @@ public class TopicalDocument extends Document {
   public static TopicalDocument readFrom(String rootDirectoryPath) throws IOException {
     Preconditions.checkNotNull(rootDirectoryPath);
 
-    TopicalDocument newDocument = new TopicalDocument(rootDirectoryPath);
-    newDocument.loadFromDirectory();
-
-    return newDocument;
+    return new TopicalDocument(rootDirectoryPath);
   }
 
   @Override
