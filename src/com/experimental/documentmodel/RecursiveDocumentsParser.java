@@ -21,7 +21,7 @@ public class RecursiveDocumentsParser {
   private final DocumentNameGenerator documentNameGenerator;
   private final SentenceProcessor sentenceProcessor;
 
-  private final Executor executor = Executors.newFixedThreadPool(4);
+  private final Executor executor = Executors.newFixedThreadPool(8);
 
   private final Semaphore tasksSem = new Semaphore(0);
   private int numTasks = 0;
