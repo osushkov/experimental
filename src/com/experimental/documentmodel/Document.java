@@ -100,7 +100,7 @@ public abstract class Document {
     for (Sentence sentence : getSentences()) {
       for (Token token : sentence.tokens) {
         if (token.partOfSpeech != POSTag.OTHER) {
-          bw.write(token.lemma);
+          bw.write(token.lemma.toLowerCase());
           bw.write(" ");
         }
       }

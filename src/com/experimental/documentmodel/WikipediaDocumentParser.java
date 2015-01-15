@@ -188,7 +188,7 @@ public class WikipediaDocumentParser implements ThirdPartyDocumentParser {
       numTokens += sentence.tokens.size();
     }
 
-    if (numTokens < 20) {
+    if (numTokens < 100) {
       return false;
     }
 

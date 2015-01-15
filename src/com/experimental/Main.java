@@ -2,6 +2,7 @@ package com.experimental;
 
 import com.experimental.crawler.CrawlerController;
 import com.experimental.documentmodel.*;
+import com.experimental.documentvector.Word2VecDB;
 import com.experimental.languagemodel.LemmaDB;
 import com.experimental.languagemodel.LemmaQualityAggregator;
 import com.experimental.languagemodel.NounAssociations;
@@ -21,7 +22,14 @@ public class Main {
 //    generateNounAssociations();
 
     parseWebbaseDocuments();
-//    stanfordNlpDemo();
+
+//    try {
+//      testWord2VecDB();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+
+    //stanfordNlpDemo();
 //    cssBoxExperiment();
   }
 
@@ -95,7 +103,7 @@ public class Main {
     SentenceProcessor sentenceProcessor = new SentenceProcessor();
     RecursiveDocumentsParser recursiveParser =
         new RecursiveDocumentsParser(Constants.WEBBASE_ROOT_PATH, parserFactory, documentNameGenerator, sentenceProcessor);
-    recursiveParser.parseDocuments(4);
+    recursiveParser.parseDocuments(1);
 
     Log.out("parseWebbaseDocuments finished");
   }
@@ -207,5 +215,25 @@ public class Main {
     }
 
     Log.out("generateNounAssociations finished");
+  }
+
+  private static void testWord2VecDB() throws IOException {
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String dbPath = aggregateDataFile.toPath().resolve(Word2VecDB.WORD2VEC_FILENAME).toString();
+
+    Word2VecDB word2VecDb = null;
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new FileReader(dbPath));
+      word2VecDb = Word2VecDB.readFrom(br);
+
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
+    } finally {
+      if (br != null) {
+        br.close();
+      }
+    }
   }
 }

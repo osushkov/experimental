@@ -1,7 +1,6 @@
 package com.experimental.sitepage;
 
 import com.experimental.documentmodel.Sentence;
-import com.experimental.documentmodel.WordToken;
 import com.experimental.geometry.Rectangle;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;

@@ -5,8 +5,10 @@ import com.google.common.base.Preconditions;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by sushkov on 9/01/15.
@@ -21,6 +23,8 @@ public class RecursiveDocumentsParser {
 
   private final Executor executor = Executors.newFixedThreadPool(4);
 
+  private final Semaphore tasksSem = new Semaphore(0);
+  private int numTasks = 0;
 
   public RecursiveDocumentsParser(String rootDirectory,
                                   ThirdPartyDocumentParserFactory parserFactory,
@@ -39,6 +43,16 @@ public class RecursiveDocumentsParser {
 
   public void parseDocuments(int limit) {
     parseDocuments(rootDirectory, limit);
+
+    for (int i = 0; i < numTasks; i++) {
+      try {
+        Log.out("Tasks Remaining: " + (numTasks - i));
+        tasksSem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+        return;
+      }
+    }
   }
 
   private int parseDocuments(String directoryPath, int limit) {
@@ -69,6 +83,7 @@ public class RecursiveDocumentsParser {
   }
 
   private void parseDocument(final String documentPath) {
+    numTasks++;
     executor.execute(new Runnable() {
       @Override
       public void run() {
@@ -79,13 +94,12 @@ public class RecursiveDocumentsParser {
           documentParser.parseThirdPartyDocument(documentPath);
         } catch (IOException e) {
           e.printStackTrace();
+        } finally {
+          tasksSem.release();
         }
+
       }
     });
-  }
-
-  private boolean isWikipediaDataFile(String path) {
-    return path.matches(".*wiki_[0-9]*");
   }
 
 }

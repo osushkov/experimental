@@ -3,7 +3,7 @@ package com.experimental.documentvector;
 /**
  * Created by sushkov on 12/01/15.
  */
-public interface DocumentVector {
+public interface ConceptVector {
   int dimensions();
   double getValue(int dim);
   void setValue(int dim, double value);
@@ -11,11 +11,11 @@ public interface DocumentVector {
   void normalise();
   double length();
 
-  double dotProduct(DocumentVector other);
+  double dotProduct(ConceptVector other);
 
-  void overwriteWith(DocumentVector other);
+  void overwriteWith(ConceptVector other);
   void setToZero();
 
-  void add(DocumentVector other);
+  void add(ConceptVector other);
   void scale(double factor);
 }

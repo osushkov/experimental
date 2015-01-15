@@ -10,13 +10,13 @@ import java.io.IOException;
 /**
  * Created by sushkov on 12/01/15.
  */
-public class DocumentVectorImpl implements DocumentVector {
+public class ConceptVectorImpl implements ConceptVector {
 
   private final double[] values;
   private final int dimensions;
 
-  public static DocumentVector createRandomUnitVector(int dim) {
-    DocumentVectorImpl result = new DocumentVectorImpl(dim);
+  public static ConceptVector createRandomUnitVector(int dim) {
+    ConceptVectorImpl result = new ConceptVectorImpl(dim);
     for (int i = 0; i < dim; i++) {
       result.setValue(i, Common.randInterval(0.0, 1.0));
     }
@@ -24,7 +24,7 @@ public class DocumentVectorImpl implements DocumentVector {
     return result;
   }
 
-  public DocumentVectorImpl(int dim) {
+  public ConceptVectorImpl(int dim) {
     Preconditions.checkArgument(dim > 0);
 
     values = new double[dim];
@@ -70,7 +70,7 @@ public class DocumentVectorImpl implements DocumentVector {
   }
 
   @Override
-  public double dotProduct(DocumentVector other) {
+  public double dotProduct(ConceptVector other) {
     Preconditions.checkArgument(dimensions == other.dimensions());
     double sum = 0.0;
     for (int i = 0; i < dimensions; i++) {
@@ -80,7 +80,7 @@ public class DocumentVectorImpl implements DocumentVector {
   }
 
   @Override
-  public void overwriteWith(DocumentVector other) {
+  public void overwriteWith(ConceptVector other) {
     Preconditions.checkNotNull(other);
     Preconditions.checkArgument(dimensions == other.dimensions());
 
@@ -97,12 +97,12 @@ public class DocumentVectorImpl implements DocumentVector {
   }
 
   @Override
-  public void add(DocumentVector other) {
+  public void add(ConceptVector other) {
     Preconditions.checkNotNull(other);
     Preconditions.checkArgument(dimensions == other.dimensions());
 
-    if (other instanceof SparseVector) {
-      SparseVector otherSparse = (SparseVector) other;
+    if (other instanceof SparseConceptVectorImpl) {
+      SparseConceptVectorImpl otherSparse = (SparseConceptVectorImpl) other;
       for (int i = 0; i < otherSparse.numElements; i++) {
         values[otherSparse.entries.get(i).index] += otherSparse.entries.get(i).value;
       }
@@ -127,9 +127,9 @@ public class DocumentVectorImpl implements DocumentVector {
     }
   }
 
-  public static DocumentVectorImpl readFrom(BufferedReader in) throws IOException {
+  public static ConceptVectorImpl readFrom(BufferedReader in) throws IOException {
     int dim = Integer.parseInt(in.readLine());
-    DocumentVectorImpl result = new DocumentVectorImpl(dim);
+    ConceptVectorImpl result = new ConceptVectorImpl(dim);
     for (int i = 0; i < dim; i++) {
       result.setValue(i, Double.parseDouble(in.readLine()));
     }

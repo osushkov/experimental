@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by sushkov on 12/01/15.
  */
-public class SparseVector implements DocumentVector {
+public class SparseConceptVectorImpl implements ConceptVector {
 
   public static class SparseVectorEntry {
     public int index;
@@ -53,7 +53,7 @@ public class SparseVector implements DocumentVector {
   public int numElements;
   private final int dimensions;
 
-  public SparseVector(int dim) {
+  public SparseConceptVectorImpl(int dim) {
     Preconditions.checkArgument(dim > 0);
     this.dimensions = dim;
     this.numElements = 0;
@@ -135,11 +135,11 @@ public class SparseVector implements DocumentVector {
   }
 
   @Override
-  public double dotProduct(DocumentVector other) {
+  public double dotProduct(ConceptVector other) {
     Preconditions.checkNotNull(other);
 
-    if (other instanceof SparseVector) {
-      return sparseDotProduct((SparseVector) other);
+    if (other instanceof SparseConceptVectorImpl) {
+      return sparseDotProduct((SparseConceptVectorImpl) other);
     } else {
       double sum = 0.0;
       for (int i = 0; i < numElements; i++) {
@@ -151,7 +151,7 @@ public class SparseVector implements DocumentVector {
   }
 
   @Override
-  public void overwriteWith(DocumentVector other) {
+  public void overwriteWith(ConceptVector other) {
     Preconditions.checkNotNull(other);
     Preconditions.checkArgument(dimensions == other.dimensions());
 
@@ -170,7 +170,7 @@ public class SparseVector implements DocumentVector {
   }
 
   @Override
-  public void add(DocumentVector other) {
+  public void add(ConceptVector other) {
     Preconditions.checkNotNull(other);
     Preconditions.checkArgument(dimensions == other.dimensions());
 
@@ -188,7 +188,7 @@ public class SparseVector implements DocumentVector {
     }
   }
 
-  private double sparseDotProduct(SparseVector other) {
+  private double sparseDotProduct(SparseConceptVectorImpl other) {
     Preconditions.checkNotNull(other);
 
     double sum = 0.0;
@@ -220,7 +220,7 @@ public class SparseVector implements DocumentVector {
     }
   }
 
-  public SparseVector readFromInPlace(BufferedReader in) throws IOException {
+  public SparseConceptVectorImpl readFromInPlace(BufferedReader in) throws IOException {
     String line = in.readLine();
     if (line == null) {
       return null;
@@ -240,8 +240,8 @@ public class SparseVector implements DocumentVector {
     return this;
   }
 
-  public static SparseVector readFrom(BufferedReader in) throws IOException {
-    SparseVector result = new SparseVector(800);
+  public static SparseConceptVectorImpl readFrom(BufferedReader in) throws IOException {
+    SparseConceptVectorImpl result = new SparseConceptVectorImpl(800);
 
     String line = in.readLine();
     if (line == null) {
