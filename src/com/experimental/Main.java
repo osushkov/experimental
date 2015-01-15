@@ -16,12 +16,13 @@ public class Main {
   private static final LemmaDB lemmaDB = new LemmaDB();
 
   public static void main(String[] args) {
-    //parseWikipediaDocuments();
+    parseWikipediaDocuments();
+    parseWebbaseDocuments();
 //    aggregateLemmaQuality();
 //    outputConcatenatedLemmatisedDocuments();
 //    generateNounAssociations();
 
-    parseWebbaseDocuments();
+
 
 //    try {
 //      testWord2VecDB();
@@ -79,7 +80,7 @@ public class Main {
     SentenceProcessor sentenceProcessor = new SentenceProcessor();
     RecursiveDocumentsParser recursiveParser =
         new RecursiveDocumentsParser(Constants.WIKI_ROOT_PATH, parserFactory, documentNameGenerator, sentenceProcessor);
-    recursiveParser.parseDocuments(12);
+    recursiveParser.parseDocuments();
 
     Log.out("parseWikipediaDocuments finished");
   }
@@ -103,7 +104,7 @@ public class Main {
     SentenceProcessor sentenceProcessor = new SentenceProcessor();
     RecursiveDocumentsParser recursiveParser =
         new RecursiveDocumentsParser(Constants.WEBBASE_ROOT_PATH, parserFactory, documentNameGenerator, sentenceProcessor);
-    recursiveParser.parseDocuments(1);
+    recursiveParser.parseDocuments();
 
     Log.out("parseWebbaseDocuments finished");
   }
