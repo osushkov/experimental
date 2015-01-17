@@ -18,4 +18,6 @@ public interface ConceptVector {
 
   void add(ConceptVector other);
   void scale(double factor);
+
+  ConceptVector getCopy();
 }

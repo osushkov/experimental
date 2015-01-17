@@ -5,8 +5,7 @@ import com.google.common.base.Preconditions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by sushkov on 14/01/15.
@@ -14,8 +13,25 @@ import java.util.Map;
 public class Word2VecDB {
   public static final String WORD2VEC_FILENAME = "word2vec.txt";
 
-  private final int dimensionality;
+  public final int dimensionality;
   private Map<String, ConceptVector> wordMap = new HashMap<String, ConceptVector>();
+
+  public static class WordSimilarityScore {
+    public final String word;
+    public final double similarity;
+
+    public WordSimilarityScore(String word, double similarity) {
+      this.word = Preconditions.checkNotNull(word);
+      this.similarity = similarity;
+    }
+  }
+
+  private static final Comparator<WordSimilarityScore> SIMILARITY_ORDER =
+      new Comparator<WordSimilarityScore>() {
+        public int compare(WordSimilarityScore e1, WordSimilarityScore e2) {
+          return Double.compare(e2.similarity, e1.similarity);
+        }
+      };
 
   public Word2VecDB(int dimensionality) {
     Preconditions.checkArgument(dimensionality > 0);
@@ -62,7 +78,25 @@ public class Word2VecDB {
 
   public ConceptVector getWordVector(String word) {
     Preconditions.checkNotNull(word);
-
     return wordMap.get(word.toLowerCase());
+  }
+
+  public List<WordSimilarityScore> getClosestWordsTo(ConceptVector wordVec, int num) {
+    Preconditions.checkNotNull(wordVec);
+
+    ConceptVector normalisedWordVec = wordVec.getCopy();
+    normalisedWordVec.normalise();
+
+    List<WordSimilarityScore> result = new ArrayList<WordSimilarityScore>();
+    for (Map.Entry<String, ConceptVector> storedEntry : wordMap.entrySet()) {
+      ConceptVector normalisedStored = storedEntry.getValue().getCopy();
+      normalisedStored.normalise();
+
+      double dp = normalisedStored.dotProduct(normalisedWordVec);
+      result.add(new WordSimilarityScore(storedEntry.getKey(), dp));
+    }
+
+    Collections.sort(result, SIMILARITY_ORDER);
+    return result;
   }
 }

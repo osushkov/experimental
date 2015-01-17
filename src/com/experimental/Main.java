@@ -2,8 +2,10 @@ package com.experimental;
 
 import com.experimental.crawler.CrawlerController;
 import com.experimental.documentmodel.*;
+import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.Word2VecDB;
 import com.experimental.languagemodel.LemmaDB;
+import com.experimental.languagemodel.LemmaMorphologies;
 import com.experimental.languagemodel.LemmaQualityAggregator;
 import com.experimental.languagemodel.NounAssociations;
 import com.experimental.nlp.Demo;
@@ -11,18 +13,20 @@ import com.experimental.pageparser.PageParser;
 import com.experimental.utils.Log;
 
 import java.io.*;
+import java.util.List;
 
 public class Main {
   private static final LemmaDB lemmaDB = new LemmaDB();
 
   public static void main(String[] args) {
-    parseWikipediaDocuments();
-    parseWebbaseDocuments();
+//    parseWikipediaDocuments();
+//    parseWebbaseDocuments();
+
 //    aggregateLemmaQuality();
 //    outputConcatenatedLemmatisedDocuments();
 //    generateNounAssociations();
 
-
+      buildLemmaMorphologiesMap();
 
 //    try {
 //      testWord2VecDB();
@@ -236,5 +240,49 @@ public class Main {
         br.close();
       }
     }
+
+    ConceptVector monarch = word2VecDb.getWordVector("porn");
+    //ConceptVector man = word2VecDb.getWordVector("dig");
+
+//    man.add(monarch);
+
+    List<Word2VecDB.WordSimilarityScore> closest = word2VecDb.getClosestWordsTo(monarch, 10);
+    for (int i = 0; i < 10; i++) {
+      Log.out(closest.get(i).word + "\t" + closest.get(i).similarity);
+    }
+  }
+
+  private static void buildLemmaMorphologiesMap() {
+    Log.out("buildLemmaMorphologiesMap running...");
+
+    final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies(lemmaDB);
+    try {
+      if (lemmaMorphologies.tryLoad()) {
+        Log.out("loaded LemmaMorphologies from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(new DocumentStream.DocumentStreamOutput() {
+      @Override
+      public void processDocument(Document document) {
+        for (Sentence sentence : document.getSentences()) {
+          for (Token token : sentence.tokens) {
+            lemmaMorphologies.addToken(token);
+          }
+        }
+      }
+    });
+
+    try {
+      lemmaMorphologies.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Log.out("buildLemmaMorphologiesMap finished");
   }
 }

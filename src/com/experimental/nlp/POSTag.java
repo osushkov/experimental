@@ -73,6 +73,10 @@ public enum POSTag {
     return this == POSTag.JJ || this == POSTag.JJR || this == POSTag.JJS;
   }
 
+  public boolean isAdverb() {
+    return this == POSTag.RB || this == POSTag.RBS || this == POSTag.RBR;
+  }
+
   public SimplePOSTag getSimplePOSTag() {
     if (isNoun()) {
       return SimplePOSTag.NOUN;
@@ -80,6 +84,8 @@ public enum POSTag {
       return SimplePOSTag.ADJECTIVE;
     } else if (isVerb()) {
       return SimplePOSTag.VERB;
+    } else if (isAdverb()) {
+      return SimplePOSTag.ADVERB;
     } else {
       return SimplePOSTag.OTHER;
     }

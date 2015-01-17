@@ -62,7 +62,7 @@ public class DocumentNameGenerator {
   public String getAbsoluteRootPath(DocumentType type, String documentName) {
     Preconditions.checkNotNull(type);
     Preconditions.checkNotNull(documentName);
-    return rootDocumentsDirPath + type.getLabel() + "/" + documentName.substring(0, 2);
+    return rootDocumentsDirPath + type.getLabel() + "/" + documentName.substring(0, Math.min(2, documentName.length()));
   }
 
   public synchronized String getAndStoreNewDocumentName(DocumentType type) {

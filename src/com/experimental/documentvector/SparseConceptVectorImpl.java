@@ -60,6 +60,17 @@ public class SparseConceptVectorImpl implements ConceptVector {
   }
 
   @Override
+  public ConceptVector getCopy() {
+    SparseConceptVectorImpl result = new SparseConceptVectorImpl(dimensions);
+
+    for (SparseVectorEntry entry : entries) {
+      result.setValue(entry.index, entry.value);
+    }
+
+    return result;
+  }
+
+  @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
     for (int i = 0; i < numElements; i++) {

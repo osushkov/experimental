@@ -7,5 +7,6 @@ public enum SimplePOSTag {
   NOUN,
   ADJECTIVE,
   VERB,
+  ADVERB,
   OTHER;
 }

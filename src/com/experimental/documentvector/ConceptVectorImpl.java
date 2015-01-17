@@ -36,6 +36,17 @@ public class ConceptVectorImpl implements ConceptVector {
   }
 
   @Override
+  public ConceptVector getCopy() {
+    ConceptVectorImpl result = new ConceptVectorImpl(dimensions);
+
+    for (int i = 0; i < dimensions; i++) {
+      result.setValue(i, values[i]);
+    }
+
+    return result;
+  }
+
+  @Override
   public int dimensions() {
     return dimensions;
   }

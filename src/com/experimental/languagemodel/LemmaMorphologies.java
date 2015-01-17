@@ -2,6 +2,7 @@ package com.experimental.languagemodel;
 
 import com.experimental.Constants;
 import com.experimental.documentmodel.Token;
+import com.experimental.nlp.SimplePOSTag;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
@@ -13,34 +14,64 @@ import java.util.*;
 public class LemmaMorphologies {
   private static final String LEMMA_MORPHOLOGIES_FILENAME = "lemma_morphologies.txt";
 
-  private final Map<String, Map<String, Integer>> morphologiesMap = new HashMap<String, Map<String, Integer>>();
+  private final LemmaDB lemmaDb;
+  private final Map<LemmaId, Map<String, Integer>> lemmaToMorphologyMap = new HashMap<LemmaId, Map<String, Integer>>();
+  private final Map<String, Map<LemmaId, Integer>> morphologytoLemmaMap = new HashMap<String, Map<LemmaId, Integer>>();
+
+  public LemmaMorphologies(LemmaDB lemmaDb) {
+    this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
+  }
 
   public void addToken(Token token) {
     Preconditions.checkNotNull(token);
-    if (!(token.partOfSpeech.isVerb() || token.partOfSpeech.isAdjective() || token.partOfSpeech.isNoun())) {
+
+    Lemma lemma = Lemma.fromToken(token);
+    if (lemma.tag == SimplePOSTag.OTHER) {
       return;
     }
 
-    String lemma = token.lemma.toLowerCase();
-    String raw = token.raw.toLowerCase();
+    addTokenToLemmaToMorphologyMap(token.raw.toLowerCase(), lemma, 1);
+    addTokenToMorphologyToLemmaMap(token.raw.toLowerCase(), lemma, 1);
+  }
 
-    Map<String, Integer> curEntry = morphologiesMap.get(lemma);
-    if (curEntry == null) {
-      curEntry = new HashMap<String, Integer>();
-      morphologiesMap.put(lemma, curEntry);
+  private void addTokenToLemmaToMorphologyMap(String morphology, Lemma lemma, int occurances) {
+    LemmaId lemmaId = lemmaDb.addLemma(lemma);
+
+    Map<String, Integer> lemmaMorphologyEntry = lemmaToMorphologyMap.get(lemmaId);
+    if (lemmaMorphologyEntry == null) {
+      lemmaMorphologyEntry = new HashMap<String, Integer>();
+      lemmaToMorphologyMap.put(lemmaId, lemmaMorphologyEntry);
     }
 
-    Integer curCount = curEntry.get(raw);
-    if (curCount == null) {
-      curEntry.put(raw, 1);
+    if (!lemmaMorphologyEntry.containsKey(morphology)) {
+      lemmaMorphologyEntry.put(morphology, occurances);
     } else {
-      curEntry.put(raw, curCount+1);
+      lemmaMorphologyEntry.put(morphology, lemmaMorphologyEntry.get(morphology) + occurances);
     }
   }
 
-  public Map<String, Integer> getMorphologiesFor(String lemma) {
+  private void addTokenToMorphologyToLemmaMap(String morphology, Lemma lemma, int occurances) {
+    LemmaId lemmaId = lemmaDb.addLemma(lemma);
+
+    Map<LemmaId, Integer> morphologyLemmaEntry = morphologytoLemmaMap.get(morphology);
+    if (morphologyLemmaEntry == null) {
+      morphologyLemmaEntry = new HashMap<LemmaId, Integer>();
+      morphologytoLemmaMap.put(morphology, morphologyLemmaEntry);
+    }
+
+
+    if (!morphologyLemmaEntry.containsKey(lemmaId)) {
+      morphologyLemmaEntry.put(lemmaId, occurances);
+    } else {
+      morphologyLemmaEntry.put(lemmaId, morphologyLemmaEntry.get(lemmaId) + occurances);
+    }
+  }
+
+  public Map<String, Integer> getMorphologiesFor(Lemma lemma) {
     Preconditions.checkNotNull(lemma);
-    return morphologiesMap.get(lemma.toLowerCase());
+
+    LemmaId lemmaId = lemmaDb.addLemma(lemma);
+    return lemmaToMorphologyMap.get(lemmaId);
   }
 
   public void save() throws IOException {
@@ -57,12 +88,15 @@ public class LemmaMorphologies {
         return;
       }
 
-      bw.write(Integer.toString(morphologiesMap.size()) + "\n");
-      for (Map.Entry<String, Map<String, Integer>> entry : morphologiesMap.entrySet()) {
-        bw.write(entry.getKey() + " ");
+      bw.write(Integer.toString(lemmaToMorphologyMap.size()) + "\n");
+
+      for (Map.Entry<LemmaId, Map<String, Integer>> entry : lemmaToMorphologyMap.entrySet()) {
+        Lemma lemma = lemmaDb.getLemma(entry.getKey());
+        lemma.writeTo(bw);
+
         bw.write(Integer.toString(entry.getValue().size()) + "\n");
-        for (Map.Entry<String, Integer> morphologyEntry : entry.getValue().entrySet()) {
-          bw.write(Integer.toString(morphologyEntry.getValue()) + " " + morphologyEntry.getKey() + "\n");
+        for (Map.Entry<String, Integer> morphEntry : entry.getValue().entrySet()) {
+          bw.write(morphEntry.getValue() + " " + morphEntry.getKey() + "\n");
         }
       }
     } finally {
@@ -70,6 +104,51 @@ public class LemmaMorphologies {
         bw.close();
       }
     }
+  }
+
+  public boolean tryLoad() throws IOException {
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String morphologiesFilePath = aggregateDataFile.toPath().resolve(LEMMA_MORPHOLOGIES_FILENAME).toString();
+
+    File morphologiesFile = new File(morphologiesFilePath);
+    if (!morphologiesFile.exists()) {
+      return false;
+    }
+
+    lemmaToMorphologyMap.clear();
+    morphologytoLemmaMap.clear();
+
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new FileReader(morphologiesFile.getAbsolutePath()));
+
+      int numEntries = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
+      for (int i = 0; i < numEntries; i++) {
+        Lemma lemma = Lemma.readFrom(br);
+
+        int numLemmaEntries = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
+        for (int j = 0; j < numLemmaEntries; j++) {
+          String line = Preconditions.checkNotNull(br.readLine());
+          String[] lineTokens = line.split(" ");
+          Preconditions.checkState(lineTokens.length == 2);
+
+          int occurances = Integer.parseInt(lineTokens[0]);
+          String morphology = lineTokens[1];
+
+          addTokenToLemmaToMorphologyMap(morphology, lemma, occurances);
+          addTokenToMorphologyToLemmaMap(morphology, lemma, occurances);
+        }
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return false;
+    } finally {
+      if (br != null) {
+        br.close();
+      }
+    }
+
+    return true;
   }
 
 }
