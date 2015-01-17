@@ -101,12 +101,24 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="NounAssociations.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="NounAssociations.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/NounAssociations.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.47047046" vertical-offset="1075" max-vertical-offset="2325">
-                  <caret line="113" column="29" selection-start-line="113" selection-start-column="29" selection-end-line="113" selection-end-column="29" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="1075" max-vertical-offset="2325">
+                  <caret line="95" column="45" selection-start-line="95" selection-start-column="45" selection-end-line="95" selection-end-column="45" />
                   <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="DocumentNameGenerator.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentNameGenerator.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.6996997" vertical-offset="201" max-vertical-offset="1200">
+                  <caret line="64" column="94" selection-start-line="64" selection-start-column="94" selection-end-line="64" selection-end-column="94" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -149,7 +161,6 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/WebbaseDocumentParser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/WikipediaDocumentParser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/RecursiveDocumentsParser.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentNameGenerator.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/StopWords.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriserImpl.java" />
@@ -169,6 +180,7 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/Word2VecDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentNameGenerator.java" />
       </list>
     </option>
   </component>
@@ -808,16 +820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentNameGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1200">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/Token.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="825">
@@ -1006,14 +1008,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/NounAssociations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47047046" vertical-offset="1075" max-vertical-offset="2325">
-          <caret line="113" column="29" selection-start-line="113" selection-start-column="29" selection-end-line="113" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentStream.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7807808" vertical-offset="0" max-vertical-offset="1020">
@@ -1040,6 +1034,24 @@
           <folding>
             <element signature="e#8436#8741#0" expanded="true" />
             <element signature="e#8740#8741#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/NounAssociations.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1075" max-vertical-offset="2325">
+          <caret line="95" column="45" selection-start-line="95" selection-start-column="45" selection-end-line="95" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentNameGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6996997" vertical-offset="201" max-vertical-offset="1200">
+          <caret line="64" column="94" selection-start-line="64" selection-start-column="94" selection-end-line="64" selection-end-column="94" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
