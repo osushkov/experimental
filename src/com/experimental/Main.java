@@ -14,6 +14,10 @@ import com.experimental.utils.Log;
 
 import java.io.*;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
   private static final LemmaDB lemmaDB = new LemmaDB();
@@ -265,17 +269,37 @@ public class Main {
       e.printStackTrace();
     }
 
+    final Executor executor = Executors.newFixedThreadPool(8);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(new DocumentStream.DocumentStreamOutput() {
       @Override
-      public void processDocument(Document document) {
-        for (Sentence sentence : document.getSentences()) {
-          for (Token token : sentence.tokens) {
-            lemmaMorphologies.addToken(token);
+      public void processDocument(final Document document) {
+        numDocuments.incrementAndGet();
+
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            for (Sentence sentence : document.getSentences()) {
+              for (Token token : sentence.tokens) {
+                lemmaMorphologies.addToken(token);
+              }
+            }
+            sem.release();
           }
-        }
+        });
       }
     });
+
+    for (int i = 0; i < numDocuments.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
 
     try {
       lemmaMorphologies.save();

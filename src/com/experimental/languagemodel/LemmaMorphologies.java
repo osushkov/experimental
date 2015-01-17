@@ -7,6 +7,8 @@ import com.google.common.base.Preconditions;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by sushkov on 13/01/15.
@@ -15,8 +17,12 @@ public class LemmaMorphologies {
   private static final String LEMMA_MORPHOLOGIES_FILENAME = "lemma_morphologies.txt";
 
   private final LemmaDB lemmaDb;
-  private final Map<LemmaId, Map<String, Integer>> lemmaToMorphologyMap = new HashMap<LemmaId, Map<String, Integer>>();
-  private final Map<String, Map<LemmaId, Integer>> morphologytoLemmaMap = new HashMap<String, Map<LemmaId, Integer>>();
+
+  private final Map<LemmaId, Map<String, AtomicInteger>> lemmaToMorphologyMap =
+      new ConcurrentHashMap<LemmaId, Map<String, AtomicInteger>>();
+
+  private final Map<String, Map<LemmaId, AtomicInteger>> morphologytoLemmaMap =
+      new ConcurrentHashMap<String, Map<LemmaId, AtomicInteger>>();
 
   public LemmaMorphologies(LemmaDB lemmaDb) {
     this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
@@ -37,41 +43,34 @@ public class LemmaMorphologies {
   private void addTokenToLemmaToMorphologyMap(String morphology, Lemma lemma, int occurances) {
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
 
-    Map<String, Integer> lemmaMorphologyEntry = lemmaToMorphologyMap.get(lemmaId);
-    if (lemmaMorphologyEntry == null) {
-      lemmaMorphologyEntry = new HashMap<String, Integer>();
-      lemmaToMorphologyMap.put(lemmaId, lemmaMorphologyEntry);
-    }
+    lemmaToMorphologyMap.putIfAbsent(lemmaId, new ConcurrentHashMap<String, AtomicInteger>());
+    Map<String, AtomicInteger> lemmaMorphologyEntry = lemmaToMorphologyMap.get(lemmaId);
 
-    if (!lemmaMorphologyEntry.containsKey(morphology)) {
-      lemmaMorphologyEntry.put(morphology, occurances);
-    } else {
-      lemmaMorphologyEntry.put(morphology, lemmaMorphologyEntry.get(morphology) + occurances);
-    }
+    lemmaMorphologyEntry.putIfAbsent(morphology, new AtomicInteger(0));
+    lemmaMorphologyEntry.get(morphology).incrementAndGet();
   }
 
   private void addTokenToMorphologyToLemmaMap(String morphology, Lemma lemma, int occurances) {
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
 
-    Map<LemmaId, Integer> morphologyLemmaEntry = morphologytoLemmaMap.get(morphology);
-    if (morphologyLemmaEntry == null) {
-      morphologyLemmaEntry = new HashMap<LemmaId, Integer>();
-      morphologytoLemmaMap.put(morphology, morphologyLemmaEntry);
-    }
+    morphologytoLemmaMap.putIfAbsent(morphology, new ConcurrentHashMap<LemmaId, AtomicInteger>());
+    Map<LemmaId, AtomicInteger> morphologyLemmaEntry = morphologytoLemmaMap.get(morphology);
 
-
-    if (!morphologyLemmaEntry.containsKey(lemmaId)) {
-      morphologyLemmaEntry.put(lemmaId, occurances);
-    } else {
-      morphologyLemmaEntry.put(lemmaId, morphologyLemmaEntry.get(lemmaId) + occurances);
-    }
+    morphologyLemmaEntry.putIfAbsent(lemmaId, new AtomicInteger(0));
+    morphologyLemmaEntry.get(lemmaId).incrementAndGet();
   }
 
   public Map<String, Integer> getMorphologiesFor(Lemma lemma) {
     Preconditions.checkNotNull(lemma);
 
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
-    return lemmaToMorphologyMap.get(lemmaId);
+    Map<String, Integer> result = new HashMap<String, Integer>();
+
+    for (Map.Entry<String, AtomicInteger> entry : lemmaToMorphologyMap.get(lemmaId).entrySet()) {
+      result.put(entry.getKey(), entry.getValue().get());
+    }
+
+    return result;
   }
 
   public void save() throws IOException {
@@ -90,13 +89,13 @@ public class LemmaMorphologies {
 
       bw.write(Integer.toString(lemmaToMorphologyMap.size()) + "\n");
 
-      for (Map.Entry<LemmaId, Map<String, Integer>> entry : lemmaToMorphologyMap.entrySet()) {
+      for (Map.Entry<LemmaId, Map<String, AtomicInteger>> entry : lemmaToMorphologyMap.entrySet()) {
         Lemma lemma = lemmaDb.getLemma(entry.getKey());
         lemma.writeTo(bw);
 
         bw.write(Integer.toString(entry.getValue().size()) + "\n");
-        for (Map.Entry<String, Integer> morphEntry : entry.getValue().entrySet()) {
-          bw.write(morphEntry.getValue() + " " + morphEntry.getKey() + "\n");
+        for (Map.Entry<String, AtomicInteger> morphEntry : entry.getValue().entrySet()) {
+          bw.write(Integer.toString(morphEntry.getValue().get()) + " " + morphEntry.getKey() + "\n");
         }
       }
     } finally {
