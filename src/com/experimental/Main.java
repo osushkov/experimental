@@ -4,10 +4,7 @@ import com.experimental.crawler.CrawlerController;
 import com.experimental.documentmodel.*;
 import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.Word2VecDB;
-import com.experimental.languagemodel.LemmaDB;
-import com.experimental.languagemodel.LemmaMorphologies;
-import com.experimental.languagemodel.LemmaQualityAggregator;
-import com.experimental.languagemodel.NounAssociations;
+import com.experimental.languagemodel.*;
 import com.experimental.nlp.Demo;
 import com.experimental.pageparser.PageParser;
 import com.experimental.utils.Log;
@@ -21,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
   private static final LemmaDB lemmaDB = new LemmaDB();
+  private static final MorphologyDB morphologyDB = new MorphologyDB();
 
   public static void main(String[] args) {
 //    parseWikipediaDocuments();
@@ -259,7 +257,7 @@ public class Main {
   private static void buildLemmaMorphologiesMap() {
     Log.out("buildLemmaMorphologiesMap running...");
 
-    final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies(lemmaDB);
+    final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies(lemmaDB, morphologyDB);
     try {
       if (lemmaMorphologies.tryLoad()) {
         Log.out("loaded LemmaMorphologies from disk");
@@ -293,6 +291,7 @@ public class Main {
       }
     });
 
+    Log.out("processed all docs");
     for (int i = 0; i < numDocuments.get(); i++) {
       try {
         sem.acquire();

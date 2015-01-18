@@ -4,6 +4,7 @@ import com.experimental.Constants;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.Token;
+import com.experimental.languagemodel.LemmaDB.LemmaId;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 

@@ -2,6 +2,8 @@ package com.experimental.languagemodel;
 
 import com.experimental.Constants;
 import com.experimental.documentmodel.Token;
+import com.experimental.languagemodel.LemmaDB.LemmaId;
+import com.experimental.languagemodel.MorphologyDB.MorphologyId;
 import com.experimental.nlp.SimplePOSTag;
 import com.google.common.base.Preconditions;
 
@@ -17,15 +19,17 @@ public class LemmaMorphologies {
   private static final String LEMMA_MORPHOLOGIES_FILENAME = "lemma_morphologies.txt";
 
   private final LemmaDB lemmaDb;
+  private final MorphologyDB morphologyDb;
 
-  private final Map<LemmaId, Map<String, AtomicInteger>> lemmaToMorphologyMap =
-      new ConcurrentHashMap<LemmaId, Map<String, AtomicInteger>>();
+  private final Map<LemmaId, Map<MorphologyId, AtomicInteger>> lemmaToMorphologyMap =
+      new ConcurrentHashMap<LemmaId, Map<MorphologyId, AtomicInteger>>();
 
-  private final Map<String, Map<LemmaId, AtomicInteger>> morphologytoLemmaMap =
-      new ConcurrentHashMap<String, Map<LemmaId, AtomicInteger>>();
+  private final Map<MorphologyId, Map<LemmaId, AtomicInteger>> morphologytoLemmaMap =
+      new ConcurrentHashMap<MorphologyId, Map<LemmaId, AtomicInteger>>();
 
-  public LemmaMorphologies(LemmaDB lemmaDb) {
+  public LemmaMorphologies(LemmaDB lemmaDb, MorphologyDB morphologyDb) {
     this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
+    this.morphologyDb = Preconditions.checkNotNull(morphologyDb);
   }
 
   public void addToken(Token token) {
@@ -42,19 +46,21 @@ public class LemmaMorphologies {
 
   private void addTokenToLemmaToMorphologyMap(String morphology, Lemma lemma, int occurances) {
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
+    MorphologyId morphologyId = morphologyDb.addMorphology(morphology);
 
-    lemmaToMorphologyMap.putIfAbsent(lemmaId, new ConcurrentHashMap<String, AtomicInteger>());
-    Map<String, AtomicInteger> lemmaMorphologyEntry = lemmaToMorphologyMap.get(lemmaId);
+    lemmaToMorphologyMap.putIfAbsent(lemmaId, new ConcurrentHashMap<MorphologyId, AtomicInteger>());
+    Map<MorphologyId, AtomicInteger> lemmaMorphologyEntry = lemmaToMorphologyMap.get(lemmaId);
 
-    lemmaMorphologyEntry.putIfAbsent(morphology, new AtomicInteger(0));
-    lemmaMorphologyEntry.get(morphology).incrementAndGet();
+    lemmaMorphologyEntry.putIfAbsent(morphologyId, new AtomicInteger(0));
+    lemmaMorphologyEntry.get(morphologyId).incrementAndGet();
   }
 
   private void addTokenToMorphologyToLemmaMap(String morphology, Lemma lemma, int occurances) {
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
+    MorphologyId morphologyId = morphologyDb.addMorphology(morphology);
 
-    morphologytoLemmaMap.putIfAbsent(morphology, new ConcurrentHashMap<LemmaId, AtomicInteger>());
-    Map<LemmaId, AtomicInteger> morphologyLemmaEntry = morphologytoLemmaMap.get(morphology);
+    morphologytoLemmaMap.putIfAbsent(morphologyId, new ConcurrentHashMap<LemmaId, AtomicInteger>());
+    Map<LemmaId, AtomicInteger> morphologyLemmaEntry = morphologytoLemmaMap.get(morphologyId);
 
     morphologyLemmaEntry.putIfAbsent(lemmaId, new AtomicInteger(0));
     morphologyLemmaEntry.get(lemmaId).incrementAndGet();
@@ -66,8 +72,9 @@ public class LemmaMorphologies {
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
     Map<String, Integer> result = new HashMap<String, Integer>();
 
-    for (Map.Entry<String, AtomicInteger> entry : lemmaToMorphologyMap.get(lemmaId).entrySet()) {
-      result.put(entry.getKey(), entry.getValue().get());
+    for (Map.Entry<MorphologyId, AtomicInteger> entry : lemmaToMorphologyMap.get(lemmaId).entrySet()) {
+      String word = Preconditions.checkNotNull(morphologyDb.getMorphology(entry.getKey()));
+      result.put(word, entry.getValue().get());
     }
 
     return result;
@@ -89,13 +96,14 @@ public class LemmaMorphologies {
 
       bw.write(Integer.toString(lemmaToMorphologyMap.size()) + "\n");
 
-      for (Map.Entry<LemmaId, Map<String, AtomicInteger>> entry : lemmaToMorphologyMap.entrySet()) {
+      for (Map.Entry<LemmaId, Map<MorphologyId, AtomicInteger>> entry : lemmaToMorphologyMap.entrySet()) {
         Lemma lemma = lemmaDb.getLemma(entry.getKey());
         lemma.writeTo(bw);
 
         bw.write(Integer.toString(entry.getValue().size()) + "\n");
-        for (Map.Entry<String, AtomicInteger> morphEntry : entry.getValue().entrySet()) {
-          bw.write(Integer.toString(morphEntry.getValue().get()) + " " + morphEntry.getKey() + "\n");
+        for (Map.Entry<MorphologyId, AtomicInteger> morphEntry : entry.getValue().entrySet()) {
+          String word = Preconditions.checkNotNull(morphologyDb.getMorphology(morphEntry.getKey()));
+          bw.write(Integer.toString(morphEntry.getValue().get()) + " " + word + "\n");
         }
       }
     } finally {

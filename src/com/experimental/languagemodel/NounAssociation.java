@@ -1,6 +1,7 @@
 package com.experimental.languagemodel;
 
 import com.experimental.Constants;
+import com.experimental.languagemodel.LemmaDB.LemmaId;
 import com.google.common.base.Preconditions;
 
 import java.io.*;

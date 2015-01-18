@@ -5,6 +5,7 @@ import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.Token;
+import com.experimental.languagemodel.LemmaDB.LemmaId;
 import com.experimental.nlp.SimplePOSTag;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;

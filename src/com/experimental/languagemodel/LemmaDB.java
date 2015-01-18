@@ -12,6 +12,14 @@ import java.util.Map;
  */
 public class LemmaDB {
 
+  public static class LemmaId {
+    public final int id;
+
+    public LemmaId(int id) {
+      this.id = id;
+    }
+  }
+
   private int curId = 0;
   private final BiMap<Lemma, LemmaId> lemmaMap = HashBiMap.create();
 
@@ -30,13 +38,7 @@ public class LemmaDB {
 
   public synchronized LemmaId getLemmaId(Lemma lemma) {
     Preconditions.checkNotNull(lemma);
-
-    LemmaId lemmaId = lemmaMap.get(lemma);
-    if (lemmaId == null) {
-      return null;
-    } else {
-      return lemmaId;
-    }
+    return lemmaMap.get(lemma);
   }
 
   public synchronized Lemma getLemma(LemmaId id) {

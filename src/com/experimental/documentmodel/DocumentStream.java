@@ -15,6 +15,7 @@ public class DocumentStream {
   }
 
   private final String rootPath;
+  private int numDocumentsProcessed = 0;
 
   public DocumentStream(String rootPath) {
     this.rootPath = Preconditions.checkNotNull(rootPath);
@@ -47,6 +48,12 @@ public class DocumentStream {
           streamOutput.processDocument(new WebsiteDocument(dir.getAbsolutePath()));
           break;
       }
+      numDocumentsProcessed++;
+      if ((numDocumentsProcessed % 10000) == 0) {
+        Log.out("docs processed: " + numDocumentsProcessed);
+        System.gc();
+      }
+
       return;
     }
 
