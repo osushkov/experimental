@@ -79,12 +79,14 @@
           <file leaf-file-name="LemmaMorphologies.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.06263048" vertical-offset="0" max-vertical-offset="2505">
-                  <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="54" />
+                <state vertical-scroll-proportion="0.060542796" vertical-offset="1187" max-vertical-offset="2835">
+                  <caret line="83" column="11" selection-start-line="83" selection-start-column="11" selection-end-line="83" selection-end-column="11" />
                   <folding>
+                    <element signature="imports" expanded="true" />
                     <element signature="e#818#861#0" expanded="true" />
                     <element signature="e#979#1022#0" expanded="true" />
-                    <element signature="e#2852#2869#0" expanded="true" />
+                    <element signature="e#2854#2871#0" expanded="true" />
+                    <element signature="e#4411#4420#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -127,10 +129,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="LemmaQualityAggregator.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="LemmaQualityAggregator.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaQualityAggregator.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.6006006" vertical-offset="0" max-vertical-offset="2760">
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2760">
                   <caret line="47" column="48" selection-start-line="47" selection-start-column="48" selection-end-line="47" selection-end-column="48" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -153,10 +155,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DocumentStream.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="DocumentStream.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentStream.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
+                <state vertical-scroll-proportion="0.7207207" vertical-offset="0" max-vertical-offset="1095">
                   <caret line="53" column="20" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
                   <folding />
                 </state>
@@ -216,11 +218,11 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentStream.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/MorphologyDB.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/NounAssociations.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/NounAssociation.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaQualityAggregator.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java" />
       </list>
     </option>
   </component>
@@ -598,7 +600,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22390318" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22390318" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1034,39 +1036,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
-          <caret line="53" column="20" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2965" max-vertical-offset="4260">
-          <caret line="233" column="54" selection-start-line="233" selection-start-column="54" selection-end-line="233" selection-end-column="54" />
-          <folding>
-            <element signature="e#8675#9190#0" expanded="true" />
-            <element signature="e#8862#9174#0" expanded="true" />
-            <element signature="e#9173#9174#0" expanded="true" />
-            <element signature="e#9189#9190#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06263048" vertical-offset="0" max-vertical-offset="2505">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="54" />
-          <folding>
-            <element signature="e#818#861#0" expanded="true" />
-            <element signature="e#979#1022#0" expanded="true" />
-            <element signature="e#2852#2869#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/NounAssociations.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="2460">
@@ -1091,11 +1060,46 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaQualityAggregator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6006006" vertical-offset="0" max-vertical-offset="2760">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2760">
           <caret line="47" column="48" selection-start-line="47" selection-start-column="48" selection-end-line="47" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1320#1347#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7207207" vertical-offset="0" max-vertical-offset="1095">
+          <caret line="53" column="20" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2965" max-vertical-offset="4260">
+          <caret line="233" column="54" selection-start-line="233" selection-start-column="54" selection-end-line="233" selection-end-column="54" />
+          <folding>
+            <element signature="e#8675#9190#0" expanded="true" />
+            <element signature="e#8862#9174#0" expanded="true" />
+            <element signature="e#9173#9174#0" expanded="true" />
+            <element signature="e#9189#9190#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.060542796" vertical-offset="1187" max-vertical-offset="2835">
+          <caret line="83" column="11" selection-start-line="83" selection-start-column="11" selection-end-line="83" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#818#861#0" expanded="true" />
+            <element signature="e#979#1022#0" expanded="true" />
+            <element signature="e#2854#2871#0" expanded="true" />
+            <element signature="e#4411#4420#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -41,7 +41,7 @@ public class LemmaMorphologies {
     }
 
     addTokenToLemmaToMorphologyMap(token.raw.toLowerCase(), lemma, 1);
-    addTokenToMorphologyToLemmaMap(token.raw.toLowerCase(), lemma, 1);
+    //addTokenToMorphologyToLemmaMap(token.raw.toLowerCase(), lemma, 1);
   }
 
   private void addTokenToLemmaToMorphologyMap(String morphology, Lemma lemma, int occurances) {
@@ -81,6 +81,8 @@ public class LemmaMorphologies {
   }
 
   public void save() throws IOException {
+    trim();
+
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String morphologiesFilePath = aggregateDataFile.toPath().resolve(LEMMA_MORPHOLOGIES_FILENAME).toString();
 
@@ -110,6 +112,26 @@ public class LemmaMorphologies {
       if (bw != null) {
         bw.close();
       }
+    }
+  }
+
+  private void trim() {
+    List<LemmaId> toRemove = new ArrayList<LemmaId>();
+    for (LemmaId lemmaId: lemmaToMorphologyMap.keySet()) {
+      Map<MorphologyId, AtomicInteger> morphologies = lemmaToMorphologyMap.get(lemmaId);
+
+      int totalOccurances = 0;
+      for (AtomicInteger occurances : morphologies.values()) {
+        totalOccurances += occurances.get();
+      }
+
+      if (totalOccurances < 10) {
+        toRemove.add(lemmaId);
+      }
+    }
+
+    for (LemmaId lemmaId : toRemove) {
+      lemmaToMorphologyMap.remove(lemmaId);
     }
   }
 
