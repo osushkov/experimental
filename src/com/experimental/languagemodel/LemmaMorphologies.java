@@ -125,7 +125,7 @@ public class LemmaMorphologies {
         totalOccurances += occurances.get();
       }
 
-      if (totalOccurances < 10) {
+      if (totalOccurances < 100) {
         toRemove.add(lemmaId);
       }
     }
