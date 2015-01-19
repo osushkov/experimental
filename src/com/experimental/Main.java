@@ -316,26 +316,26 @@ public class Main {
     YellowPagesCrawler crawler = new YellowPagesCrawler();
     Set<String> websiteUrls = crawler.crawlForWebsites();
 
-    BufferedWriter bw = null;
-    try {
-      FileWriter fw = new FileWriter("site_urls.txt");
-      bw = new BufferedWriter(fw);
-
-      for (String url : websiteUrls) {
-        bw.append(url + "\n");
-      }
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    try {
-      if (bw != null) {
-        bw.close();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+//    BufferedWriter bw = null;
+//    try {
+//      FileWriter fw = new FileWriter("site_urls.txt");
+//      bw = new BufferedWriter(fw);
+//
+//      for (String url : websiteUrls) {
+//        bw.append(url + "\n");
+//      }
+//    } catch (FileNotFoundException e) {
+//      e.printStackTrace();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//
+//    try {
+//      if (bw != null) {
+//        bw.close();
+//      }
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
   }
 }

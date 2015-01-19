@@ -30,8 +30,8 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="3321" max-vertical-offset="4590">
-                  <caret line="328" column="5" selection-start-line="328" selection-start-column="5" selection-end-line="328" selection-end-column="5" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="3613" max-vertical-offset="4590">
+                  <caret line="316" column="42" selection-start-line="316" selection-start-column="42" selection-end-line="316" selection-end-column="42" />
                   <folding />
                 </state>
               </provider>
@@ -62,15 +62,17 @@
           <file leaf-file-name="YellowPagesCrawler.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.85580915" vertical-offset="1500" max-vertical-offset="3975">
-                  <caret line="155" column="20" selection-start-line="155" selection-start-column="20" selection-end-line="155" selection-end-column="20" />
+                <state vertical-scroll-proportion="0.33298755" vertical-offset="264" max-vertical-offset="5235">
+                  <caret line="39" column="21" selection-start-line="39" selection-start-column="21" selection-end-line="39" selection-end-column="21" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#1136#1144#0" expanded="true" />
-                    <element signature="e#1610#2847#0" expanded="true" />
-                    <element signature="e#2846#2847#0" expanded="true" />
-                    <element signature="e#3361#4598#0" expanded="true" />
-                    <element signature="e#4597#4598#0" expanded="true" />
+                    <element signature="e#1205#1213#0" expanded="true" />
+                    <element signature="e#1709#2946#0" expanded="true" />
+                    <element signature="e#2945#2946#0" expanded="true" />
+                    <element signature="e#3460#4697#0" expanded="true" />
+                    <element signature="e#4696#4697#0" expanded="true" />
+                    <element signature="e#5156#6398#0" expanded="true" />
+                    <element signature="e#6397#6398#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -89,8 +91,8 @@
           <file leaf-file-name="YellowPagesSearchTerms.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesSearchTerms.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1920">
-                  <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+                <state vertical-scroll-proportion="-3.4285715" vertical-offset="939" max-vertical-offset="1920">
+                  <caret line="69" column="87" selection-start-line="69" selection-start-column="82" selection-end-line="69" selection-end-column="87" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -224,8 +226,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentNameGenerator.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesSearchTerms.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
       </list>
     </option>
   </component>
@@ -1082,24 +1084,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3321" max-vertical-offset="4590">
-          <caret line="328" column="5" selection-start-line="328" selection-start-column="5" selection-end-line="328" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesSearchTerms.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="638" max-vertical-offset="1920">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/crawler/CrawlerController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="870">
@@ -1108,17 +1092,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java">
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesSearchTerms.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.85580915" vertical-offset="1500" max-vertical-offset="3975">
-          <caret line="155" column="20" selection-start-line="155" selection-start-column="20" selection-end-line="155" selection-end-column="20" />
+        <state vertical-scroll-proportion="-3.4285715" vertical-offset="939" max-vertical-offset="1920">
+          <caret line="69" column="87" selection-start-line="69" selection-start-column="82" selection-end-line="69" selection-end-column="87" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1136#1144#0" expanded="true" />
-            <element signature="e#1610#2847#0" expanded="true" />
-            <element signature="e#2846#2847#0" expanded="true" />
-            <element signature="e#3361#4598#0" expanded="true" />
-            <element signature="e#4597#4598#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3613" max-vertical-offset="4590">
+          <caret line="316" column="42" selection-start-line="316" selection-start-column="42" selection-end-line="316" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33298755" vertical-offset="264" max-vertical-offset="5235">
+          <caret line="39" column="21" selection-start-line="39" selection-start-column="21" selection-end-line="39" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1205#1213#0" expanded="true" />
+            <element signature="e#1709#2946#0" expanded="true" />
+            <element signature="e#2945#2946#0" expanded="true" />
+            <element signature="e#3460#4697#0" expanded="true" />
+            <element signature="e#4696#4697#0" expanded="true" />
+            <element signature="e#5156#6398#0" expanded="true" />
+            <element signature="e#6397#6398#0" expanded="true" />
           </folding>
         </state>
       </provider>

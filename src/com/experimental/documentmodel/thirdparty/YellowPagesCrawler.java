@@ -31,14 +31,16 @@ public class YellowPagesCrawler {
 
   private static final String YELLOW_PAGES_AU_PATH = "www.yellowpages.com.au";
   private static final String YELLOW_PAGES_US_PATH = "www.yellowpages.com";
+  private static final String YELLOW_PAGES_UK_PATH = "www.yell.com";
 
   private final Set<String> siteUrls = new HashSet<String>();
   private final Semaphore doneSem = new Semaphore(0);
   private final Executor executor = Executors.newFixedThreadPool(2);
 
   public Set<String> crawlForWebsites() {
-    crawlYellowPagesAU();
-    crawlYellowPagesUS();
+    //crawlYellowPagesAU();
+    //crawlYellowPagesUS();
+    crawlYellowPagesUK();
 
     try {
       doneSem.acquire();
@@ -175,6 +177,66 @@ public class YellowPagesCrawler {
         .build();
   }
 
+  private void crawlYellowPagesUK() {
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+        for (String query : YellowPagesSearchTerms.SEARCH_TERMS) {
+          for (int page = 1; page < 20; page++) {
+            try {
+              try {
+                Thread.sleep(1000);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+
+              URI queryUri = null;
+              try {
+                queryUri = buildUrlForUK(query, page);
+              } catch (URISyntaxException e) {
+                e.printStackTrace();
+                break;
+              }
+              List<String> links = null;
+              try {
+                links = extractLinkedWebsitesForUK(queryUri);
+              } catch (IOException e) {
+                e.printStackTrace();
+                break;
+              }
+
+              int numAdded = 0;
+              for (String link : links) {
+                if (addUrl(link)) {
+                  Log.out(link);
+                  numAdded++;
+                }
+              }
+
+              if (numAdded == 0) {
+                break;
+              }
+            } catch (Throwable e) {
+              break;
+            }
+          }
+        }
+
+        doneSem.release();
+      }
+    });
+  }
+
+  private URI buildUrlForUK(String searchTerm, int page) throws URISyntaxException {
+    return new URIBuilder()
+        .setScheme("http")
+        .setHost(YELLOW_PAGES_UK_PATH)
+        .setPath("/ucs/UcsSearchAction.do")
+        .addParameter("keywords", searchTerm)
+        .addParameter("pageNum", Integer.toString(page))
+        .build();
+  }
+
   private synchronized boolean addUrl(String url) {
     if (siteUrls.contains(url)) {
       return false;
@@ -200,6 +262,28 @@ public class YellowPagesCrawler {
 
         if ((linkText.toLowerCase().equals("website") || link.hasClass("contact-url"))
             && shouldIncludeLink(dstUrl)) {
+          result.add(dstUrl);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private List<String> extractLinkedWebsitesForUK(URI targetUri) throws IOException {
+    Connection connection = Jsoup.connect(targetUri.toString());
+    connection.timeout(10000);
+    connection.userAgent(USER_AGENT);
+    Document doc = connection.get();
+    Elements searchResultsDivs = doc.select("div.y-leftColumn");
+
+    List<String> result = new ArrayList<String>();
+    for (Element searchResultDiv : searchResultsDivs) {
+      Elements links = searchResultDiv.select("a[href]");
+      for (Element link : links) {
+        String dstUrl = link.attr("abs:href");
+
+        if (link.hasClass("l-link-w") && shouldIncludeLink(dstUrl)) {
           result.add(dstUrl);
         }
       }
