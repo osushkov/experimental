@@ -1,4 +1,7 @@
-package com.experimental.documentmodel;
+package com.experimental.documentmodel.thirdparty;
+
+import com.experimental.documentmodel.DocumentNameGenerator;
+import com.experimental.documentmodel.SentenceProcessor;
 
 /**
  * Created by sushkov on 14/01/15.

@@ -1,13 +1,12 @@
-package com.experimental.documentmodel;
+package com.experimental.documentmodel.thirdparty;
 
+import com.experimental.documentmodel.*;
+import com.experimental.documentmodel.thirdparty.ThirdPartyDocumentParser;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Created by sushkov on 8/01/15.

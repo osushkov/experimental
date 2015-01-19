@@ -41,7 +41,7 @@ public class LemmaMorphologies {
     }
 
     addTokenToLemmaToMorphologyMap(token.raw.toLowerCase(), lemma, 1);
-    //addTokenToMorphologyToLemmaMap(token.raw.toLowerCase(), lemma, 1);
+    addTokenToMorphologyToLemmaMap(token.raw.toLowerCase(), lemma, 1);
   }
 
   private void addTokenToLemmaToMorphologyMap(String morphology, Lemma lemma, int occurances) {

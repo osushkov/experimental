@@ -1,6 +1,10 @@
-package com.experimental.documentmodel;
+package com.experimental.documentmodel.thirdparty;
 
-import com.experimental.utils.Log;
+import com.experimental.documentmodel.DocumentNameGenerator;
+import com.experimental.documentmodel.Sentence;
+import com.experimental.documentmodel.SentenceProcessor;
+import com.experimental.documentmodel.TextCollectionDocument;
+import com.experimental.documentmodel.thirdparty.ThirdPartyDocumentParser;
 import com.google.common.base.Preconditions;
 
 import java.io.*;

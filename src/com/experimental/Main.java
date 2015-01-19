@@ -2,6 +2,7 @@ package com.experimental;
 
 import com.experimental.crawler.CrawlerController;
 import com.experimental.documentmodel.*;
+import com.experimental.documentmodel.thirdparty.*;
 import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.Word2VecDB;
 import com.experimental.languagemodel.*;
@@ -11,6 +12,7 @@ import com.experimental.utils.Log;
 
 import java.io.*;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -28,7 +30,8 @@ public class Main {
 //    outputConcatenatedLemmatisedDocuments();
 //    generateNounAssociations();
 
-      buildLemmaMorphologiesMap();
+//    buildLemmaMorphologiesMap();
+    testYellowPagesCrawler();
 
 //    try {
 //      testWord2VecDB();
@@ -307,5 +310,32 @@ public class Main {
     }
 
     Log.out("buildLemmaMorphologiesMap finished");
+  }
+
+  private static void testYellowPagesCrawler() {
+    YellowPagesCrawler crawler = new YellowPagesCrawler();
+    Set<String> websiteUrls = crawler.crawlForWebsites();
+
+    BufferedWriter bw = null;
+    try {
+      FileWriter fw = new FileWriter("site_urls.txt");
+      bw = new BufferedWriter(fw);
+
+      for (String url : websiteUrls) {
+        bw.append(url + "\n");
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      if (bw != null) {
+        bw.close();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

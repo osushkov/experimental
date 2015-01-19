@@ -1,11 +1,13 @@
-package com.experimental.documentmodel;
+package com.experimental.documentmodel.thirdparty;
 
+import com.experimental.documentmodel.DocumentNameGenerator;
+import com.experimental.documentmodel.SentenceProcessor;
+import com.experimental.documentmodel.thirdparty.ThirdPartyDocumentParser;
+import com.experimental.documentmodel.thirdparty.ThirdPartyDocumentParserFactory;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;

@@ -1,4 +1,4 @@
-package com.experimental.documentmodel;
+package com.experimental.documentmodel.thirdparty;
 
 import java.io.IOException;
 
