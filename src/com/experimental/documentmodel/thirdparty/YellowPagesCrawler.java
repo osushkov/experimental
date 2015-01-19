@@ -58,35 +58,39 @@ public class YellowPagesCrawler {
         for (String query : YellowPagesSearchTerms.SEARCH_TERMS) {
           for (int page = 1; page < 20; page++) {
             try {
-              Thread.sleep(1000);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-
-            URI queryUri = null;
-            try {
-              queryUri = buildUrlForAU(query, page);
-            } catch (URISyntaxException e) {
-              e.printStackTrace();
-              break;
-            }
-            List<String> links = null;
-            try {
-              links = extractLinkedWebsites(queryUri);
-            } catch (IOException e) {
-              e.printStackTrace();
-              break;
-            }
-
-            int numAdded = 0;
-            for (String link : links) {
-              if (addUrl(link)) {
-                Log.out(link);
-                numAdded++;
+              try {
+                Thread.sleep(1000);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
               }
-            }
 
-            if (numAdded == 0) {
+              URI queryUri = null;
+              try {
+                queryUri = buildUrlForAU(query, page);
+              } catch (URISyntaxException e) {
+                e.printStackTrace();
+                break;
+              }
+              List<String> links = null;
+              try {
+                links = extractLinkedWebsites(queryUri);
+              } catch (IOException e) {
+                e.printStackTrace();
+                break;
+              }
+
+              int numAdded = 0;
+              for (String link : links) {
+                if (addUrl(link)) {
+                  Log.out(link);
+                  numAdded++;
+                }
+              }
+
+              if (numAdded == 0) {
+                break;
+              }
+            } catch (Throwable e) {
               break;
             }
           }
@@ -116,35 +120,39 @@ public class YellowPagesCrawler {
         for (String query : YellowPagesSearchTerms.SEARCH_TERMS) {
           for (int page = 1; page < 20; page++) {
             try {
-              Thread.sleep(1000);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-
-            URI queryUri = null;
-            try {
-              queryUri = buildUrlForUS(query, page);
-            } catch (URISyntaxException e) {
-              e.printStackTrace();
-              break;
-            }
-            List<String> links = null;
-            try {
-              links = extractLinkedWebsites(queryUri);
-            } catch (IOException e) {
-              e.printStackTrace();
-              break;
-            }
-
-            int numAdded = 0;
-            for (String link : links) {
-              if (addUrl(link)) {
-                Log.out(link);
-                numAdded++;
+              try {
+                Thread.sleep(1000);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
               }
-            }
 
-            if (numAdded == 0) {
+              URI queryUri = null;
+              try {
+                queryUri = buildUrlForUS(query, page);
+              } catch (URISyntaxException e) {
+                e.printStackTrace();
+                break;
+              }
+              List<String> links = null;
+              try {
+                links = extractLinkedWebsites(queryUri);
+              } catch (IOException e) {
+                e.printStackTrace();
+                break;
+              }
+
+              int numAdded = 0;
+              for (String link : links) {
+                if (addUrl(link)) {
+                  Log.out(link);
+                  numAdded++;
+                }
+              }
+
+              if (numAdded == 0) {
+                break;
+              }
+            } catch (Throwable e) {
               break;
             }
           }

@@ -62,15 +62,15 @@
           <file leaf-file-name="YellowPagesCrawler.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.93360996" vertical-offset="870" max-vertical-offset="3855">
-                  <caret line="118" column="28" selection-start-line="118" selection-start-column="28" selection-end-line="118" selection-end-column="28" />
+                <state vertical-scroll-proportion="0.85580915" vertical-offset="1500" max-vertical-offset="3975">
+                  <caret line="155" column="20" selection-start-line="155" selection-start-column="20" selection-end-line="155" selection-end-column="20" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1136#1144#0" expanded="true" />
-                    <element signature="e#1610#2700#0" expanded="true" />
-                    <element signature="e#2699#2700#0" expanded="true" />
-                    <element signature="e#3214#4304#0" expanded="true" />
-                    <element signature="e#4303#4304#0" expanded="true" />
+                    <element signature="e#1610#2847#0" expanded="true" />
+                    <element signature="e#2846#2847#0" expanded="true" />
+                    <element signature="e#3361#4598#0" expanded="true" />
+                    <element signature="e#4597#4598#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -1110,15 +1110,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.93360996" vertical-offset="870" max-vertical-offset="3855">
-          <caret line="118" column="28" selection-start-line="118" selection-start-column="28" selection-end-line="118" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.85580915" vertical-offset="1500" max-vertical-offset="3975">
+          <caret line="155" column="20" selection-start-line="155" selection-start-column="20" selection-end-line="155" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1136#1144#0" expanded="true" />
-            <element signature="e#1610#2700#0" expanded="true" />
-            <element signature="e#2699#2700#0" expanded="true" />
-            <element signature="e#3214#4304#0" expanded="true" />
-            <element signature="e#4303#4304#0" expanded="true" />
+            <element signature="e#1610#2847#0" expanded="true" />
+            <element signature="e#2846#2847#0" expanded="true" />
+            <element signature="e#3361#4598#0" expanded="true" />
+            <element signature="e#4597#4598#0" expanded="true" />
           </folding>
         </state>
       </provider>
