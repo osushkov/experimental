@@ -41,12 +41,12 @@ public class NounAssociation {
     this.lemmaDB = Preconditions.checkNotNull(lemmaDB);
   }
 
-  public void associateVerb(LemmaId verbId) {
+  public synchronized void associateVerb(LemmaId verbId) {
     Preconditions.checkNotNull(verbId);
     associate(verbAssociations, verbId);
   }
 
-  public void associateAdjective(LemmaId adjectiveId) {
+  public synchronized void associateAdjective(LemmaId adjectiveId) {
     Preconditions.checkNotNull(adjectiveId);
     associate(adjectiveAssociations, adjectiveId);
   }

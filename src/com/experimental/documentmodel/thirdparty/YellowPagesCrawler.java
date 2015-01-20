@@ -27,7 +27,7 @@ import java.util.concurrent.Semaphore;
  */
 public class YellowPagesCrawler {
   private static final String USER_AGENT =
-      "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
 
   private static final String YELLOW_PAGES_AU_PATH = "www.yellowpages.com.au";
   private static final String YELLOW_PAGES_US_PATH = "www.yellowpages.com";
@@ -276,6 +276,11 @@ public class YellowPagesCrawler {
     connection.userAgent(USER_AGENT);
     Document doc = connection.get();
     Elements searchResultsDivs = doc.select("div.y-leftColumn");
+
+    if (searchResultsDivs.size() == 0) {
+      Log.out(targetUri.toString());
+      Log.out(doc.outerHtml());
+    }
 
     List<String> result = new ArrayList<String>();
     for (Element searchResultDiv : searchResultsDivs) {

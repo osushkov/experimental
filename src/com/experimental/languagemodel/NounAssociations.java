@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sushkov on 13/01/15.
@@ -18,8 +19,7 @@ public class NounAssociations {
 
   private static final String NOUN_ASSOCIATIONS_FILENAME = "noun_associations.txt";
 
-  private final Map<LemmaId, NounAssociation> nounAssociations = new HashMap<LemmaId, NounAssociation>();
-  private final Map<LemmaId, Integer> associsationOccurances = null;
+  private final Map<LemmaId, NounAssociation> nounAssociations = new ConcurrentHashMap<LemmaId, NounAssociation>();
   private final LemmaDB lemmaDB;
 
   public NounAssociations(LemmaDB lemmaDB) {
@@ -60,7 +60,7 @@ public class NounAssociations {
     return -1;
   }
 
-  public void associate(Token noun, Token word) {
+  private void associate(Token noun, Token word) {
     Preconditions.checkNotNull(noun);
     Preconditions.checkNotNull(word);
 
@@ -72,11 +72,10 @@ public class NounAssociations {
     LemmaId nounId = lemmaDB.addLemma(Lemma.fromToken(noun));
     LemmaId wordId = lemmaDB.addLemma(Lemma.fromToken(word));
 
-    NounAssociation curEntry = nounAssociations.get(nounId);
-    if (curEntry == null) {
-      curEntry = new NounAssociation(nounId, lemmaDB);
-      nounAssociations.put(nounId, curEntry);
+    if (!nounAssociations.containsKey(nounId)) {
+      nounAssociations.putIfAbsent(nounId, new NounAssociation(nounId, lemmaDB));
     }
+    NounAssociation curEntry = nounAssociations.get(nounId);
 
     if (word.partOfSpeech.isAdjective()) {
       curEntry.associateAdjective(wordId);

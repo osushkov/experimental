@@ -28,10 +28,9 @@ public class Main {
 
 //    aggregateLemmaQuality();
 //    outputConcatenatedLemmatisedDocuments();
-//    generateNounAssociations();
+    generateNounAssociations();
 
 //    buildLemmaMorphologiesMap();
-    testYellowPagesCrawler();
 
 //    try {
 //      testWord2VecDB();
@@ -210,13 +209,33 @@ public class Main {
       e.printStackTrace();
     }
 
+    final Executor executor = Executors.newFixedThreadPool(12);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(new DocumentStream.DocumentStreamOutput() {
       @Override
-      public void processDocument(Document document) {
-        nounAssociations.addDocument(document);
+      public void processDocument(final Document document) {
+        numDocuments.incrementAndGet();
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            nounAssociations.addDocument(document);
+            sem.release();
+          }
+        });
       }
     });
+
+    Log.out("processed all docs");
+    for (int i = 0; i < numDocuments.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
 
     try {
       nounAssociations.save();
