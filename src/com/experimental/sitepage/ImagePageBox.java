@@ -3,7 +3,6 @@ package com.experimental.sitepage;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.SentenceProcessor;
 import com.experimental.geometry.Rectangle;
-import com.experimental.utils.UrlUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
@@ -83,7 +82,7 @@ public class ImagePageBox implements PageBox {
     Preconditions.checkNotNull(imageSrc);
 
     try {
-      return UrlUtil.absoluteUrl(pageUrl, imageSrc);
+      return PageUtils.constructAbsoluteUrl(pageUrl, imageSrc).toString();
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -92,6 +91,12 @@ public class ImagePageBox implements PageBox {
   @Override
   public Rectangle getRectangle() {
     return rectangle;
+  }
+
+  @Override
+  public List<Sentence> getTextContent() {
+    Preconditions.checkState(sentences != null);
+    return sentences;
   }
 
   @Override

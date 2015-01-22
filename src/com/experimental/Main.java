@@ -7,10 +7,14 @@ import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.Word2VecDB;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.Demo;
+import com.experimental.pageparser.PageCrawler;
 import com.experimental.pageparser.PageParser;
 import com.experimental.utils.Log;
+import com.google.common.collect.Lists;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -36,7 +40,9 @@ public class Main {
 //    }
 
     //stanfordNlpDemo();
-    cssBoxExperiment();
+    pageCrawlerExperiment();
+
+    Log.out("FINISHED");
   }
 
   public static void webCrawlExperiment() {
@@ -58,8 +64,18 @@ public class Main {
   }
 
   public static void cssBoxExperiment() {
-    PageParser pageParser = new PageParser("http://www.cbdplumbers.com.au/", new SentenceProcessor());
+    PageParser pageParser = new PageParser("http://www.cbdplumbers.com.au/", SentenceProcessor.instance);
     pageParser.parsePage();
+  }
+
+  public static void pageCrawlerExperiment() {
+    List<String> crawlUrls = Lists.newArrayList(
+//        "http://www.kynetonelectrics.com",
+//        "http://www.castleroofing.us",
+//        "http://www.firehousesubs.com",
+        "http://www.purespaandsalon.net");
+    PageCrawler crawler = new PageCrawler();
+    crawler.crawlSites(crawlUrls);
   }
 
   public static void stanfordNlpDemo() {
@@ -82,9 +98,8 @@ public class Main {
     };
 
     DocumentNameGenerator documentNameGenerator = new DocumentNameGenerator(Constants.DOCUMENTS_OUTPUT_PATH);
-    SentenceProcessor sentenceProcessor = new SentenceProcessor();
-    RecursiveDocumentsParser recursiveParser =
-        new RecursiveDocumentsParser(Constants.WIKI_ROOT_PATH, parserFactory, documentNameGenerator, sentenceProcessor);
+    RecursiveDocumentsParser recursiveParser = new RecursiveDocumentsParser(
+        Constants.WIKI_ROOT_PATH, parserFactory, documentNameGenerator, SentenceProcessor.instance);
     recursiveParser.parseDocuments();
 
     Log.out("parseWikipediaDocuments finished");
@@ -106,9 +121,8 @@ public class Main {
     };
 
     DocumentNameGenerator documentNameGenerator = new DocumentNameGenerator(Constants.DOCUMENTS_OUTPUT_PATH);
-    SentenceProcessor sentenceProcessor = new SentenceProcessor();
-    RecursiveDocumentsParser recursiveParser =
-        new RecursiveDocumentsParser(Constants.WEBBASE_ROOT_PATH, parserFactory, documentNameGenerator, sentenceProcessor);
+    RecursiveDocumentsParser recursiveParser = new RecursiveDocumentsParser(
+        Constants.WEBBASE_ROOT_PATH, parserFactory, documentNameGenerator, SentenceProcessor.instance);
     recursiveParser.parseDocuments();
 
     Log.out("parseWebbaseDocuments finished");

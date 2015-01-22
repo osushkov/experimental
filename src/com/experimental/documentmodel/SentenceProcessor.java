@@ -31,10 +31,12 @@ public class SentenceProcessor {
   private final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies();
   private final StanfordCoreNLP pipeline;
 
-  public SentenceProcessor() {
+  public static final SentenceProcessor instance = new SentenceProcessor();
+
+  private SentenceProcessor() {
     Properties props = new Properties();
     props.put("annotators", "tokenize, ssplit, pos, lemma");
-    props.put("threads", "4");
+    props.put("threads", "8");
 
     pipeline = new StanfordCoreNLP(props);
   }
@@ -82,8 +84,9 @@ public class SentenceProcessor {
   }
 
   private boolean canUseMorphologyStats(CoreMap sentence) {
-    int tokensInSentence = sentence.get(CoreAnnotations.TokensAnnotation.class).size();
-    return tokensInSentence == 1;
+    return false;
+//    int tokensInSentence = sentence.get(CoreAnnotations.TokensAnnotation.class).size();
+//    return tokensInSentence == 1;
   }
 
   private Token getTokenFromAnnotations(CoreLabel token) {

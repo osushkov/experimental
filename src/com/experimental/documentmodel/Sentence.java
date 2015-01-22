@@ -72,7 +72,7 @@ public class Sentence {
   @Override
   public String toString() {
     StringBuffer buffer = new StringBuffer();
-
+    buffer.append(Double.toString(emphasis)).append(" : ");
     for (Token token : tokens) {
       buffer.append(token.raw).append("(").append(token.lemma).append(" ").append(token.partOfSpeech).append(") ");
     }

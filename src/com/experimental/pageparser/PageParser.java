@@ -6,12 +6,8 @@ import com.experimental.geometry.Rectangle;
 import com.experimental.sitepage.*;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
-import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
-import cz.vutbr.web.css.NodeData;
 import org.fit.cssbox.css.CSSNorm;
 import org.fit.cssbox.css.DOMAnalyzer;
-import org.fit.cssbox.css.NormalOutput;
-import org.fit.cssbox.css.Output;
 import org.fit.cssbox.io.DOMSource;
 import org.fit.cssbox.io.DefaultDOMSource;
 import org.fit.cssbox.io.DefaultDocumentSource;
@@ -20,21 +16,12 @@ import org.fit.cssbox.layout.Box;
 import org.fit.cssbox.layout.BrowserCanvas;
 import org.fit.cssbox.layout.ElementBox;
 import org.fit.cssbox.layout.TextBox;
-import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.html.HTMLDocument;
-import org.xml.sax.SAXException;
 
-import javax.xml.soap.Text;
-import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +41,10 @@ public class PageParser {
     }
   }
 
+  private static final double TITLE_SENTENCE_WEIGHT = 4.0;
+  private static final double DESCRIPTION_SENTENCE_WEIGHT = 3.0;
+  private static final double KEYWORD_SENTENCE_WEIGHT = 4.0;
+
   private final String pageUrl;
   private final SentenceProcessor sentenceProcessor;
 
@@ -63,6 +54,7 @@ public class PageParser {
   }
 
   public SitePage parsePage() {
+    Log.out("parsePage: " + pageUrl);
     try {
       //Open the network connection
       DocumentSource docSource = new DefaultDocumentSource(pageUrl);
@@ -70,6 +62,7 @@ public class PageParser {
       //Parse the input document
       DOMSource parser = new DefaultDOMSource(docSource);
       Document doc = parser.parse();
+
 
       //Create the CSS analyzer
       DOMAnalyzer da = new DOMAnalyzer(doc, docSource.getURL());
@@ -107,31 +100,19 @@ public class PageParser {
       }
 
       processPageBoxes(allPageBoxes);
-      List<SitePage.Link> outgoingLinks = getLinksFromPageBoxes(allPageBoxes);
 
-
-      SitePage.HeaderInfo header = getHeaderFor(doc);
-      for (Sentence sentence : header.title) {
-        Log.out(sentence.toString());
-      }
-
-      for (Sentence sentence : header.description) {
-        Log.out(sentence.toString());
-      }
-
-      for (Sentence sentence : header.keywords) {
-        Log.out(sentence.toString());
-      }
+      SitePage result = new SitePage(pageUrl, getHeaderFor(doc));
+      result.outgoingLinks.addAll(getLinksFromPageBoxes(allPageBoxes));
+      result.pageBoxes.addAll(allPageBoxes);
 
       docSource.close();
 
+      return result;
     } catch (Exception e) {
-      System.err.println("Error: "+e.getMessage());
+      System.err.println("Error: " + e.getMessage());
       e.printStackTrace();
       return null;
     }
-
-    return null;
   }
 
   private void populateElementContentMap(Box box, Map<Element, ElementContent> elementContentsMap) {
@@ -264,7 +245,7 @@ public class PageParser {
       Element titleElement = (Element) titleNodes.item(i);
       String titleText = titleElement.getTextContent();
       titleText = titleText.replace('|', '.'); // StanfordNLP doesnt handle pipe very well. Replace with period.
-      titleSentences.addAll(sentenceProcessor.processString(titleText, 1.0, true));
+      titleSentences.addAll(sentenceProcessor.processString(titleText, TITLE_SENTENCE_WEIGHT, true));
     }
 
     NodeList metaNodes = doc.getElementsByTagName("meta");
@@ -273,14 +254,15 @@ public class PageParser {
 
       if (metaElement.getAttribute("name").toLowerCase().contains("description")) {
         String descriptionText = metaElement.getAttribute("content");
-        descriptionSentences.addAll(sentenceProcessor.processString(descriptionText, 1.0, true));
+        descriptionSentences.addAll(
+            sentenceProcessor.processString(descriptionText, DESCRIPTION_SENTENCE_WEIGHT, true));
       }
 
       if (metaElement.getAttribute("name").toLowerCase().contains("keywords")) {
         String keywordsValue = metaElement.getAttribute("content");
         String[] keywords = keywordsValue.split(",");
         for (String keyword : keywords) {
-          keywordSentences.addAll(sentenceProcessor.processString(keyword, 1.0, true));
+          keywordSentences.addAll(sentenceProcessor.processString(keyword, KEYWORD_SENTENCE_WEIGHT, true));
         }
       }
     }
@@ -289,56 +271,44 @@ public class PageParser {
   }
 
   private List<SitePage.Link> getLinksFromPageBoxes(List<PageBox> pageBoxes) {
-    Map<URI, List<Sentence>> links = new HashMap<URI, List<Sentence>>();
+    Map<URL, List<Sentence>> links = new HashMap<URL, List<Sentence>>();
     for (PageBox box : pageBoxes) {
       if (box instanceof TextPageBox) {
         TextPageBox textBox = (TextPageBox) box;
         if (textBox.textStyle.isLink) {
-          URI linkUri = null;
           try {
-            linkUri = getLinkAbsoluteUrl(textBox.textStyle.linkUrl);
-          } catch (URISyntaxException e) {
+            URL linkUrl = PageUtils.constructAbsoluteUrl(pageUrl, textBox.textStyle.linkHref);
+            if (isRelevantLinkUrl(linkUrl)) {
+              links.putIfAbsent(linkUrl, new ArrayList<Sentence>());
+              links.get(linkUrl).addAll(textBox.sentences);
+            }
+          } catch (MalformedURLException e) {
             e.printStackTrace();
             continue;
-          }
-
-          if (isRelevantLinkUrl(linkUri)) {
-            links.putIfAbsent(linkUri, new ArrayList<Sentence>());
-            links.get(linkUri).addAll(textBox.sentences);
           }
         }
       }
     }
 
     List<SitePage.Link> result = new ArrayList<SitePage.Link>();
-    for (Map.Entry<URI, List<Sentence>> entry : links.entrySet()) {
+    for (Map.Entry<URL, List<Sentence>> entry : links.entrySet()) {
       result.add(new SitePage.Link(entry.getValue(), entry.getKey()));
     }
     return result;
   }
 
-  private URI getLinkAbsoluteUrl(String url) throws URISyntaxException {
-    return new URI(PageUtils.constructAbsoluteUrl(pageUrl, url));
-  }
-
-  private boolean isRelevantLinkUrl(URI uri) {
-    if (uri.toString().contains("#")) {
+  private boolean isRelevantLinkUrl(URL url) throws MalformedURLException {
+    if (url.toString().contains("#")) {
       return false;
     }
 
-    URI pageUri = null;
-    try {
-      pageUri = new URI(pageUrl);
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
+    URL rootPageUrl = new URL(pageUrl);
+
+    if (!rootPageUrl.getProtocol().equals(url.getProtocol())) {
       return false;
     }
 
-    if (!pageUri.getScheme().equals(uri.getScheme())) {
-      return false;
-    }
-
-    if (!uri.getHost().equals(pageUri.getHost())) {
+    if (!rootPageUrl.getHost().equals(url.getHost())) {
       return false;
     }
 

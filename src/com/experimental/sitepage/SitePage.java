@@ -6,8 +6,7 @@ import com.google.common.base.Preconditions;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +17,9 @@ public class SitePage {
 
   public static class Link {
     public final List<Sentence> linkText;
-    public final URI destination;
+    public final URL destination;
 
-    public Link(List<Sentence> linkText, URI destination) {
+    public Link(List<Sentence> linkText, URL destination) {
       this.linkText = Preconditions.checkNotNull(linkText);
       this.destination = Preconditions.checkNotNull(destination);
     }
@@ -43,15 +42,18 @@ public class SitePage {
         linkText.add(newSentence);
       }
 
-      URI destination = null;
-      try {
-        destination = new URI(Preconditions.checkNotNull(in.readLine()));
-      } catch (URISyntaxException e) {
-        e.printStackTrace();
-        return null;
-      }
-
+      URL destination = new URL(Preconditions.checkNotNull(in.readLine()));
       return new Link(linkText, destination);
+    }
+
+    @Override
+    public String toString() {
+      StringBuffer buffer = new StringBuffer();
+      buffer.append(destination.toString() + "\n");
+      for (Sentence sentence : linkText) {
+        buffer.append(sentence.toString() + "\n");
+      }
+      return buffer.toString();
     }
 
     
@@ -134,7 +136,16 @@ public class SitePage {
   }
 
   public List<Sentence> getFlatSentences() {
-    return null;
+    List<Sentence> result = new ArrayList<Sentence>();
+    result.addAll(header.title);
+    result.addAll(header.description);
+    result.addAll(header.keywords);
+
+    for (PageBox box : pageBoxes) {
+      result.addAll(box.getTextContent());
+    }
+
+    return result;
   }
 
   public void writeTo(BufferedWriter bw) throws IOException {
@@ -143,17 +154,17 @@ public class SitePage {
     bw.write(url + "\n");
     header.writeTo(bw);
 
-    bw.write(Integer.toString(outgoingLinks.size()));
+    bw.write(Integer.toString(outgoingLinks.size()) + "\n");
     for (Link link : outgoingLinks) {
       link.writeTo(bw);
     }
 
-    bw.write(Integer.toString(incomingLinks.size()));
+    bw.write(Integer.toString(incomingLinks.size()) + "\n");
     for (Sentence link : incomingLinks) {
       link.writeTo(bw);
     }
 
-    bw.write(Integer.toString(pageBoxes.size()));
+    bw.write(Integer.toString(pageBoxes.size()) + "\n");
     for (PageBox box : pageBoxes) {
       if (box instanceof ImagePageBox) {
         bw.write("ImagePageBox\n");

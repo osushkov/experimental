@@ -60,7 +60,7 @@ public abstract class Document {
   }
 
   public void addSentence(Sentence sentence) {
-    addSentences(Lists.newArrayList(sentences));
+    addSentences(Lists.newArrayList(sentence));
   }
 
   public void addSentences(List<Sentence> sentences) {

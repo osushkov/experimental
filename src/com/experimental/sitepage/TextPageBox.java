@@ -4,10 +4,8 @@ import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.SentenceProcessor;
 import com.experimental.geometry.Rectangle;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import cz.vutbr.web.css.CSSProperty;
 import org.fit.cssbox.layout.TextBox;
-import org.w3c.dom.css.Rect;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,7 +24,7 @@ public class TextPageBox implements PageBox {
     public final boolean isUnderlined;
     public final boolean isItalic;
     public final boolean isLink;
-    public String linkUrl;
+    public String linkHref;
 
     public TextStyle(double fontSize, boolean isBold, boolean isUnderlined, boolean isItalic,
                      boolean isLink, String linkUrl) {
@@ -35,7 +33,7 @@ public class TextPageBox implements PageBox {
       this.isUnderlined = isUnderlined;
       this.isItalic = isItalic;
       this.isLink = isLink;
-      this.linkUrl = linkUrl;
+      this.linkHref = linkUrl;
     }
 
     public TextStyle(TextBox textBox) {
@@ -46,7 +44,7 @@ public class TextPageBox implements PageBox {
       this.isItalic = textBox.getVisualContext().getFont().isItalic();
       this.isUnderlined = textBox.getVisualContext().getTextDecoration().contains(CSSProperty.TextDecoration.UNDERLINE);
       this.isLink = PageUtils.isElementALink(textBox.getParent());
-      this.linkUrl = PageUtils.getElementLinkDestination(textBox.getParent());
+      this.linkHref = PageUtils.getElementLinkDestination(textBox.getParent());
     }
 
     public static TextStyle readFrom(BufferedReader in) throws IOException {
@@ -73,10 +71,10 @@ public class TextPageBox implements PageBox {
       bw.append(Boolean.toString(isItalic) + "\n");
       bw.append(Boolean.toString(isLink) + "\n");
 
-      if (linkUrl == null) {
+      if (linkHref == null) {
         bw.append("\n");
       } else {
-        bw.append(linkUrl + "\n");
+        bw.append(linkHref + "\n");
       }
     }
 
@@ -160,8 +158,25 @@ public class TextPageBox implements PageBox {
   }
 
   @Override
+  public List<Sentence> getTextContent() {
+    Preconditions.checkState(sentences != null);
+    return sentences;
+  }
+
+  @Override
   public String toString() {
-    return "[TextPageBox] " + textStyle.computeAbsoluteEmphasis() + "\n" + text;
+    if (sentences != null) {
+      StringBuffer buffer = new StringBuffer();
+      buffer.append("[TextPageBox]\n");
+      for (Sentence sentence : sentences) {
+        buffer.append(sentence.toString()).append("\n");
+      }
+
+      return buffer.toString();
+
+    } else {
+      return "[TextPageBox] " + textStyle.computeAbsoluteEmphasis() + "\n" + text;
+    }
   }
 
   public void buildSentences(SentenceProcessor sentenceProcessor, double textBoxEmphasis) {
