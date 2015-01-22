@@ -19,16 +19,13 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
-  private static final LemmaDB lemmaDB = new LemmaDB();
-  private static final MorphologyDB morphologyDB = new MorphologyDB();
-
   public static void main(String[] args) {
 //    parseWikipediaDocuments();
 //    parseWebbaseDocuments();
 
 //    aggregateLemmaQuality();
 //    outputConcatenatedLemmatisedDocuments();
-    generateNounAssociations();
+//    generateNounAssociations();
 
 //    buildLemmaMorphologiesMap();
 
@@ -39,7 +36,7 @@ public class Main {
 //    }
 
     //stanfordNlpDemo();
-//    cssBoxExperiment();
+    cssBoxExperiment();
   }
 
   public static void webCrawlExperiment() {
@@ -61,8 +58,8 @@ public class Main {
   }
 
   public static void cssBoxExperiment() {
-    PageParser pageParser = new PageParser();
-    pageParser.parsePage("http://www.familylawyers.net.au/contact", "page.html");
+    PageParser pageParser = new PageParser("http://www.cbdplumbers.com.au/", new SentenceProcessor());
+    pageParser.parsePage();
   }
 
   public static void stanfordNlpDemo() {
@@ -120,7 +117,7 @@ public class Main {
   private static void aggregateLemmaQuality() {
     Log.out("aggregateLemmaQuality running...");
 
-    final LemmaQualityAggregator lemmaQualityAggregator = new LemmaQualityAggregator(lemmaDB);
+    final LemmaQualityAggregator lemmaQualityAggregator = new LemmaQualityAggregator();
     try {
       if (lemmaQualityAggregator.tryLoadFromDisk()) {
         Log.out("loaded LemmaQualityAggregator from disk");
@@ -199,7 +196,7 @@ public class Main {
   private static void generateNounAssociations() {
     Log.out("generateNounAssociations running...");
 
-    final NounAssociations nounAssociations = new NounAssociations(lemmaDB);
+    final NounAssociations nounAssociations = new NounAssociations();
     try {
       if (nounAssociations.tryLoad()) {
         Log.out("loaded NounAssociations from disk");
@@ -279,7 +276,7 @@ public class Main {
   private static void buildLemmaMorphologiesMap() {
     Log.out("buildLemmaMorphologiesMap running...");
 
-    final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies(lemmaDB, morphologyDB);
+    final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies();
     try {
       if (lemmaMorphologies.tryLoad()) {
         Log.out("loaded LemmaMorphologies from disk");

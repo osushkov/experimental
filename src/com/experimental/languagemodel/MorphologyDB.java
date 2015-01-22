@@ -44,4 +44,6 @@ public class MorphologyDB {
 
     return morphologyMap.inverse().get(id);
   }
+
+  public static final MorphologyDB instance = new MorphologyDB();
 }

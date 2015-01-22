@@ -5,6 +5,7 @@ import com.experimental.documentmodel.Token;
 import com.experimental.languagemodel.LemmaDB.LemmaId;
 import com.experimental.languagemodel.MorphologyDB.MorphologyId;
 import com.experimental.nlp.SimplePOSTag;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
@@ -16,10 +17,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by sushkov on 13/01/15.
  */
 public class LemmaMorphologies {
+  private static final String TAG = "LemmaMorphologies";
   private static final String LEMMA_MORPHOLOGIES_FILENAME = "lemma_morphologies.txt";
 
-  private final LemmaDB lemmaDb;
-  private final MorphologyDB morphologyDb;
+  private final LemmaDB lemmaDb = LemmaDB.instance;
+  private final MorphologyDB morphologyDb = MorphologyDB.instance;
 
   private final Map<LemmaId, Map<MorphologyId, AtomicInteger>> lemmaToMorphologyMap =
       new ConcurrentHashMap<LemmaId, Map<MorphologyId, AtomicInteger>>();
@@ -27,10 +29,7 @@ public class LemmaMorphologies {
   private final Map<MorphologyId, Map<LemmaId, AtomicInteger>> morphologytoLemmaMap =
       new ConcurrentHashMap<MorphologyId, Map<LemmaId, AtomicInteger>>();
 
-  public LemmaMorphologies(LemmaDB lemmaDb, MorphologyDB morphologyDb) {
-    this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
-    this.morphologyDb = Preconditions.checkNotNull(morphologyDb);
-  }
+  private boolean isLoaded = false;
 
   public void addToken(Token token) {
     Preconditions.checkNotNull(token);
@@ -75,6 +74,20 @@ public class LemmaMorphologies {
     for (Map.Entry<MorphologyId, AtomicInteger> entry : lemmaToMorphologyMap.get(lemmaId).entrySet()) {
       String word = Preconditions.checkNotNull(morphologyDb.getMorphology(entry.getKey()));
       result.put(word, entry.getValue().get());
+    }
+
+    return result;
+  }
+
+  public Map<Lemma, Integer> getLemmasFor(String morphology) {
+    Preconditions.checkNotNull(morphology);
+
+    MorphologyId morphologyId = morphologyDb.addMorphology(morphology.toLowerCase());
+    Map<Lemma, Integer> result = new HashMap<Lemma, Integer>();
+
+    for (Map.Entry<LemmaId, AtomicInteger> entry : morphologytoLemmaMap.get(morphologyId).entrySet()) {
+      Lemma lemma  = Preconditions.checkNotNull(lemmaDb.getLemma(entry.getKey()));
+      result.put(lemma, entry.getValue().get());
     }
 
     return result;
@@ -136,6 +149,11 @@ public class LemmaMorphologies {
   }
 
   public boolean tryLoad() throws IOException {
+    if (isLoaded) {
+      return true;
+    }
+
+    Log.out(TAG, "tryLoad");
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String morphologiesFilePath = aggregateDataFile.toPath().resolve(LEMMA_MORPHOLOGIES_FILENAME).toString();
 
@@ -153,6 +171,10 @@ public class LemmaMorphologies {
 
       int numEntries = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
       for (int i = 0; i < numEntries; i++) {
+        if (i%100000 == 0) {
+          int percentLoaded = 100 * i / numEntries;
+          Log.out(Integer.toString(percentLoaded) + "%");
+        }
         Lemma lemma = Lemma.readFrom(br);
 
         int numLemmaEntries = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
@@ -162,6 +184,7 @@ public class LemmaMorphologies {
           Preconditions.checkState(lineTokens.length == 2);
 
           int occurances = Integer.parseInt(lineTokens[0]);
+          Preconditions.checkState(occurances > 0);
           String morphology = lineTokens[1];
 
           addTokenToLemmaToMorphologyMap(morphology, lemma, occurances);
@@ -177,6 +200,8 @@ public class LemmaMorphologies {
       }
     }
 
+    Log.out("Loaded LemmaMorphologies with " + Integer.toString(lemmaToMorphologyMap.size()) + " lemmas.");
+    isLoaded = true;
     return true;
   }
 

@@ -20,11 +20,7 @@ public class NounAssociations {
   private static final String NOUN_ASSOCIATIONS_FILENAME = "noun_associations.txt";
 
   private final Map<LemmaId, NounAssociation> nounAssociations = new ConcurrentHashMap<LemmaId, NounAssociation>();
-  private final LemmaDB lemmaDB;
-
-  public NounAssociations(LemmaDB lemmaDB) {
-    this.lemmaDB = Preconditions.checkNotNull(lemmaDB);
-  }
+  private final LemmaDB lemmaDB = LemmaDB.instance;
 
   public void addDocument(Document document) {
     Preconditions.checkNotNull(document);

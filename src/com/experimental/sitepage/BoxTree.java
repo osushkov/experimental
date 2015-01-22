@@ -1,6 +1,7 @@
 package com.experimental.sitepage;
 
 import com.experimental.geometry.Rectangle;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.fit.cssbox.layout.Box;
@@ -59,7 +60,6 @@ public class BoxTree {
 
   private final String pageUrl;
   private final BoxTreeNode root = new BoxTreeNode(null);
-  private final Map<PageBox, BoxTreeNode> boxMap = new HashMap<PageBox, BoxTreeNode>();
 
   public BoxTree(String pageUrl, Box rootBox, Node rootNode) {
     this.pageUrl = Preconditions.checkNotNull(pageUrl);
@@ -67,7 +67,6 @@ public class BoxTree {
     Map<Element, ElementContent> elementContentsMap = new HashMap<Element, ElementContent>();
     populateElementContentMap(rootBox, elementContentsMap);
 
-      System.out.println("bleh: " + rootNode);
       buildTree(rootNode, root, elementContentsMap);
   }
 
@@ -103,11 +102,9 @@ public class BoxTree {
   }
 
   private void buildTree(Node curNode, BoxTreeNode parent, Map<Element, ElementContent> elementContentsMap) {
-    System.out.println("wee: " + curNode);
     BoxTreeNode newNode = new BoxTreeNode(parent);
     if (curNode instanceof Element) {
       if (elementContentsMap.containsKey((Element) curNode)) {
-        System.out.println("bleh");
         ElementContent elementContent = elementContentsMap.get((Element) curNode);
 
         newNode.childBoxes.addAll(elementContent.containedImages);
@@ -174,11 +171,12 @@ public class BoxTree {
         ElementBox childElementBox = (ElementBox) childBox;
         if (childElementBox.getElement().getTagName().equals("img")) {
           String imageSrc = childElementBox.getElement().getAttribute("src");
+          String imageAltText = childElementBox.getElement().getAttribute("alt");
           if (imageSrc != null) {
             Rectangle imageRect = new Rectangle(
                 childElementBox.getAbsoluteBounds().getX(), childElementBox.getAbsoluteBounds().getY(),
                 childElementBox.getAbsoluteBounds().getWidth(), childElementBox.getAbsoluteBounds().getHeight());
-            result.add(new ImagePageBox(pageUrl, imageSrc, imageRect));
+            result.add(new ImagePageBox(pageUrl, imageSrc, imageAltText, imageRect));
           }
         }
       }
@@ -207,36 +205,4 @@ public class BoxTree {
 
     return result;
   }
-
-//  public double similarityBetween(PageBox boxA, PageBox boxB) {
-//    // implemented using the Lin similarity measure.
-//    // TODO: if the LCS is the root, then the similarity will be 0. This may not be desirable for a website.
-//
-//    BoxTreeNode nodeA = Preconditions.checkNotNull(boxMap.get(boxA));
-//    BoxTreeNode nodeB = Preconditions.checkNotNull(boxMap.get(boxB));
-//
-//    BoxTreeNode lcs = findFirstCommonAncestor(nodeA, nodeB);
-//
-//    double numerator = 2.0 * Math.log(lcs.numElements / root.numElements);
-//    double denominator =
-//        Math.log(nodeA.numElements / root.numElements) + Math.log(nodeB.numElements / root.numElements);
-//
-//    return numerator / denominator;
-//  }
-
-  private BoxTreeNode findFirstCommonAncestor(BoxTreeNode nodeA, BoxTreeNode nodeB) {
-    List<BoxTreeNode> ancestorsOfA = nodeA.getAncestors();
-    List<BoxTreeNode> ancestorsOfB = nodeB.getAncestors();
-
-    for (BoxTreeNode ancestorA : ancestorsOfA) {
-      if (ancestorsOfB.contains(ancestorA)) {
-        return ancestorA;
-      }
-    }
-
-    // We should never get here with a property rooted tree.
-    assert(false);
-    return null;
-  }
-
 }

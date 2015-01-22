@@ -39,14 +39,10 @@ public class LemmaQualityAggregator {
         }
       };
 
-  private final LemmaDB lemmaDB;
+  private final LemmaDB lemmaDB = LemmaDB.instance;
   private final Map<LemmaId, LemmaQualityInfo> lemmaQualityMap = new HashMap<LemmaId, LemmaQualityInfo>();
   private boolean haveQuality = false;
   private int totalDocuments = 0;
-
-  public LemmaQualityAggregator(LemmaDB lemmaDB) {
-    this.lemmaDB = Preconditions.checkNotNull(lemmaDB);
-  }
 
   public void addDocument(Document document) {
     Preconditions.checkNotNull(document);

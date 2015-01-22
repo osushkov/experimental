@@ -16,10 +16,9 @@ public abstract class Document {
   private static final String RAW_TEXT_FILENAME = "raw.txt";
   private static final String TOKENISED_SENTENCES_FILENAME = "sentences.txt";
 
-  private final String rootDirectoryPath;
+  protected final String rootDirectoryPath;
 
   private List<Sentence> sentences = null;
-  //private String rawText = null;
   private BagOfWeightedLemmas bagOfLemmas = null;
 
   public static boolean isExistingDocumentDirectory(File dir) {
@@ -43,15 +42,6 @@ public abstract class Document {
   public Document(String rootDirectoryPath) {
     this.rootDirectoryPath = Preconditions.checkNotNull(rootDirectoryPath);
   }
-
-//  public String getRawText() {
-//    if (rawText == null) {
-//      if (!loadRawText()) {
-//        rawText = "";
-//      }
-//    }
-//    return rawText;
-//  }
 
   public List<Sentence> getSentences() {
     if (sentences == null) {
@@ -80,16 +70,11 @@ public abstract class Document {
     this.sentences.addAll(Preconditions.checkNotNull(sentences));
   }
 
-//  public void setText(String rawText) {
-//    this.rawText = Preconditions.checkNotNull(rawText);
-//  }
-
   public void save() throws IOException {
     File rootDir = new File(rootDirectoryPath);
     if (!rootDir.exists()) {
       rootDir.mkdirs();
     }
-    writeRawText(rootDir.toPath().resolve(RAW_TEXT_FILENAME).toString());
     writeSentences(rootDir.toPath().resolve(TOKENISED_SENTENCES_FILENAME).toString());
     writeSpecificData();
   }
@@ -107,25 +92,6 @@ public abstract class Document {
     }
 
     bw.write("\n");
-  }
-
-  private void writeRawText(String filePath) throws IOException {
-//    BufferedWriter bw = null;
-//    try {
-//      try {
-//        FileWriter fw = new FileWriter(filePath);
-//        bw = new BufferedWriter(fw);
-//      } catch (FileNotFoundException e) {
-//        e.printStackTrace();
-//        return;
-//      }
-//
-//      bw.write(rawText);
-//    } finally {
-//      if (bw != null) {
-//        bw.close();
-//      }
-//    }
   }
 
   private void writeSentences(String filePath) throws IOException {
@@ -150,34 +116,12 @@ public abstract class Document {
     }
   }
 
-  protected abstract void writeSpecificData();
+  protected abstract void writeSpecificData() throws IOException;
 
 
   private void generateBagOfLemmas() {
     bagOfLemmas = new BagOfWeightedLemmas(getSentences());
   }
-
-//  private boolean loadRawText() {
-//    File rootDir = new File(rootDirectoryPath);
-//    if (!rootDir.exists()) {
-//      return false;
-//    }
-//
-//    String rawTextPath = rootDir.toPath().resolve(RAW_TEXT_FILENAME).toString();
-//    File rawTextFile = new File(rawTextPath);
-//    if (!rawTextFile.exists()) {
-//      return false;
-//    }
-//
-//    try {
-//      loadRawText(rawTextFile);
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//      return false;
-//    }
-//
-//    return true;
-//  }
 
   private boolean loadSentences() {
     File rootDir = new File(rootDirectoryPath);
@@ -200,31 +144,6 @@ public abstract class Document {
 
     return true;
   }
-
-//  private void loadRawText(File file) throws IOException {
-//    StringBuffer rawTextBuffer = new StringBuffer();
-//
-//    BufferedReader br = null;
-//    try {
-//      br = new BufferedReader(new FileReader(file.getAbsolutePath()));
-//
-//      String line = br.readLine();
-//      while (line != null) {
-//        rawTextBuffer.append(line).append("\n");
-//        line = br.readLine();
-//      }
-//
-//    } catch (FileNotFoundException e) {
-//      e.printStackTrace();
-//      return;
-//    } finally {
-//      if (br != null) {
-//        br.close();
-//      }
-//    }
-//
-//    this.rawText = rawTextBuffer.toString();
-//  }
 
   private void loadSentences(File file) throws IOException {
     BufferedReader br = null;

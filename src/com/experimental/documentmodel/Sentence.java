@@ -68,4 +68,15 @@ public class Sentence {
 
     return buf.toString();
   }
+
+  @Override
+  public String toString() {
+    StringBuffer buffer = new StringBuffer();
+
+    for (Token token : tokens) {
+      buffer.append(token.raw).append("(").append(token.lemma).append(" ").append(token.partOfSpeech).append(") ");
+    }
+
+    return buffer.toString();
+  }
 }

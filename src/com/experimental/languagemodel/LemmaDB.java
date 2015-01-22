@@ -47,4 +47,6 @@ public class LemmaDB {
 
     return lemmaMap.inverse().get(id);
   }
+
+  public static final LemmaDB instance = new LemmaDB();
 }

@@ -2,6 +2,9 @@ package com.experimental.geometry;
 
 import com.google.common.base.Preconditions;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -66,7 +69,30 @@ public class Rectangle {
     this.height = maxY - minY;
   }
 
-  double distanceTo(Rectangle other) {
+  public static Rectangle readFrom(BufferedReader in) throws IOException {
+    Preconditions.checkNotNull(in);
+
+    double x = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
+    double y = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
+
+    double width = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
+    double height = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
+    Preconditions.checkState(width >= 0.0);
+    Preconditions.checkState(height >= 0.0);
+
+    return new Rectangle(x, y, width, height);
+  }
+
+  public void writeTo(BufferedWriter out) throws IOException {
+    Preconditions.checkNotNull(out);
+
+    out.write(Double.toString(x) + "\n");
+    out.write(Double.toString(y) + "\n");
+    out.write(Double.toString(width) + "\n");
+    out.write(Double.toString(height) + "\n");
+  }
+
+  public double distanceTo(Rectangle other) {
     Preconditions.checkNotNull(other);
 
     double xDist = Math.max(this.x, other.x) - Math.min(this.x + this.width, other.x + other.width);
@@ -76,6 +102,10 @@ public class Rectangle {
     yDist = Math.max(yDist, 0.0);
 
     return Math.sqrt(xDist * xDist + yDist * yDist);
+  }
+
+  public double area() {
+    return width * height;
   }
 
   @Override

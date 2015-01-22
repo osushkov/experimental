@@ -1,7 +1,12 @@
 package com.experimental.pageparser;
 
-import com.experimental.sitepage.BoxTree;
-import com.experimental.sitepage.PageBox;
+import com.experimental.documentmodel.Sentence;
+import com.experimental.documentmodel.SentenceProcessor;
+import com.experimental.geometry.Rectangle;
+import com.experimental.sitepage.*;
+import com.experimental.utils.Log;
+import com.google.common.base.Preconditions;
+import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import cz.vutbr.web.css.NodeData;
 import org.fit.cssbox.css.CSSNorm;
 import org.fit.cssbox.css.DOMAnalyzer;
@@ -15,13 +20,21 @@ import org.fit.cssbox.layout.Box;
 import org.fit.cssbox.layout.BrowserCanvas;
 import org.fit.cssbox.layout.ElementBox;
 import org.fit.cssbox.layout.TextBox;
+import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.html.HTMLDocument;
 import org.xml.sax.SAXException;
 
+import javax.xml.soap.Text;
+import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,12 +44,28 @@ import java.util.Map;
  * Created by sushkov on 3/01/15.
  */
 public class PageParser {
-  private Map<Element, String> elementText = new HashMap<Element, String>();
+  private static class ElementContent {
+    final Element element;
+    final List<TextPageBox> containedText = new ArrayList<TextPageBox>();
+    final List<ImagePageBox> containedImages = new ArrayList<ImagePageBox>();
 
-  public void parsePage(String url, String outputPath) {
+    ElementContent(Element element) {
+      this.element = Preconditions.checkNotNull(element);
+    }
+  }
+
+  private final String pageUrl;
+  private final SentenceProcessor sentenceProcessor;
+
+  public PageParser(String pageUrl, SentenceProcessor sentenceProcessor) {
+    this.pageUrl = Preconditions.checkNotNull(pageUrl);
+    this.sentenceProcessor = Preconditions.checkNotNull(sentenceProcessor);
+  }
+
+  public SitePage parsePage() {
     try {
       //Open the network connection
-      DocumentSource docSource = new DefaultDocumentSource(url);
+      DocumentSource docSource = new DefaultDocumentSource(pageUrl);
 
       //Parse the input document
       DOMSource parser = new DefaultDOMSource(docSource);
@@ -60,132 +89,259 @@ public class PageParser {
       browser.createLayout(new java.awt.Dimension(1366, 768));
 
       //Compute the styles
-      System.err.println("Computing style...");
       da.stylesToDomInherited();
 
-      System.out.println("document uri: " + url);
-      BoxTree boxTree = new BoxTree(url, browser.getViewport(), doc);
-      List<PageBox> allBoxes = boxTree.getAllBoxes();
-      for (PageBox pageBox : allBoxes) {
-        System.out.println(pageBox);
+      Map<Element, ElementContent> elementContentsMap = new HashMap<Element, ElementContent>();
+      populateElementContentMap(browser.getViewport(), elementContentsMap);
+
+      List<PageBox> allPageBoxes = new ArrayList<PageBox>();
+      for (ElementContent elementContent : elementContentsMap.values()) {
+        if (elementContent.containedText.size() > 0) {
+          TextPageBox mergedTextBox = mergeTextBoxes(elementContent.containedText);
+          if (mergedTextBox != null) {
+            allPageBoxes.add(mergedTextBox);
+          }
+        }
+
+        allPageBoxes.addAll(elementContent.containedImages);
       }
 
-//      printTextBoxes2(browser.getViewport());
-//      printTextBoxes(browser.getViewport(), da);
+      processPageBoxes(allPageBoxes);
+      List<SitePage.Link> outgoingLinks = getLinksFromPageBoxes(allPageBoxes);
 
-      OutputStream os = new FileOutputStream(outputPath);
-      Output out = new NormalOutput(doc);
-      out.dumpTo(os);
-      os.close();
+
+      SitePage.HeaderInfo header = getHeaderFor(doc);
+      for (Sentence sentence : header.title) {
+        Log.out(sentence.toString());
+      }
+
+      for (Sentence sentence : header.description) {
+        Log.out(sentence.toString());
+      }
+
+      for (Sentence sentence : header.keywords) {
+        Log.out(sentence.toString());
+      }
 
       docSource.close();
-
-      System.err.println("Done.");
 
     } catch (Exception e) {
       System.err.println("Error: "+e.getMessage());
       e.printStackTrace();
+      return null;
     }
 
-
-//    for (String line : elementText.values()) {
-//      System.out.println(line + " ** ");
-//    }
+    return null;
   }
 
-  private static void printTextBoxes2(Box root)
-  {
-    if (root instanceof TextBox)
-    {
-      //text boxes are just printed
-      TextBox text = (TextBox) root;
-      if (isBoxVisible(root)) {
-        System.out.println("x=" + text.getAbsoluteBounds().x + " y=" + text.getAbsoluteBounds().y + " text=" + text.getText());
-      }
-    }
-    else if (root instanceof ElementBox)
-    {
-      //element boxes must be just traversed
-      ElementBox el = (ElementBox) root;
-      for (int i = el.getStartChild(); i < el.getEndChild(); i++)
-        printTextBoxes2(el.getSubBox(i));
-    }
-  }
+  private void populateElementContentMap(Box box, Map<Element, ElementContent> elementContentsMap) {
+    Preconditions.checkNotNull(box);
+    Preconditions.checkNotNull(elementContentsMap);
 
-  private static boolean isBoxVisible(Box box) {
-    if (!box.isDisplayed() || !box.isDeclaredVisible()) {
-      return false;
+    if (!PageUtils.isBoxVisible(box)) {
+      return;
     }
-
 
     if (box instanceof ElementBox) {
-      ElementBox el = (ElementBox) box;
+      ElementBox elementBox = (ElementBox) box;
+      Element element = elementBox.getElement();
 
-      System.out.println(el.getStyle().getProperty("display"));
-      if ("none".equals(el.getStyle().getProperty("display"))) {
-        return false;
-      }
-    }
+      List<TextPageBox> childTextBoxes = textBoxesFromElement(elementBox);
+      List<ImagePageBox> childImageBoxes = imageBoxesFromElement(elementBox);
 
-    if (box.getParent() != null) {
-      return isBoxVisible(box.getParent());
-    }
-
-    return true;
-  }
-
-
-  private void printTextBoxes(Box root, DOMAnalyzer da) {
-
-    if (root instanceof TextBox)
-    {
-      //text boxes are just printed
-      TextBox text = (TextBox) root;
-      System.out.println(text.getText());
-//      System.out.println(text.getVisualContext().getFont().getSize() + " " + text.getVisualContext().getFont().isBold() +
-//          " " + text.getVisualContext().getFont().isItalic());
-
-
-//      System.out.println("x=" + text.getAbsoluteBounds().x + " y=" + text.getAbsoluteBounds().y +
-//          " w=" + text.getMinimalAbsoluteBounds().getWidth() + " h=" + text.getAbsoluteBounds().getHeight() +
-//          " text=" + text.getText());
-    }
-    else if (root instanceof ElementBox) {
-      //element boxes must be just traversed
-      ElementBox el = (ElementBox) root;
-
-//      printDirectChildText(el);
-
-      if (el.getElement().getTagName().equals("img")) {
-//        System.out.println("image=" + el.getElement().getAttribute("src"));
-//        System.out.println("x=" + el.getAbsoluteBounds().x + " y=" + el.getAbsoluteBounds().y +
-//            " w=" + el.getMinimalAbsoluteBounds().getWidth() + " h=" + el.getAbsoluteBounds().getHeight());
-      } else {
-        for (int i = el.getStartChild(); i < el.getEndChild(); i++) {
-          printTextBoxes(el.getSubBox(i), da);
+      if (childTextBoxes.size() > 0 || childImageBoxes.size() > 0) {
+        if (!elementContentsMap.containsKey(element)) {
+          elementContentsMap.put(element, new ElementContent(element));
         }
+
+        ElementContent elementContent = elementContentsMap.get(element);
+        elementContent.containedImages.addAll(childImageBoxes);
+        elementContent.containedText.addAll(childTextBoxes);
+      }
+
+      for (int i = elementBox.getStartChild(); i < elementBox.getEndChild(); i++) {
+        populateElementContentMap(elementBox.getSubBox(i), elementContentsMap);
       }
     }
   }
 
-  private void printDirectChildText(ElementBox elementBox) {
-    if (elementBox.isDisplayed() && elementBox.isDeclaredVisible()) {
-      for (int i = elementBox.getStartChild(); i < elementBox.getEndChild(); i++) {
-        Box childBox = elementBox.getSubBox(i);
-        if (childBox instanceof TextBox) {
-          Element elem = elementBox.getElement();
-          if (elementText.get(elem) == null) {
-            elementText.put(elem, childBox.getText());
-          } else {
-            elementText.put(elem, elementText.get(elem) + " " + childBox.getText());
+  private void processPageBoxes(List<PageBox> allPageBoxes) {
+    double weightSum = 0.0;
+    int totalCharacters = 0;
+
+    for (PageBox box : allPageBoxes) {
+      if (box instanceof TextPageBox) {
+        TextPageBox textBox = (TextPageBox) box;
+        int numCharacters = textBox.text.length();
+
+        weightSum += textBox.textStyle.computeAbsoluteEmphasis() * numCharacters;
+        totalCharacters += numCharacters;
+      }
+    }
+
+    double averageEmphasis = weightSum / totalCharacters;
+    for (PageBox box : allPageBoxes) {
+      if (box instanceof TextPageBox) {
+        TextPageBox textBox = (TextPageBox) box;
+        textBox.buildSentences(sentenceProcessor, textBox.textStyle.computeAbsoluteEmphasis() / averageEmphasis);
+      } else if (box instanceof ImagePageBox) {
+        ((ImagePageBox) box).buildSentences(sentenceProcessor, averageEmphasis);
+      }
+    }
+  }
+
+  private TextPageBox mergeTextBoxes(List<TextPageBox> boxes) {
+    Preconditions.checkNotNull(boxes);
+
+    if (boxes.size() == 0) {
+      return null;
+    }
+
+    StringBuffer mergedText = new StringBuffer();
+    List<Rectangle> allRectangles = new ArrayList<Rectangle>();
+    TextPageBox.TextStyle textStyle = boxes.get(0).textStyle;
+
+    for (TextPageBox box : boxes) {
+      if (box != boxes.get(0)) {
+        mergedText.append(" ");
+      }
+      mergedText.append(box.text);
+      allRectangles.add(box.getRectangle());
+    }
+
+    return new TextPageBox(mergedText.toString(), textStyle, new Rectangle(allRectangles));
+  }
+
+  private List<TextPageBox> textBoxesFromElement(ElementBox elementBox) {
+    List<TextPageBox> result = new ArrayList<TextPageBox>();
+    for (int i = elementBox.getStartChild(); i < elementBox.getEndChild(); i++) {
+      Box childBox = elementBox.getSubBox(i);
+      if (childBox instanceof TextBox) {
+        TextBox childTextBox = (TextBox) childBox;
+
+        Rectangle rect = new Rectangle(
+            childTextBox.getAbsoluteBounds().getX(), childTextBox.getAbsoluteBounds().getY(),
+            childTextBox.getAbsoluteBounds().getWidth(), childTextBox.getAbsoluteBounds().getHeight());
+
+        result.add(new TextPageBox(childTextBox.getText(), new TextPageBox.TextStyle(childTextBox), rect));
+      }
+    }
+
+    return result;
+  }
+
+  private List<ImagePageBox> imageBoxesFromElement(ElementBox elementBox) {
+    List<ImagePageBox> result = new ArrayList<ImagePageBox>();
+
+    for (int i = elementBox.getStartChild(); i < elementBox.getEndChild(); i++) {
+      Box childBox = elementBox.getSubBox(i);
+      if (childBox instanceof ElementBox) {
+        ElementBox childElementBox = (ElementBox) childBox;
+        if (childElementBox.getElement().getTagName().equals("img")) {
+          String imageSrc = childElementBox.getElement().getAttribute("src");
+          String imageAltText = childElementBox.getElement().getAttribute("alt");
+          if (imageSrc != null) {
+            Rectangle imageRect = new Rectangle(
+                childElementBox.getAbsoluteBounds().getX(), childElementBox.getAbsoluteBounds().getY(),
+                childElementBox.getAbsoluteBounds().getWidth(), childElementBox.getAbsoluteBounds().getHeight());
+            result.add(new ImagePageBox(pageUrl, imageSrc, imageAltText, imageRect));
           }
         }
       }
     }
 
-//    for (String text : elementText) {
-//      System.out.println(text + "*");
-//    }
+    return result;
   }
 
+  private SitePage.HeaderInfo getHeaderFor(Document doc) {
+    List<Sentence> titleSentences = new ArrayList<Sentence>();
+
+    List<Sentence> descriptionSentences = new ArrayList<Sentence>();
+    List<Sentence> keywordSentences = new ArrayList<Sentence>();
+
+    NodeList titleNodes = doc.getElementsByTagName("title");
+    for (int i = 0; i < titleNodes.getLength(); i++) {
+      Element titleElement = (Element) titleNodes.item(i);
+      String titleText = titleElement.getTextContent();
+      titleText = titleText.replace('|', '.'); // StanfordNLP doesnt handle pipe very well. Replace with period.
+      titleSentences.addAll(sentenceProcessor.processString(titleText, 1.0, true));
+    }
+
+    NodeList metaNodes = doc.getElementsByTagName("meta");
+    for (int i = 0; i < metaNodes.getLength(); i++) {
+      Element metaElement = (Element) metaNodes.item(i);
+
+      if (metaElement.getAttribute("name").toLowerCase().contains("description")) {
+        String descriptionText = metaElement.getAttribute("content");
+        descriptionSentences.addAll(sentenceProcessor.processString(descriptionText, 1.0, true));
+      }
+
+      if (metaElement.getAttribute("name").toLowerCase().contains("keywords")) {
+        String keywordsValue = metaElement.getAttribute("content");
+        String[] keywords = keywordsValue.split(",");
+        for (String keyword : keywords) {
+          keywordSentences.addAll(sentenceProcessor.processString(keyword, 1.0, true));
+        }
+      }
+    }
+
+    return new SitePage.HeaderInfo(titleSentences, descriptionSentences, keywordSentences);
+  }
+
+  private List<SitePage.Link> getLinksFromPageBoxes(List<PageBox> pageBoxes) {
+    Map<URI, List<Sentence>> links = new HashMap<URI, List<Sentence>>();
+    for (PageBox box : pageBoxes) {
+      if (box instanceof TextPageBox) {
+        TextPageBox textBox = (TextPageBox) box;
+        if (textBox.textStyle.isLink) {
+          URI linkUri = null;
+          try {
+            linkUri = getLinkAbsoluteUrl(textBox.textStyle.linkUrl);
+          } catch (URISyntaxException e) {
+            e.printStackTrace();
+            continue;
+          }
+
+          if (isRelevantLinkUrl(linkUri)) {
+            links.putIfAbsent(linkUri, new ArrayList<Sentence>());
+            links.get(linkUri).addAll(textBox.sentences);
+          }
+        }
+      }
+    }
+
+    List<SitePage.Link> result = new ArrayList<SitePage.Link>();
+    for (Map.Entry<URI, List<Sentence>> entry : links.entrySet()) {
+      result.add(new SitePage.Link(entry.getValue(), entry.getKey()));
+    }
+    return result;
+  }
+
+  private URI getLinkAbsoluteUrl(String url) throws URISyntaxException {
+    return new URI(PageUtils.constructAbsoluteUrl(pageUrl, url));
+  }
+
+  private boolean isRelevantLinkUrl(URI uri) {
+    if (uri.toString().contains("#")) {
+      return false;
+    }
+
+    URI pageUri = null;
+    try {
+      pageUri = new URI(pageUrl);
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+      return false;
+    }
+
+    if (!pageUri.getScheme().equals(uri.getScheme())) {
+      return false;
+    }
+
+    if (!uri.getHost().equals(pageUri.getHost())) {
+      return false;
+    }
+
+    return true;
+  }
 }
