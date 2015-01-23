@@ -68,8 +68,13 @@ public class LemmaMorphologies {
   public Map<String, Integer> getMorphologiesFor(Lemma lemma) {
     Preconditions.checkNotNull(lemma);
 
-    LemmaId lemmaId = lemmaDb.addLemma(lemma);
+
     Map<String, Integer> result = new HashMap<String, Integer>();
+
+    LemmaId lemmaId = lemmaDb.getLemmaId(lemma);
+    if (lemmaId == null) {
+      return result;
+    }
 
     if (!lemmaToMorphologyMap.containsKey(lemmaId)) {
       return result;
@@ -86,8 +91,12 @@ public class LemmaMorphologies {
   public Map<Lemma, Integer> getLemmasFor(String morphology) {
     Preconditions.checkNotNull(morphology);
 
-    MorphologyId morphologyId = morphologyDb.addMorphology(morphology.toLowerCase());
     Map<Lemma, Integer> result = new HashMap<Lemma, Integer>();
+
+    MorphologyId morphologyId = morphologyDb.getMorphologyId(morphology);
+    if (morphologyId == null) {
+      return result;
+    }
 
     if (!morphologytoLemmaMap.containsKey(morphologyId)) {
       return result;
