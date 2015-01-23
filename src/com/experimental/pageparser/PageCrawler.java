@@ -37,7 +37,7 @@ public class PageCrawler {
   private final DocumentNameGenerator documentNameGenerator =
       new DocumentNameGenerator(Constants.DOCUMENTS_OUTPUT_PATH);
 
-  private final Executor executor = Executors.newFixedThreadPool(12);
+  private final Executor executor = Executors.newFixedThreadPool(20);
   private final Semaphore doneSem = new Semaphore(0);
 
   public void crawlSites(List<String> urls) {
