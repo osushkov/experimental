@@ -171,6 +171,8 @@ public class PageParser {
     }
 
     double averageEmphasis = weightSum / totalCharacters;
+    Log.out("emp: " + averageEmphasis + " " + weightSum + " " + totalCharacters);
+
     for (PageBox box : allPageBoxes) {
       if (box instanceof TextPageBox) {
         TextPageBox textBox = (TextPageBox) box;

@@ -29,6 +29,8 @@ public class TextPageBox implements PageBox {
     public TextStyle(double fontSize, boolean isBold, boolean isUnderlined, boolean isItalic,
                      boolean isLink, String linkUrl) {
       this.fontSize = fontSize;
+      Preconditions.checkState(fontSize > 0.0);
+
       this.isBold = isBold;
       this.isUnderlined = isUnderlined;
       this.isItalic = isItalic;
@@ -40,6 +42,8 @@ public class TextPageBox implements PageBox {
       Preconditions.checkNotNull(textBox);
 
       this.fontSize = textBox.getVisualContext().getFont().getSize();
+      Preconditions.checkState(fontSize > 0.0);
+
       this.isBold = textBox.getVisualContext().getFont().isBold();
       this.isItalic = textBox.getVisualContext().getFont().isItalic();
       this.isUnderlined = textBox.getVisualContext().getTextDecoration().contains(CSSProperty.TextDecoration.UNDERLINE);
@@ -51,7 +55,7 @@ public class TextPageBox implements PageBox {
       Preconditions.checkNotNull(in);
 
       double fontSize = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
-      Preconditions.checkState(fontSize >= 0.0);
+      Preconditions.checkState(fontSize > 0.0);
 
       boolean isBold = Boolean.parseBoolean(Preconditions.checkNotNull(in.readLine()));
       boolean isUnderlined = Boolean.parseBoolean(Preconditions.checkNotNull(in.readLine()));
@@ -79,6 +83,7 @@ public class TextPageBox implements PageBox {
     }
 
     public double computeAbsoluteEmphasis() {
+
       double result = Math.sqrt(fontSize);
 //      if (isBold) {
 //        result *= 1.2;
