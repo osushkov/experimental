@@ -9,7 +9,9 @@ import com.experimental.languagemodel.*;
 import com.experimental.nlp.Demo;
 import com.experimental.pageparser.PageCrawler;
 import com.experimental.pageparser.PageParser;
+import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Log;
+import com.experimental.utils.TldUtils;
 import com.google.common.collect.Lists;
 
 import java.io.*;
@@ -40,8 +42,14 @@ public class Main {
 //    }
 
     //stanfordNlpDemo();
-    pageCrawlerExperiment();
+//    pageCrawlerExperiment();
+//    try {
+//      pageCrawler();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
 
+    testYellowPagesCrawler();
     Log.out("FINISHED");
   }
 
@@ -68,14 +76,57 @@ public class Main {
     pageParser.parsePage();
   }
 
-  public static void pageCrawlerExperiment() {
-    List<String> crawlUrls = Lists.newArrayList(
-//        "http://www.kynetonelectrics.com",
-//        "http://www.castleroofing.us",
-//        "http://www.firehousesubs.com",
-        "http://www.purespaandsalon.net");
+  public static void pageCrawler() throws IOException {
+    Log.out("pageCrawler running...");
+
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String siteListPath = aggregateDataFile.toPath().resolve("all_sites.txt").toString();
+
+    List<String> crawlUrls = Lists.newArrayList();
+
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new FileReader(siteListPath));
+
+      String line = br.readLine();
+      while (line != null) {
+        if (!line.startsWith("http://")) {
+          line = "http://" + line;
+        }
+        crawlUrls.add(line);
+        line = br.readLine();
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
+    } finally {
+      if (br != null) {
+        br.close();
+      }
+    }
+
     PageCrawler crawler = new PageCrawler();
     crawler.crawlSites(crawlUrls);
+
+    Log.out("pageCrawler finished");
+  }
+
+  public static void pageProcessExperiment() {
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE),
+        new DocumentStream.DocumentStreamOutput() {
+      @Override
+      public void processDocument(Document document) {
+        WebsiteDocument webDoc = (WebsiteDocument) document;
+
+        Log.out("process document: " + webDoc.getSitePages().size());
+        for (SitePage page : webDoc.getSitePages()) {
+          for (Sentence sentence : page.header.description) {
+            Log.out(sentence.toString());
+          }
+        }
+      }
+    });
   }
 
   public static void stanfordNlpDemo() {

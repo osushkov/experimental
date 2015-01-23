@@ -17,7 +17,9 @@ public class PageUtils {
   public static boolean isElementALink(ElementBox element) {
     if (element.getElement().getTagName().equals("a")) {
       String href = element.getElement().getAttribute("href").trim().toLowerCase();
-      if (href.startsWith("mailto:") || href.startsWith("ftp:") || href.startsWith("file:")) {
+      if (href.startsWith("mailto:") || href.startsWith("ftp:") ||
+          href.startsWith("file:") || href.startsWith("tel:") ||
+          href.startsWith("javascript"))  {
         return false;
       } else {
         return true;

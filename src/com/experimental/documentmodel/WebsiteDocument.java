@@ -23,7 +23,7 @@ public class WebsiteDocument extends Document {
   }
 
   public List<SitePage> getSitePages() {
-    if (sitePages == null) {
+    if (sitePages == null || frontPage == null) {
       sitePages = new ArrayList<SitePage>();
       tryLoadSitePages();
     }
@@ -93,6 +93,48 @@ public class WebsiteDocument extends Document {
   }
 
   private boolean tryLoadSitePages() {
-    return false;
+    File rootDir = new File(rootDirectoryPath);
+    if (!rootDir.exists()) {
+      return false;
+    }
+
+    String sitesPath = rootDir.toPath().resolve(SITES_FILENAME).toString();
+    File sitesFile = new File(sitesPath);
+    if (!sitesFile.exists()) {
+      return false;
+    }
+
+    try {
+      loadSitePages(sitesFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
+
+    return true;
+  }
+
+  private void loadSitePages(File file) throws IOException {
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+
+      frontPage = SitePage.readFrom(br);
+
+      int numPages = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
+      Preconditions.checkState(numPages >= 0);
+
+      sitePages.clear();
+      for (int i = 0; i < numPages; i++) {
+        sitePages.add(SitePage.readFrom(br));
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
+    } finally {
+      if (br != null) {
+        br.close();
+      }
+    }
   }
 }

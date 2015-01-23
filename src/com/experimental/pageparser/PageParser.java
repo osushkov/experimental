@@ -42,7 +42,7 @@ public class PageParser {
   }
 
   private static final double TITLE_SENTENCE_WEIGHT = 4.0;
-  private static final double DESCRIPTION_SENTENCE_WEIGHT = 3.0;
+  private static final double DESCRIPTION_SENTENCE_WEIGHT = 2.0;
   private static final double KEYWORD_SENTENCE_WEIGHT = 4.0;
 
   private final String pageUrl;

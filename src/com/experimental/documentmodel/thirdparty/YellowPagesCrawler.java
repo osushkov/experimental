@@ -14,10 +14,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -37,10 +34,12 @@ public class YellowPagesCrawler {
   private final Semaphore doneSem = new Semaphore(0);
   private final Executor executor = Executors.newFixedThreadPool(2);
 
+  private Map<String, String> cookies = null;
+
   public Set<String> crawlForWebsites() {
-    //crawlYellowPagesAU();
+    crawlYellowPagesAU();
     //crawlYellowPagesUS();
-    crawlYellowPagesUK();
+    //crawlYellowPagesUK();
 
     try {
       doneSem.acquire();
@@ -250,6 +249,13 @@ public class YellowPagesCrawler {
     Connection connection = Jsoup.connect(targetUri.toString());
     connection.timeout(10000);
     connection.userAgent(USER_AGENT);
+
+    if (cookies == null) {
+      cookies = connection.execute().cookies();
+    }
+
+    connection.cookies(cookies);
+
     Document doc = connection.get();
     Elements searchResultsDivs = doc.select("div.search-results");
 

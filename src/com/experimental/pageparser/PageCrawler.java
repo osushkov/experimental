@@ -6,6 +6,7 @@ import com.experimental.documentmodel.SentenceProcessor;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Log;
+import com.experimental.utils.TldUtils;
 import com.google.common.base.Preconditions;
 import javafx.util.Pair;
 import org.apache.http.client.utils.URIBuilder;
@@ -14,6 +15,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -35,13 +37,33 @@ public class PageCrawler {
   private final DocumentNameGenerator documentNameGenerator =
       new DocumentNameGenerator(Constants.DOCUMENTS_OUTPUT_PATH);
 
-  private final Executor executor = Executors.newFixedThreadPool(1);
+  private final Executor executor = Executors.newFixedThreadPool(12);
   private final Semaphore doneSem = new Semaphore(0);
 
   public void crawlSites(List<String> urls) {
     Preconditions.checkNotNull(urls);
 
+    Set<String> crawledHosts = new HashSet<String>();
+
     for (String url : urls) {
+      URL targetUrl = null;
+      try {
+        targetUrl = new URL(url);
+      } catch (MalformedURLException e) {
+        e.printStackTrace();
+        continue;
+      }
+
+      if (crawledHosts.contains(targetUrl.getHost())) {
+        continue;
+      }
+
+      if (!TldUtils.shouldProcessUrl(targetUrl)) {
+        continue;
+      }
+
+      crawledHosts.add(targetUrl.getHost());
+
       scheduleCrawlFor(url);
     }
 
@@ -86,28 +108,30 @@ public class PageCrawler {
     }
 
     if (frontPage == null) {
-      Log.out("front page is null");
       return;
     }
     parentDocument.setFrontPage(frontPage);
 
     List<SitePage.Link> allLinks = new ArrayList<SitePage.Link>();
     List<SitePage> childPages = new ArrayList<SitePage>();
+    Set<URL> visitedPages = new HashSet<URL>();
 
-    Log.out("outgoing links: " + frontPage.outgoingLinks.size());
     for (SitePage.Link link : frontPage.outgoingLinks) {
       allLinks.add(link);
 
       SitePage childPage = null;
-      try {
-        childPage = parsePage(link.destination);
-      } catch (IOException e) {
-        e.printStackTrace();
-        continue;
+
+      if (!visitedPages.contains(link.destination) && visitedPages.size() < 25) {
+        try {
+          childPage = parsePage(link.destination);
+          visitedPages.add(link.destination);
+        } catch (IOException e) {
+          e.printStackTrace();
+          continue;
+        }
       }
 
       if (childPage == null) {
-        Log.out("child page is null");
         continue;
       }
       for (SitePage.Link childLink : childPage.outgoingLinks) {
@@ -144,7 +168,10 @@ public class PageCrawler {
   }
 
   private SitePage parsePage(URL url) throws IOException {
-    org.jsoup.nodes.Document doc = Jsoup.connect(url.toString()).followRedirects(true).get();
+    org.jsoup.nodes.Document doc = Jsoup.connect(url.toString())
+        .followRedirects(true)
+        .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+        .get();
 
     URL redirectedUrl = new URL(doc.location());
     Elements meta = doc.select("html head meta");

@@ -2,8 +2,10 @@ package com.experimental.documentmodel;
 
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by sushkov on 8/01/15.
@@ -22,10 +24,16 @@ public class DocumentStream {
   }
 
   public void streamDocuments(DocumentStreamOutput streamOutput) {
+    List<DocumentNameGenerator.DocumentType> types = Lists.newArrayList(DocumentNameGenerator.DocumentType.values());
+    streamDocuments(types, streamOutput);
+  }
+
+  public void streamDocuments(Iterable<DocumentNameGenerator.DocumentType> types, DocumentStreamOutput streamOutput) {
     Preconditions.checkNotNull(streamOutput);
+    Preconditions.checkNotNull(types);
 
     File documentsDir = new File(rootPath);
-    for (DocumentNameGenerator.DocumentType type : DocumentNameGenerator.DocumentType.values()) {
+    for (DocumentNameGenerator.DocumentType type : types) {
       String typeDirPath = documentsDir.toPath().resolve(type.getLabel()).toString();
 
       File typeDir = new File(typeDirPath);
