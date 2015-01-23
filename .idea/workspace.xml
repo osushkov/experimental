@@ -30,7 +30,7 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-35.892857" vertical-offset="0" max-vertical-offset="5670">
+                <state vertical-scroll-proportion="-27.857143" vertical-offset="225" max-vertical-offset="5670">
                   <caret line="89" column="28" selection-start-line="89" selection-start-column="28" selection-end-line="89" selection-end-column="28" />
                   <folding>
                     <element signature="e#3218#3658#0" expanded="true" />
@@ -40,14 +40,27 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="PageParser.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="PageParser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/pageparser/PageParser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="3678" max-vertical-offset="4815">
-                  <caret line="279" column="56" selection-start-line="279" selection-start-column="36" selection-end-line="279" selection-end-column="56" />
+                <state vertical-scroll-proportion="0.74934036" vertical-offset="708" max-vertical-offset="4995">
+                  <caret line="106" column="20" selection-start-line="106" selection-start-column="20" selection-end-line="106" selection-end-column="20" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#10313#10334#0" expanded="true" />
+                    <element signature="e#10497#10518#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ImagePageBox.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/experimental/sitepage/ImagePageBox.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1785">
+                  <caret line="109" column="39" selection-start-line="109" selection-start-column="39" selection-end-line="109" selection-end-column="39" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#1638#1648#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -70,7 +83,7 @@
           <file leaf-file-name="PageCrawler.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/pageparser/PageCrawler.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="281" max-vertical-offset="2850">
+                <state vertical-scroll-proportion="0.0" vertical-offset="911" max-vertical-offset="2850">
                   <caret line="53" column="17" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -80,10 +93,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="PageUtils.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="PageUtils.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/sitepage/PageUtils.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7915567" vertical-offset="0" max-vertical-offset="1137">
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
                   <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -122,21 +135,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Sentence.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Sentence.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/Sentence.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.41952506" vertical-offset="33" max-vertical-offset="1170">
+                <state vertical-scroll-proportion="0.0" vertical-offset="33" max-vertical-offset="1170">
                   <caret line="44" column="5" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SentenceProcessor.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="SentenceProcessor.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/SentenceProcessor.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="500" max-vertical-offset="2460">
-                  <caret line="86" column="16" selection-start-line="86" selection-start-column="16" selection-end-line="86" selection-end-column="16" />
+                <state vertical-scroll-proportion="0.35971856" vertical-offset="296" max-vertical-offset="2460">
+                  <caret line="49" column="42" selection-start-line="49" selection-start-column="42" selection-end-line="49" selection-end-column="42" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -203,15 +216,15 @@
         <option value="$PROJECT_DIR$/src/com/experimental/sitepage/SitePage.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/utils/UrlUtil.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/sitepage/TextPageBox.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/sitepage/ImagePageBox.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentStream.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/WebsiteDocument.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/pageparser/PageParser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/utils/TldUtils.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/pageparser/PageCrawler.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/sitepage/PageUtils.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/sitepage/ImagePageBox.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/pageparser/PageParser.java" />
       </list>
     </option>
   </component>
@@ -1069,17 +1082,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/sitepage/ImagePageBox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1785">
-          <caret line="26" column="57" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1638#1648#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/sitepage/SitePage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2917093" vertical-offset="0" max-vertical-offset="3435">
@@ -1162,62 +1164,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/pageparser/PageParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3678" max-vertical-offset="4815">
-          <caret line="279" column="56" selection-start-line="279" selection-start-column="36" selection-end-line="279" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#10313#10334#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/SentenceProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="500" max-vertical-offset="2460">
-          <caret line="86" column="16" selection-start-line="86" selection-start-column="16" selection-end-line="86" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/thirdparty/YellowPagesCrawler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8504837" vertical-offset="2918" max-vertical-offset="5010">
           <caret line="285" column="40" selection-start-line="285" selection-start-column="40" selection-end-line="285" selection-end-column="40" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/Sentence.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41952506" vertical-offset="33" max-vertical-offset="1170">
-          <caret line="44" column="5" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/pageparser/PageCrawler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="281" max-vertical-offset="2850">
-          <caret line="53" column="17" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1452#1460#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-35.892857" vertical-offset="0" max-vertical-offset="5670">
-          <caret line="89" column="28" selection-start-line="89" selection-start-column="28" selection-end-line="89" selection-end-column="28" />
-          <folding>
-            <element signature="e#3218#3658#0" expanded="true" />
-            <element signature="e#3657#3658#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1233,10 +1184,72 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/sitepage/PageUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7915567" vertical-offset="0" max-vertical-offset="1137">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
           <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-27.857143" vertical-offset="225" max-vertical-offset="5670">
+          <caret line="89" column="28" selection-start-line="89" selection-start-column="28" selection-end-line="89" selection-end-column="28" />
+          <folding>
+            <element signature="e#3218#3658#0" expanded="true" />
+            <element signature="e#3657#3658#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/Sentence.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="33" max-vertical-offset="1170">
+          <caret line="44" column="5" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/SentenceProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35971856" vertical-offset="296" max-vertical-offset="2460">
+          <caret line="49" column="42" selection-start-line="49" selection-start-column="42" selection-end-line="49" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/sitepage/ImagePageBox.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1785">
+          <caret line="109" column="39" selection-start-line="109" selection-start-column="39" selection-end-line="109" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1638#1648#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/pageparser/PageCrawler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="911" max-vertical-offset="2850">
+          <caret line="53" column="17" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1452#1460#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/pageparser/PageParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.74934036" vertical-offset="708" max-vertical-offset="4995">
+          <caret line="106" column="20" selection-start-line="106" selection-start-column="20" selection-end-line="106" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10497#10518#0" expanded="true" />
           </folding>
         </state>
       </provider>

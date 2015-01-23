@@ -99,7 +99,13 @@ public class PageParser {
         allPageBoxes.addAll(elementContent.containedImages);
       }
 
-      processPageBoxes(allPageBoxes);
+      if (allPageBoxes.size() == 0) {
+        return null;
+      }
+
+      if (!processPageBoxes(allPageBoxes)) {
+        return null;
+      }
 
       SitePage result = new SitePage(pageUrl, getHeaderFor(doc));
       result.outgoingLinks.addAll(getLinksFromPageBoxes(allPageBoxes));
@@ -146,7 +152,7 @@ public class PageParser {
     }
   }
 
-  private void processPageBoxes(List<PageBox> allPageBoxes) {
+  private boolean processPageBoxes(List<PageBox> allPageBoxes) {
     double weightSum = 0.0;
     int totalCharacters = 0;
 
@@ -160,6 +166,10 @@ public class PageParser {
       }
     }
 
+    if (totalCharacters == 0) {
+      return false;
+    }
+
     double averageEmphasis = weightSum / totalCharacters;
     for (PageBox box : allPageBoxes) {
       if (box instanceof TextPageBox) {
@@ -169,6 +179,8 @@ public class PageParser {
         ((ImagePageBox) box).buildSentences(sentenceProcessor, averageEmphasis);
       }
     }
+
+    return true;
   }
 
   private TextPageBox mergeTextBoxes(List<TextPageBox> boxes) {
