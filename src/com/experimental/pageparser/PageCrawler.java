@@ -102,7 +102,7 @@ public class PageCrawler {
     SitePage frontPage = null;
     try {
       frontPage = parsePage(new URL(url));
-    } catch (IOException e) {
+    } catch (Throwable e) {
       e.printStackTrace();
       return;
     }
@@ -125,7 +125,7 @@ public class PageCrawler {
         try {
           childPage = parsePage(link.destination);
           visitedPages.add(link.destination);
-        } catch (IOException e) {
+        } catch (Throwable e) {
           e.printStackTrace();
           continue;
         }
