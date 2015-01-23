@@ -39,6 +39,7 @@ public class PageCrawler {
 
   private final Executor executor = Executors.newFixedThreadPool(20);
   private final Semaphore doneSem = new Semaphore(0);
+  private final AtomicInteger documentsProcessed = new AtomicInteger(0);
 
   public void crawlSites(List<String> urls) {
     Preconditions.checkNotNull(urls);
@@ -84,7 +85,13 @@ public class PageCrawler {
       public void run() {
         processSite(url);
         doneSem.release();
-        System.gc();
+
+        int processed = documentsProcessed.incrementAndGet();
+        if (processed %100 == 0) {
+          System.gc();
+          Log.out("PROCESSED: " + processed);
+        }
+
       }
     });
 

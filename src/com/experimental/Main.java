@@ -105,7 +105,7 @@ public class Main {
     Log.out("pageCrawler running...");
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String siteListPath = aggregateDataFile.toPath().resolve("test_sites.txt").toString();
+    String siteListPath = aggregateDataFile.toPath().resolve("all_sites.txt").toString();
 
     List<String> crawlUrls = Lists.newArrayList();
 
