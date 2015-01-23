@@ -71,6 +71,10 @@ public class LemmaMorphologies {
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
     Map<String, Integer> result = new HashMap<String, Integer>();
 
+    if (!lemmaToMorphologyMap.containsKey(lemmaId)) {
+      return result;
+    }
+
     for (Map.Entry<MorphologyId, AtomicInteger> entry : lemmaToMorphologyMap.get(lemmaId).entrySet()) {
       String word = Preconditions.checkNotNull(morphologyDb.getMorphology(entry.getKey()));
       result.put(word, entry.getValue().get());
@@ -85,6 +89,10 @@ public class LemmaMorphologies {
     MorphologyId morphologyId = morphologyDb.addMorphology(morphology.toLowerCase());
     Map<Lemma, Integer> result = new HashMap<Lemma, Integer>();
 
+    if (!morphologytoLemmaMap.containsKey(morphologyId)) {
+      return result;
+    }
+
     for (Map.Entry<LemmaId, AtomicInteger> entry : morphologytoLemmaMap.get(morphologyId).entrySet()) {
       Lemma lemma  = Preconditions.checkNotNull(lemmaDb.getLemma(entry.getKey()));
       result.put(lemma, entry.getValue().get());
@@ -93,7 +101,7 @@ public class LemmaMorphologies {
     return result;
   }
 
-  public void save() throws IOException {
+  public synchronized  void save() throws IOException {
     trim();
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
@@ -148,7 +156,7 @@ public class LemmaMorphologies {
     }
   }
 
-  public boolean tryLoad() throws IOException {
+  public synchronized boolean tryLoad() throws IOException {
     if (isLoaded) {
       return true;
     }

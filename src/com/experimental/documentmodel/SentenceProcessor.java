@@ -84,9 +84,8 @@ public class SentenceProcessor {
   }
 
   private boolean canUseMorphologyStats(CoreMap sentence) {
-    return false;
-//    int tokensInSentence = sentence.get(CoreAnnotations.TokensAnnotation.class).size();
-//    return tokensInSentence == 1;
+    int tokensInSentence = sentence.get(CoreAnnotations.TokensAnnotation.class).size();
+    return tokensInSentence == 1;
   }
 
   private Token getTokenFromAnnotations(CoreLabel token) {
