@@ -84,6 +84,7 @@ public class PageCrawler {
       public void run() {
         processSite(url);
         doneSem.release();
+        System.gc();
       }
     });
 
@@ -170,6 +171,7 @@ public class PageCrawler {
   private SitePage parsePage(URL url) throws IOException {
     org.jsoup.nodes.Document doc = Jsoup.connect(url.toString())
         .followRedirects(true)
+        .timeout(2000)
         .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
         .get();
 

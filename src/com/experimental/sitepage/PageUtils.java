@@ -14,9 +14,11 @@ import java.net.URL;
  */
 public class PageUtils {
 
-  public static boolean isElementALink(ElementBox element) {
-    if (element.getElement().getTagName().equals("a")) {
-      String href = element.getElement().getAttribute("href").trim().toLowerCase();
+  public static boolean isElementALink(ElementBox elementBox) {
+    Element element = elementBox.getElement();
+    if (element.getTagName().equals("a")) {
+
+      String href = element.getAttribute("abs:href").trim().toLowerCase();
       if (href.startsWith("mailto:") || href.startsWith("ftp:") ||
           href.startsWith("file:") || href.startsWith("tel:") ||
           href.startsWith("javascript"))  {
@@ -26,8 +28,8 @@ public class PageUtils {
       }
     }
 
-    if (element.getParent() != null) {
-      return isElementALink(element.getParent());
+    if (elementBox.getParent() != null) {
+      return isElementALink(elementBox.getParent());
     }
 
     return false;

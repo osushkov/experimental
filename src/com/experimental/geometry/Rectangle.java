@@ -36,9 +36,6 @@ public class Rectangle {
     this.y = y;
     this.width = width;
     this.height = height;
-
-    Preconditions.checkArgument(width >= 0.0);
-    Preconditions.checkArgument(height >= 0.0);
   }
 
   public Rectangle(List<Rectangle> boundRectangles) {
@@ -77,8 +74,6 @@ public class Rectangle {
 
     double width = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
     double height = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
-    Preconditions.checkState(width >= 0.0);
-    Preconditions.checkState(height >= 0.0);
 
     return new Rectangle(x, y, width, height);
   }
@@ -105,7 +100,7 @@ public class Rectangle {
   }
 
   public double area() {
-    return width * height;
+    return Math.max(width * height, 0.0);
   }
 
   @Override

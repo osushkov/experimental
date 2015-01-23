@@ -3,12 +3,9 @@ package com.experimental.languagemodel;
 import com.experimental.Constants;
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Document;
-import com.experimental.documentmodel.Sentence;
-import com.experimental.documentmodel.Token;
 import com.experimental.languagemodel.LemmaDB.LemmaId;
 import com.experimental.nlp.SimplePOSTag;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 import java.io.*;
 import java.util.*;
@@ -16,10 +13,10 @@ import java.util.*;
 /**
  * Created by sushkov on 11/01/15.
  */
-public class LemmaQualityAggregator {
-  private static final String QUALITY_DATA_FILENAME = "lemma_quality_data.txt";
+public class LemmaVariances {
+  private static final String VARIANCES_DATA_FILENAME = "lemma_variances.txt";
 
-  private static class LemmaQualityInfo {
+  private static class LemmaVarianceInfo {
     final LemmaId lemmaId;
     int numDocumentsOccured = 0;
 
@@ -27,20 +24,20 @@ public class LemmaQualityAggregator {
     double sumOfSquares = 0.0;
     double sum = 0.0;
 
-    LemmaQualityInfo(LemmaId lemmaId) {
+    LemmaVarianceInfo(LemmaId lemmaId) {
       this.lemmaId = Preconditions.checkNotNull(lemmaId);
     }
   }
 
-  private static final Comparator<LemmaQualityInfo> QUALITY_ORDER =
-      new Comparator<LemmaQualityInfo>() {
-        public int compare(LemmaQualityInfo e1, LemmaQualityInfo e2) {
+  private static final Comparator<LemmaVarianceInfo> QUALITY_ORDER =
+      new Comparator<LemmaVarianceInfo>() {
+        public int compare(LemmaVarianceInfo e1, LemmaVarianceInfo e2) {
           return Double.compare(e2.quality, e1.quality);
         }
       };
 
   private final LemmaDB lemmaDB = LemmaDB.instance;
-  private final Map<LemmaId, LemmaQualityInfo> lemmaQualityMap = new HashMap<LemmaId, LemmaQualityInfo>();
+  private final Map<LemmaId, LemmaVarianceInfo> lemmaQualityMap = new HashMap<LemmaId, LemmaVarianceInfo>();
   private boolean haveQuality = false;
   private int totalDocuments = 0;
 
@@ -61,9 +58,9 @@ public class LemmaQualityAggregator {
       LemmaId lemmaId = lemmaDB.addLemma(entry.lemma);
       Preconditions.checkNotNull(lemmaId);
 
-      LemmaQualityInfo qualityEntry = lemmaQualityMap.get(lemmaId);
+      LemmaVarianceInfo qualityEntry = lemmaQualityMap.get(lemmaId);
       if (qualityEntry == null) {
-        qualityEntry = new LemmaQualityInfo((lemmaId));
+        qualityEntry = new LemmaVarianceInfo((lemmaId));
         lemmaQualityMap.put(lemmaId, qualityEntry);
       }
 
@@ -77,7 +74,7 @@ public class LemmaQualityAggregator {
   }
 
   public void computeQuality() {
-    for (LemmaQualityInfo entry : lemmaQualityMap.values()) {
+    for (LemmaVarianceInfo entry : lemmaQualityMap.values()) {
       entry.quality = entry.sumOfSquares - entry.sum * entry.sum / totalDocuments;
     }
 
@@ -86,7 +83,7 @@ public class LemmaQualityAggregator {
 
   public boolean tryLoadFromDisk() throws IOException {
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String qualityFilePath = aggregateDataFile.toPath().resolve(QUALITY_DATA_FILENAME).toString();
+    String qualityFilePath = aggregateDataFile.toPath().resolve(VARIANCES_DATA_FILENAME).toString();
 
     File qualityFile = new File(qualityFilePath);
     if (!qualityFile.exists()) {
@@ -100,7 +97,7 @@ public class LemmaQualityAggregator {
 
       int numEntries = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
       for (int i = 0; i < numEntries; i++) {
-        LemmaQualityInfo newInfo = loadLemmaQualityInfo(br);
+        LemmaVarianceInfo newInfo = loadLemmaQualityInfo(br);
         lemmaQualityMap.put(newInfo.lemmaId, newInfo);
       }
     } catch (FileNotFoundException e) {
@@ -122,7 +119,7 @@ public class LemmaQualityAggregator {
     }
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String qualityFilePath = aggregateDataFile.toPath().resolve(QUALITY_DATA_FILENAME).toString();
+    String qualityFilePath = aggregateDataFile.toPath().resolve(VARIANCES_DATA_FILENAME).toString();
 
     BufferedWriter bw = null;
     try {
@@ -135,10 +132,10 @@ public class LemmaQualityAggregator {
       }
 
       bw.write(Integer.toString(lemmaQualityMap.values().size()) + "\n");
-      List<LemmaQualityInfo> values = new ArrayList(lemmaQualityMap.values());
+      List<LemmaVarianceInfo> values = new ArrayList(lemmaQualityMap.values());
       Collections.sort(values, QUALITY_ORDER);
 
-      for (LemmaQualityInfo info : values) {
+      for (LemmaVarianceInfo info : values) {
         saveLemmaQualityInfo(info, bw);
       }
     } finally {
@@ -148,7 +145,7 @@ public class LemmaQualityAggregator {
     }
   }
 
-  private void saveLemmaQualityInfo(LemmaQualityInfo info, BufferedWriter bw) throws IOException {
+  private void saveLemmaQualityInfo(LemmaVarianceInfo info, BufferedWriter bw) throws IOException {
     bw.write(Integer.toString(info.numDocumentsOccured) + " ");
     bw.write(Double.toString(info.quality) + " ");
     bw.write(Double.toString(info.sumOfSquares) + " ");
@@ -157,7 +154,7 @@ public class LemmaQualityAggregator {
     lemmaDB.getLemma(info.lemmaId).writeTo(bw);
   }
 
-  private LemmaQualityInfo loadLemmaQualityInfo(BufferedReader br) throws IOException {
+  private LemmaVarianceInfo loadLemmaQualityInfo(BufferedReader br) throws IOException {
     String line = Preconditions.checkNotNull(br.readLine());
     String[] lineTokens = line.split(" ");
     Preconditions.checkState(lineTokens.length == 4);
@@ -170,7 +167,7 @@ public class LemmaQualityAggregator {
     Lemma lemma = Lemma.readFrom(br);
     LemmaId lemmaId = lemmaDB.addLemma(lemma);
 
-    LemmaQualityInfo result = new LemmaQualityInfo(lemmaId);
+    LemmaVarianceInfo result = new LemmaVarianceInfo(lemmaId);
     result.numDocumentsOccured = numDocumentsOccured;
     result.quality = quality;
     result.sumOfSquares = sumOfSquares;

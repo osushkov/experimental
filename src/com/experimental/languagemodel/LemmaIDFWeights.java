@@ -3,6 +3,8 @@ package com.experimental.languagemodel;
 import com.experimental.Constants;
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Document;
+import com.experimental.languagemodel.LemmaDB.LemmaId;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
@@ -17,29 +19,34 @@ import java.util.Map;
 public class LemmaIDFWeights {
 
   private static class LemmaWeightInfo {
-    final String lemma;
-    int totalOccurances = 0;
+    final LemmaId lemmaId;
+    double totalOccurances = 0.0;
     List<Double> documentOccurance = new ArrayList<Double>();
 
     double globalWeight = 0.0;
 
-    LemmaWeightInfo(String lemma) {
-      this.lemma = Preconditions.checkNotNull(lemma);
+    LemmaWeightInfo(LemmaId lemmaId) {
+      this.lemmaId = Preconditions.checkNotNull(lemmaId);
     }
   }
-
 
   private static final String LEMMA_IDF_WEIGHTS_FILENAME = "lemma_idf_weights.txt";
 
   // This is used when we finally have the token idf weights, whether computed or loaded from a file.
-  private final Map<String, Double> lemmaIdfWeights = new HashMap<String, Double>();
+  private final Map<LemmaId, Double> lemmaIdfWeights = new HashMap<LemmaId, Double>();
 
   // This is used for when we are computing the token idf weights from the documents.
-  private final Map<String, LemmaWeightInfo> lemmaWeightInfo = new HashMap<String, LemmaWeightInfo>();
-  private int numDocuments = 0;
+  private final Map<LemmaId, LemmaWeightInfo> lemmaWeightInfo = new HashMap<LemmaId, LemmaWeightInfo>();
+  private final LemmaDB lemmaDb;
+  private double numDocuments = 0.0;
 
-  public double getLemmaWeight(String lemma) {
+  public LemmaIDFWeights(LemmaDB lemmaDb) {
+    this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
+  }
+
+  public double getLemmaWeight(Lemma lemma) {
     Preconditions.checkNotNull(lemma);
+    LemmaId lemmaId = lemmaDb.addLemma(lemma);
 
     if (!lemmaIdfWeights.containsKey(lemma)) {
       return 0.0;
@@ -48,16 +55,19 @@ public class LemmaIDFWeights {
     }
   }
 
-  public void processDocument(Document document) {
-    // TODO: finish this function.
-
+  public void processDocument(Document document, double documentWeight) {
     Preconditions.checkNotNull(document);
 
     for (BagOfWeightedLemmas.WeightedLemmaEntry entry : document.getBagOfLemmas().getEntries()) {
-//      if (lemmaWeightInfo.containsKey(entry.lemma.lemma))
+      LemmaId lemmaId = lemmaDb.addLemma(entry.lemma);
+      lemmaWeightInfo.putIfAbsent(lemmaId, new LemmaWeightInfo(lemmaId));
+
+      LemmaWeightInfo info = lemmaWeightInfo.get(lemmaId);
+      info.totalOccurances += entry.weight * documentWeight;
+      info.documentOccurance.add(entry.weight * documentWeight);
     }
 
-    numDocuments++;
+    numDocuments += documentWeight;
   }
 
   public boolean tryLoad() throws IOException {
@@ -75,15 +85,16 @@ public class LemmaIDFWeights {
       br = new BufferedReader(new FileReader(lemmaIdfWeightsFile.getAbsolutePath()));
 
       int numEntries = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
+      Preconditions.checkState(numEntries >= 0);
+
       for (int i = 0; i < numEntries; i++) {
-        String line = Preconditions.checkNotNull(br.readLine());
-        String[] lineTokens = line.split(" ");
-        Preconditions.checkState(lineTokens.length == 2);
+        Lemma lemma = Lemma.readFrom(br);
+        LemmaId lemmaId = lemmaDb.addLemma(lemma);
 
-        String lemma = lineTokens[0];
-        double lemmaIdfWeight = Double.parseDouble(lineTokens[1]);
+        double lemmaIdfWeight = Double.parseDouble(Preconditions.checkNotNull(br.readLine()));
+        Preconditions.checkState(lemmaIdfWeight >= 0.0);
 
-        lemmaIdfWeights.put(lemma, lemmaIdfWeight);
+        lemmaIdfWeights.put(lemmaId, lemmaIdfWeight);
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -114,8 +125,10 @@ public class LemmaIDFWeights {
       }
 
       bw.write(Integer.toString(lemmaIdfWeights.values().size()) + "\n");
-      for (Map.Entry<String, Double> entry : lemmaIdfWeights.entrySet()) {
-        bw.write(entry.getKey() + " " + entry.getValue() + "\n");
+      for (Map.Entry<LemmaId, Double> entry : lemmaIdfWeights.entrySet()) {
+        Lemma lemma = lemmaDb.getLemma(entry.getKey());
+        lemma.writeTo(bw);
+        bw.write(entry.getValue() + "\n");
       }
     } finally {
       if (bw != null) {
@@ -129,11 +142,14 @@ public class LemmaIDFWeights {
       double entropySum = 0.0;
       for (double occurances : weightInfo.documentOccurance) {
         double p = (double) occurances / (double) weightInfo.totalOccurances;
+
         entropySum += p * Math.log(p) / Math.log(numDocuments);
+        Log.out("p: " + p + " " + entropySum);
       }
 
-      weightInfo.globalWeight = 1.0 - entropySum;
-      lemmaIdfWeights.put(weightInfo.lemma, weightInfo.globalWeight);
+      weightInfo.globalWeight = 1.0 + entropySum;
+      Log.out("weight: " + weightInfo.globalWeight);
+      lemmaIdfWeights.put(weightInfo.lemmaId, weightInfo.globalWeight);
     }
   }
 

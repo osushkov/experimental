@@ -1,7 +1,7 @@
 package com.experimental;
 
-import com.experimental.crawler.CrawlerController;
 import com.experimental.documentmodel.*;
+import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.thirdparty.*;
 import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.Word2VecDB;
@@ -11,12 +11,9 @@ import com.experimental.pageparser.PageCrawler;
 import com.experimental.pageparser.PageParser;
 import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Log;
-import com.experimental.utils.TldUtils;
 import com.google.common.collect.Lists;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -48,16 +45,20 @@ public class Main {
       e.printStackTrace();
     }
 
-    Log.out("FINISHED");
-  }
+//    buildLemmaIdfWeights();
 
-  public static void webCrawlExperiment() {
-    CrawlerController crawlerController = new CrawlerController("crawlData/", 5);
-    try {
-      crawlerController.crawl("http://www.familylawyers.net.au");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+//    try {
+//      URL main = new URL("http://shit.com/");
+//      URI mainUri = main.toURI();
+//
+//      Log.out(mainUri.resolve("../../fuck").toString());
+//    } catch (MalformedURLException e) {
+//      e.printStackTrace();
+//    } catch (URISyntaxException e) {
+//      e.printStackTrace();
+//    }
+
+    Log.out("FINISHED");
   }
 
   public static void wordNetExperiment() {
@@ -74,11 +75,37 @@ public class Main {
     pageParser.parsePage();
   }
 
+  public static void buildLemmaIdfWeights() {
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE, DocumentNameGenerator.DocumentType.TOPICAL);
+
+    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance);
+
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess,
+        new DocumentStream.DocumentStreamOutput() {
+          @Override
+          public void processDocument(Document document) {
+            if (document instanceof  WebsiteDocument) {
+              lemmaIDFWeights.processDocument(document, 1.0);
+            } else if (document instanceof TopicalDocument) {
+              lemmaIDFWeights.processDocument(document, 1.0);
+            }
+          }
+        });
+
+    try {
+      lemmaIDFWeights.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   public static void pageCrawler() throws IOException {
     Log.out("pageCrawler running...");
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String siteListPath = aggregateDataFile.toPath().resolve("all_sites.txt").toString();
+    String siteListPath = aggregateDataFile.toPath().resolve("test_sites.txt").toString();
 
     List<String> crawlUrls = Lists.newArrayList();
 
@@ -87,7 +114,7 @@ public class Main {
       br = new BufferedReader(new FileReader(siteListPath));
 
       String line = br.readLine();
-      while (line != null) {
+      while (line != null && line.length() > 1) {
         if (!line.startsWith("http://")) {
           line = "http://" + line;
         }
@@ -180,7 +207,7 @@ public class Main {
   private static void aggregateLemmaQuality() {
     Log.out("aggregateLemmaQuality running...");
 
-    final LemmaQualityAggregator lemmaQualityAggregator = new LemmaQualityAggregator();
+    final LemmaVariances lemmaQualityAggregator = new LemmaVariances();
     try {
       if (lemmaQualityAggregator.tryLoadFromDisk()) {
         Log.out("loaded LemmaQualityAggregator from disk");

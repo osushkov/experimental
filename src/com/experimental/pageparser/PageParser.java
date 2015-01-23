@@ -74,8 +74,8 @@ public class PageParser {
       //Create the browser canvas
       BrowserCanvas browser = new BrowserCanvas(da.getRoot(), da, docSource.getURL());
       //Disable the image loading
-      browser.getConfig().setLoadImages(true);
-      browser.getConfig().setLoadBackgroundImages(true);
+      browser.getConfig().setLoadImages(false);
+      browser.getConfig().setLoadBackgroundImages(false);
 
 
       //Create the layout for 1000x600 pixels
