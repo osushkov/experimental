@@ -41,9 +41,7 @@ public class TextPageBox implements PageBox {
     public TextStyle(TextBox textBox) {
       Preconditions.checkNotNull(textBox);
 
-      this.fontSize = textBox.getVisualContext().getFont().getSize();
-      Preconditions.checkState(fontSize > 0.0);
-
+      this.fontSize = Math.max(textBox.getVisualContext().getFont().getSize(), 1.0);
       this.isBold = textBox.getVisualContext().getFont().isBold();
       this.isItalic = textBox.getVisualContext().getFont().isItalic();
       this.isUnderlined = textBox.getVisualContext().getTextDecoration().contains(CSSProperty.TextDecoration.UNDERLINE);
