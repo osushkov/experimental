@@ -42,14 +42,12 @@ public class Main {
 //    }
 
     //stanfordNlpDemo();
-//    pageCrawlerExperiment();
-//    try {
-//      pageCrawler();
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
+    try {
+      pageCrawler();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-    testYellowPagesCrawler();
     Log.out("FINISHED");
   }
 
