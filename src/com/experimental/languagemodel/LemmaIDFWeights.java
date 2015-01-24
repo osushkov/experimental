@@ -95,6 +95,7 @@ public class LemmaIDFWeights {
     for (int num : occurances.values()) {
       sum += num;
     }
+    Log.out(lemma.lemma + " sum: " + sum);
     return sum;
   }
 
