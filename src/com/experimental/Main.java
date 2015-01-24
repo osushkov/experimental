@@ -78,7 +78,7 @@ public class Main {
 
   public static void buildLemmaIdfWeights() {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE, DocumentNameGenerator.DocumentType.TOPICAL);
 
     final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
 

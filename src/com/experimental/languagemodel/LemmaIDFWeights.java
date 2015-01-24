@@ -68,7 +68,7 @@ public class LemmaIDFWeights {
     Preconditions.checkNotNull(document);
 
     for (BagOfWeightedLemmas.WeightedLemmaEntry entry : document.getBagOfLemmas().getEntries()) {
-      if (numLemmaOccurances(entry.lemma) < 10) {
+      if (numLemmaOccurances(entry.lemma) < 100) {
         continue;
       }
 

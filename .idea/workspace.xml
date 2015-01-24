@@ -27,36 +27,36 @@
     <splitter split-orientation="horizontal" split-proportion="0.50093806">
       <split-first>
         <leaf>
-          <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="429" max-vertical-offset="7020">
-                  <caret line="74" column="68" selection-start-line="74" selection-start-column="68" selection-end-line="74" selection-end-column="68" />
+                <state vertical-scroll-proportion="0.40352696" vertical-offset="511" max-vertical-offset="7020">
+                  <caret line="80" column="113" selection-start-line="80" selection-start-column="113" selection-end-line="80" selection-end-column="113" />
                   <folding>
-                    <element signature="e#2719#3697#0" expanded="true" />
-                    <element signature="e#2921#3673#0" expanded="true" />
-                    <element signature="e#3672#3673#0" expanded="true" />
-                    <element signature="e#3696#3697#0" expanded="true" />
-                    <element signature="e#5210#5650#0" expanded="true" />
-                    <element signature="e#5649#5650#0" expanded="true" />
-                    <element signature="e#5697#5698#0" expanded="true" />
-                    <element signature="e#5721#5722#0" expanded="true" />
-                    <element signature="e#5992#5993#0" expanded="true" />
-                    <element signature="e#6050#6051#0" expanded="true" />
-                    <element signature="e#6945#6946#0" expanded="true" />
-                    <element signature="e#6995#6996#0" expanded="true" />
-                    <element signature="e#8131#8313#0" expanded="true" />
-                    <element signature="e#8312#8313#0" expanded="true" />
-                    <element signature="e#9526#9793#0" expanded="true" />
-                    <element signature="e#9792#9793#0" expanded="true" />
-                    <element signature="e#10627#10996#0" expanded="true" />
-                    <element signature="e#10813#10980#0" expanded="true" />
-                    <element signature="e#10979#10980#0" expanded="true" />
-                    <element signature="e#10995#10996#0" expanded="true" />
-                    <element signature="e#12951#13466#0" expanded="true" />
-                    <element signature="e#13138#13450#0" expanded="true" />
-                    <element signature="e#13449#13450#0" expanded="true" />
-                    <element signature="e#13465#13466#0" expanded="true" />
+                    <element signature="e#2763#3741#0" expanded="true" />
+                    <element signature="e#2965#3717#0" expanded="true" />
+                    <element signature="e#3716#3717#0" expanded="true" />
+                    <element signature="e#3740#3741#0" expanded="true" />
+                    <element signature="e#5254#5694#0" expanded="true" />
+                    <element signature="e#5693#5694#0" expanded="true" />
+                    <element signature="e#5741#5742#0" expanded="true" />
+                    <element signature="e#5765#5766#0" expanded="true" />
+                    <element signature="e#6036#6037#0" expanded="true" />
+                    <element signature="e#6094#6095#0" expanded="true" />
+                    <element signature="e#6989#6990#0" expanded="true" />
+                    <element signature="e#7039#7040#0" expanded="true" />
+                    <element signature="e#8175#8357#0" expanded="true" />
+                    <element signature="e#8356#8357#0" expanded="true" />
+                    <element signature="e#9570#9837#0" expanded="true" />
+                    <element signature="e#9836#9837#0" expanded="true" />
+                    <element signature="e#10671#11040#0" expanded="true" />
+                    <element signature="e#10857#11024#0" expanded="true" />
+                    <element signature="e#11023#11024#0" expanded="true" />
+                    <element signature="e#11039#11040#0" expanded="true" />
+                    <element signature="e#12995#13510#0" expanded="true" />
+                    <element signature="e#13182#13494#0" expanded="true" />
+                    <element signature="e#13493#13494#0" expanded="true" />
+                    <element signature="e#13509#13510#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -78,17 +78,17 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="LemmaIDFWeights.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="LemmaIDFWeights.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7932446" vertical-offset="605" max-vertical-offset="2850">
-                  <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2850">
+                  <caret line="70" column="46" selection-start-line="70" selection-start-column="46" selection-end-line="70" selection-end-column="46" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1395#1412#0" expanded="true" />
                     <element signature="e#1588#1614#0" expanded="true" />
-                    <element signature="e#3223#3224#0" expanded="true" />
-                    <element signature="e#3275#3276#0" expanded="true" />
+                    <element signature="e#3224#3225#0" expanded="true" />
+                    <element signature="e#3276#3277#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -253,11 +253,11 @@
         <option value="$PROJECT_DIR$/src/com/experimental/pageparser/PageParser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/pageparser/PageCrawler.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/BagOfWeightedLemmas.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/SentenceProcessor.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Pipeline.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
       </list>
     </option>
   </component>
@@ -796,7 +796,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24054463" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24054463" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1270,39 +1270,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="429" max-vertical-offset="7020">
-          <caret line="74" column="68" selection-start-line="74" selection-start-column="68" selection-end-line="74" selection-end-column="68" />
-          <folding>
-            <element signature="e#2719#3697#0" expanded="true" />
-            <element signature="e#2921#3673#0" expanded="true" />
-            <element signature="e#3672#3673#0" expanded="true" />
-            <element signature="e#3696#3697#0" expanded="true" />
-            <element signature="e#5210#5650#0" expanded="true" />
-            <element signature="e#5649#5650#0" expanded="true" />
-            <element signature="e#5697#5698#0" expanded="true" />
-            <element signature="e#5721#5722#0" expanded="true" />
-            <element signature="e#5992#5993#0" expanded="true" />
-            <element signature="e#6050#6051#0" expanded="true" />
-            <element signature="e#6945#6946#0" expanded="true" />
-            <element signature="e#6995#6996#0" expanded="true" />
-            <element signature="e#8131#8313#0" expanded="true" />
-            <element signature="e#8312#8313#0" expanded="true" />
-            <element signature="e#9526#9793#0" expanded="true" />
-            <element signature="e#9792#9793#0" expanded="true" />
-            <element signature="e#10627#10996#0" expanded="true" />
-            <element signature="e#10813#10980#0" expanded="true" />
-            <element signature="e#10979#10980#0" expanded="true" />
-            <element signature="e#10995#10996#0" expanded="true" />
-            <element signature="e#12951#13466#0" expanded="true" />
-            <element signature="e#13138#13450#0" expanded="true" />
-            <element signature="e#13449#13450#0" expanded="true" />
-            <element signature="e#13465#13466#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.0696008" vertical-offset="2215" max-vertical-offset="3510">
@@ -1315,14 +1282,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7932446" vertical-offset="605" max-vertical-offset="2850">
-          <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2850">
+          <caret line="70" column="46" selection-start-line="70" selection-start-column="46" selection-end-line="70" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1395#1412#0" expanded="true" />
             <element signature="e#1588#1614#0" expanded="true" />
-            <element signature="e#3223#3224#0" expanded="true" />
-            <element signature="e#3275#3276#0" expanded="true" />
+            <element signature="e#3224#3225#0" expanded="true" />
+            <element signature="e#3276#3277#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40352696" vertical-offset="511" max-vertical-offset="7020">
+          <caret line="80" column="113" selection-start-line="80" selection-start-column="113" selection-end-line="80" selection-end-column="113" />
+          <folding>
+            <element signature="e#2763#3741#0" expanded="true" />
+            <element signature="e#2965#3717#0" expanded="true" />
+            <element signature="e#3716#3717#0" expanded="true" />
+            <element signature="e#3740#3741#0" expanded="true" />
+            <element signature="e#5254#5694#0" expanded="true" />
+            <element signature="e#5693#5694#0" expanded="true" />
+            <element signature="e#5741#5742#0" expanded="true" />
+            <element signature="e#5765#5766#0" expanded="true" />
+            <element signature="e#6036#6037#0" expanded="true" />
+            <element signature="e#6094#6095#0" expanded="true" />
+            <element signature="e#6989#6990#0" expanded="true" />
+            <element signature="e#7039#7040#0" expanded="true" />
+            <element signature="e#8175#8357#0" expanded="true" />
+            <element signature="e#8356#8357#0" expanded="true" />
+            <element signature="e#9570#9837#0" expanded="true" />
+            <element signature="e#9836#9837#0" expanded="true" />
+            <element signature="e#10671#11040#0" expanded="true" />
+            <element signature="e#10857#11024#0" expanded="true" />
+            <element signature="e#11023#11024#0" expanded="true" />
+            <element signature="e#11039#11040#0" expanded="true" />
+            <element signature="e#12995#13510#0" expanded="true" />
+            <element signature="e#13182#13494#0" expanded="true" />
+            <element signature="e#13493#13494#0" expanded="true" />
+            <element signature="e#13509#13510#0" expanded="true" />
           </folding>
         </state>
       </provider>
