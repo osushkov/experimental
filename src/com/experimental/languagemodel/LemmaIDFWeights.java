@@ -58,10 +58,6 @@ public class LemmaIDFWeights {
   public void processDocument(Document document, double documentWeight) {
     Preconditions.checkNotNull(document);
 
-    if (!isDocumentValid(document)) {
-      return;
-    }
-
     for (BagOfWeightedLemmas.WeightedLemmaEntry entry : document.getBagOfLemmas().getEntries()) {
       LemmaId lemmaId = lemmaDb.addLemma(entry.lemma);
       lemmaWeightInfo.putIfAbsent(lemmaId, new LemmaWeightInfo(lemmaId));
@@ -74,7 +70,7 @@ public class LemmaIDFWeights {
     numDocuments += documentWeight;
   }
 
-  private boolean isDocumentValid(Document document) {
+  public boolean isDocumentValid(Document document) {
     return document.getSentences().size() > 10;
   }
 

@@ -86,6 +86,14 @@ public class Main {
         new DocumentStream.DocumentStreamOutput() {
           @Override
           public void processDocument(Document document) {
+            try {
+              if (!lemmaIDFWeights.isDocumentValid(document)) {
+                return;
+              }
+            } catch (Throwable e) {
+              return;
+            }
+
             if (document instanceof  WebsiteDocument) {
               lemmaIDFWeights.processDocument(document, 1.0);
             } else if (document instanceof TopicalDocument) {
