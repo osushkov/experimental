@@ -92,9 +92,7 @@ public class LemmaIDFWeights {
     Map<String, Integer> occurances = lemmaMorphologies.getMorphologiesFor(lemma);
 
     int sum = 0;
-    Log.out(lemma.lemma);
     for (int num : occurances.values()) {
-      Log.out("sum: " + sum + " " + num);
       sum += num;
     }
     return sum;

@@ -55,7 +55,7 @@ public class LemmaMorphologies {
     Map<MorphologyId, AtomicInteger> lemmaMorphologyEntry = lemmaToMorphologyMap.get(lemmaId);
 
     lemmaMorphologyEntry.putIfAbsent(morphologyId, new AtomicInteger(0));
-    lemmaMorphologyEntry.get(morphologyId).incrementAndGet();
+    lemmaMorphologyEntry.get(morphologyId).addAndGet(occurances);
   }
 
   private void addTokenToMorphologyToLemmaMap(String morphology, Lemma lemma, int occurances) {
@@ -66,7 +66,7 @@ public class LemmaMorphologies {
     Map<LemmaId, AtomicInteger> morphologyLemmaEntry = morphologytoLemmaMap.get(morphologyId);
 
     morphologyLemmaEntry.putIfAbsent(lemmaId, new AtomicInteger(0));
-    morphologyLemmaEntry.get(lemmaId).incrementAndGet();
+    morphologyLemmaEntry.get(lemmaId).addAndGet(occurances);
   }
 
   public Map<String, Integer> getMorphologiesFor(Lemma lemma) {
