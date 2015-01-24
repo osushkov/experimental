@@ -1,10 +1,12 @@
 package com.experimental.documentvector;
 
+import com.experimental.Constants;
+import com.experimental.languagemodel.Lemma;
+import com.experimental.languagemodel.LemmaDB;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -38,7 +40,38 @@ public class Word2VecDB {
     this.dimensionality = dimensionality;
   }
 
-  public static Word2VecDB readFrom(BufferedReader in) throws IOException {
+
+  public static Word2VecDB tryLoad() {
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String wordVecFilePath = aggregateDataFile.toPath().resolve(WORD2VEC_FILENAME).toString();
+
+    File wordVecFile = new File(wordVecFilePath);
+    if (!wordVecFile.exists()) {
+      return null;
+    }
+
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new FileReader(wordVecFile.getAbsolutePath()));
+      return readFrom(br);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return null;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  private static Word2VecDB readFrom(BufferedReader in) throws IOException {
     Preconditions.checkNotNull(in);
 
     String line = Preconditions.checkNotNull(in.readLine());

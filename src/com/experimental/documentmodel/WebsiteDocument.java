@@ -60,6 +60,10 @@ public class WebsiteDocument extends Document {
 
   @Override
   protected void writeSpecificData() throws IOException {
+    if (frontPage == null) {
+      return;
+    }
+
     File rootDir = new File(rootDirectoryPath);
     Preconditions.checkState(rootDir.exists());
 

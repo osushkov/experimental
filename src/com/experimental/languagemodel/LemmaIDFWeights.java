@@ -4,6 +4,7 @@ import com.experimental.Constants;
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Document;
 import com.experimental.languagemodel.LemmaDB.LemmaId;
+import com.experimental.nlp.SimplePOSTag;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -48,6 +49,8 @@ public class LemmaIDFWeights {
   private final LemmaMorphologies lemmaMorphologies;
   private AtomicDouble numDocuments = new AtomicDouble(0.0);
 
+  private boolean isLoaded = false;
+
   public LemmaIDFWeights(LemmaDB lemmaDb, LemmaMorphologies lemmaMorphologies) {
     this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
     this.lemmaMorphologies = Preconditions.checkNotNull(lemmaMorphologies);
@@ -57,10 +60,10 @@ public class LemmaIDFWeights {
     Preconditions.checkNotNull(lemma);
     LemmaId lemmaId = lemmaDb.addLemma(lemma);
 
-    if (!lemmaIdfWeights.containsKey(lemma)) {
+    if (!lemmaIdfWeights.containsKey(lemmaId)) {
       return 0.0;
     } else {
-      return lemmaIdfWeights.get(lemma);
+      return lemmaIdfWeights.get(lemmaId);
     }
   }
 
@@ -103,6 +106,10 @@ public class LemmaIDFWeights {
   }
 
   public boolean tryLoad() throws IOException {
+    if (isLoaded) {
+      return true;
+    }
+
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String lemmaIdfWeightsFilePath = aggregateDataFile.toPath().resolve(LEMMA_IDF_WEIGHTS_FILENAME).toString();
 
@@ -124,7 +131,7 @@ public class LemmaIDFWeights {
         LemmaId lemmaId = lemmaDb.addLemma(lemma);
 
         double lemmaIdfWeight = Double.parseDouble(Preconditions.checkNotNull(br.readLine()));
-        Preconditions.checkState(lemmaIdfWeight >= 0.0);
+        lemmaIdfWeight = Math.max(0.01, lemmaIdfWeight);
 
         lemmaIdfWeights.put(lemmaId, lemmaIdfWeight);
       }
@@ -137,10 +144,12 @@ public class LemmaIDFWeights {
       }
     }
 
+    isLoaded = true;
     return true;
   }
 
   public void save() throws IOException {
+    Log.out("LemmaIDFWeights saving");
     processWeightInfo();
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);

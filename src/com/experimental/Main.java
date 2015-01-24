@@ -4,9 +4,11 @@ import com.experimental.documentmodel.*;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.thirdparty.*;
 import com.experimental.documentvector.ConceptVector;
+import com.experimental.documentvector.DocumentVectoriser;
 import com.experimental.documentvector.Word2VecDB;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.Demo;
+import com.experimental.nlp.SimplePOSTag;
 import com.experimental.pageparser.PageCrawler;
 import com.experimental.pageparser.PageParser;
 import com.experimental.sitepage.SitePage;
@@ -46,7 +48,8 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    buildLemmaIdfWeights();
+//    buildLemmaIdfWeights();
+    vectoriseDocuments();
 
 //    try {
 //      URL main = new URL("http://shit.com/");
@@ -74,6 +77,68 @@ public class Main {
   public static void cssBoxExperiment() {
     PageParser pageParser = new PageParser("http://www.cbdplumbers.com.au/", SentenceProcessor.instance);
     pageParser.parsePage();
+  }
+
+  public static void vectoriseDocuments() {
+    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      if (!lemmaIDFWeights.tryLoad()) {
+        Log.out("could not load lemma idf weights");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    Word2VecDB word2VecDb = Word2VecDB.tryLoad();
+    if (word2VecDb == null) {
+      Log.out("could not load Word2VecDB");
+      return;
+    }
+
+    final DocumentVectoriser documentVectoriser = new DocumentVectoriser(word2VecDb, lemmaIDFWeights);
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+
+    final Executor executor = Executors.newFixedThreadPool(1);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess,
+        new DocumentStream.DocumentStreamOutput() {
+          @Override
+          public void processDocument(final Document document) {
+            numDocuments.incrementAndGet();
+            executor.execute(new Runnable() {
+              @Override
+              public void run() {
+                try {
+                  ConceptVector vector = documentVectoriser.computeDocumentVector(document);
+                  document.setConceptVector(vector);
+                  document.save();
+                } catch (Throwable e) {
+                  e.printStackTrace();
+                  return;
+                } finally {
+                  sem.release();
+                }
+              }
+            });
+          }
+        });
+
+    for (int i = 0; i < numDocuments.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    Log.out("done");
   }
 
   public static void buildLemmaIdfWeights() {
@@ -366,36 +431,6 @@ public class Main {
     }
 
     Log.out("generateNounAssociations finished");
-  }
-
-  private static void testWord2VecDB() throws IOException {
-    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String dbPath = aggregateDataFile.toPath().resolve(Word2VecDB.WORD2VEC_FILENAME).toString();
-
-    Word2VecDB word2VecDb = null;
-    BufferedReader br = null;
-    try {
-      br = new BufferedReader(new FileReader(dbPath));
-      word2VecDb = Word2VecDB.readFrom(br);
-
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      return;
-    } finally {
-      if (br != null) {
-        br.close();
-      }
-    }
-
-    ConceptVector monarch = word2VecDb.getWordVector("porn");
-    //ConceptVector man = word2VecDb.getWordVector("dig");
-
-//    man.add(monarch);
-
-    List<Word2VecDB.WordSimilarityScore> closest = word2VecDb.getClosestWordsTo(monarch, 10);
-    for (int i = 0; i < 10; i++) {
-      Log.out(closest.get(i).word + "\t" + closest.get(i).similarity);
-    }
   }
 
   private static void buildLemmaMorphologiesMap() {
