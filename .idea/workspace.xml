@@ -81,14 +81,14 @@
           <file leaf-file-name="LemmaIDFWeights.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.67041963" vertical-offset="965" max-vertical-offset="2865">
-                  <caret line="110" column="40" selection-start-line="110" selection-start-column="40" selection-end-line="110" selection-end-column="40" />
+                <state vertical-scroll-proportion="0.5015353" vertical-offset="965" max-vertical-offset="2880">
+                  <caret line="99" column="15" selection-start-line="99" selection-start-column="15" selection-end-line="99" selection-end-column="15" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1395#1412#0" expanded="true" />
                     <element signature="e#1588#1614#0" expanded="true" />
-                    <element signature="e#3266#3267#0" expanded="true" />
-                    <element signature="e#3318#3319#0" expanded="true" />
+                    <element signature="e#3291#3292#0" expanded="true" />
+                    <element signature="e#3343#3344#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -181,8 +181,8 @@
           <file leaf-file-name="LemmaMorphologies.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.19959058" vertical-offset="315" max-vertical-offset="3510">
-                  <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.4094166" vertical-offset="740" max-vertical-offset="3510">
+                  <caret line="76" column="48" selection-start-line="76" selection-start-column="48" selection-end-line="76" selection-end-column="48" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -1305,8 +1305,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19959058" vertical-offset="315" max-vertical-offset="3510">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.4094166" vertical-offset="740" max-vertical-offset="3510">
+          <caret line="76" column="48" selection-start-line="76" selection-start-column="48" selection-end-line="76" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1315,14 +1315,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.67041963" vertical-offset="965" max-vertical-offset="2865">
-          <caret line="110" column="40" selection-start-line="110" selection-start-column="40" selection-end-line="110" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.5015353" vertical-offset="965" max-vertical-offset="2880">
+          <caret line="99" column="15" selection-start-line="99" selection-start-column="15" selection-end-line="99" selection-end-column="15" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1395#1412#0" expanded="true" />
             <element signature="e#1588#1614#0" expanded="true" />
-            <element signature="e#3266#3267#0" expanded="true" />
-            <element signature="e#3318#3319#0" expanded="true" />
+            <element signature="e#3291#3292#0" expanded="true" />
+            <element signature="e#3343#3344#0" expanded="true" />
           </folding>
         </state>
       </provider>
