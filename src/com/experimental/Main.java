@@ -78,7 +78,7 @@ public class Main {
 
   public static void buildLemmaIdfWeights() {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE, DocumentNameGenerator.DocumentType.TOPICAL);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
 
     final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance);
 
@@ -97,24 +97,24 @@ public class Main {
               @Override
               public void run() {
                 try {
-                  if (!lemmaIDFWeights.isDocumentValid(document)) {
-                    return;
+                  if (lemmaIDFWeights.isDocumentValid(document)) {
+                    if (document instanceof WebsiteDocument) {
+                      lemmaIDFWeights.processDocument(document, 1.0);
+                    } else if (document instanceof TopicalDocument) {
+                      lemmaIDFWeights.processDocument(document, 0.01);
+                    }
                   }
                 } catch (Throwable e) {
                   return;
+                } finally {
+                  sem.release();
                 }
-
-                if (document instanceof  WebsiteDocument) {
-                  lemmaIDFWeights.processDocument(document, 1.0);
-                } else if (document instanceof TopicalDocument) {
-                  lemmaIDFWeights.processDocument(document, 0.01);
-                }
-
-                sem.release();
 
                 if (rand.nextInt()%5000 == 0) {
                   System.gc();
                 }
+
+
               }
             });
           }
