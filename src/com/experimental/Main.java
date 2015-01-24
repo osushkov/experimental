@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 
 import java.io.*;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -84,6 +85,7 @@ public class Main {
     final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
+    final Random rand = new Random();
 
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(docTypesToProcess,
@@ -109,6 +111,10 @@ public class Main {
                 }
 
                 sem.release();
+
+                if (rand.nextInt()%5000 == 0) {
+                  System.gc();
+                }
               }
             });
           }
