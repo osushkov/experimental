@@ -39,13 +39,13 @@ public class Main {
 //    }
 
     //stanfordNlpDemo();
-    try {
-      pageCrawler();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+//    try {
+//      pageCrawler();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
 
-//    buildLemmaIdfWeights();
+    buildLemmaIdfWeights();
 
 //    try {
 //      URL main = new URL("http://shit.com/");
@@ -89,7 +89,7 @@ public class Main {
             if (document instanceof  WebsiteDocument) {
               lemmaIDFWeights.processDocument(document, 1.0);
             } else if (document instanceof TopicalDocument) {
-              lemmaIDFWeights.processDocument(document, 1.0);
+              lemmaIDFWeights.processDocument(document, 0.01);
             }
           }
         });

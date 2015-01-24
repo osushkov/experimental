@@ -129,7 +129,7 @@ public class PageCrawler {
 
       SitePage childPage = null;
 
-      if (!visitedPages.contains(link.destination) && visitedPages.size() < 25) {
+      if (!visitedPages.contains(link.destination) && visitedPages.size() < 10) {
         try {
           childPage = parsePage(link.destination);
           visitedPages.add(link.destination);
