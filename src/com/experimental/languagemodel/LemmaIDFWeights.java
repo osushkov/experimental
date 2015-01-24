@@ -154,11 +154,9 @@ public class LemmaIDFWeights {
         double p = (double) occurances / (double) weightInfo.totalOccurances;
 
         entropySum += p * Math.log(p) / Math.log(numDocuments.get());
-        Log.out("p: " + p + " " + entropySum);
       }
 
       weightInfo.globalWeight = 1.0 + entropySum;
-      Log.out("weight: " + weightInfo.globalWeight);
       lemmaIdfWeights.put(weightInfo.lemmaId, weightInfo.globalWeight);
     }
   }

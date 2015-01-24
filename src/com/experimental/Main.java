@@ -82,7 +82,7 @@ public class Main {
 
     final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance);
 
-    final Executor executor = Executors.newFixedThreadPool(12);
+    final Executor executor = Executors.newFixedThreadPool(8);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
     final Random rand = new Random();
@@ -113,8 +113,6 @@ public class Main {
                 if (rand.nextInt()%5000 == 0) {
                   System.gc();
                 }
-
-
               }
             });
           }
