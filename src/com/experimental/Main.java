@@ -81,32 +81,55 @@ public class Main {
 
     final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance);
 
+    final Executor executor = Executors.newFixedThreadPool(12);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(docTypesToProcess,
         new DocumentStream.DocumentStreamOutput() {
           @Override
-          public void processDocument(Document document) {
-            try {
-              if (!lemmaIDFWeights.isDocumentValid(document)) {
-                return;
-              }
-            } catch (Throwable e) {
-              return;
-            }
+          public void processDocument(final Document document) {
+            numDocuments.incrementAndGet();
+            executor.execute(new Runnable() {
+              @Override
+              public void run() {
+                try {
+                  if (!lemmaIDFWeights.isDocumentValid(document)) {
+                    return;
+                  }
+                } catch (Throwable e) {
+                  return;
+                }
 
-            if (document instanceof  WebsiteDocument) {
-              lemmaIDFWeights.processDocument(document, 1.0);
-            } else if (document instanceof TopicalDocument) {
-              lemmaIDFWeights.processDocument(document, 0.01);
-            }
+                if (document instanceof  WebsiteDocument) {
+                  lemmaIDFWeights.processDocument(document, 1.0);
+                } else if (document instanceof TopicalDocument) {
+                  lemmaIDFWeights.processDocument(document, 0.01);
+                }
+
+                sem.release();
+              }
+            });
           }
         });
+
+    Log.out("processed all docs");
+    for (int i = 0; i < numDocuments.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
 
     try {
       lemmaIDFWeights.save();
     } catch (IOException e) {
       e.printStackTrace();
     }
+
+    Log.out("done");
   }
 
   public static void pageCrawler() throws IOException {

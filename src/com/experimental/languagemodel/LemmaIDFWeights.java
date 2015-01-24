@@ -6,12 +6,14 @@ import com.experimental.documentmodel.Document;
 import com.experimental.languagemodel.LemmaDB.LemmaId;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.AtomicDouble;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sushkov on 16/01/15.
@@ -28,6 +30,11 @@ public class LemmaIDFWeights {
     LemmaWeightInfo(LemmaId lemmaId) {
       this.lemmaId = Preconditions.checkNotNull(lemmaId);
     }
+
+    synchronized void update(BagOfWeightedLemmas.WeightedLemmaEntry entry, double documentWeight) {
+      totalOccurances += entry.weight * documentWeight;
+      documentOccurance.add(entry.weight * documentWeight);
+    }
   }
 
   private static final String LEMMA_IDF_WEIGHTS_FILENAME = "lemma_idf_weights.txt";
@@ -36,9 +43,9 @@ public class LemmaIDFWeights {
   private final Map<LemmaId, Double> lemmaIdfWeights = new HashMap<LemmaId, Double>();
 
   // This is used for when we are computing the token idf weights from the documents.
-  private final Map<LemmaId, LemmaWeightInfo> lemmaWeightInfo = new HashMap<LemmaId, LemmaWeightInfo>();
+  private final Map<LemmaId, LemmaWeightInfo> lemmaWeightInfo = new ConcurrentHashMap<LemmaId, LemmaWeightInfo>();
   private final LemmaDB lemmaDb;
-  private double numDocuments = 0.0;
+  private AtomicDouble numDocuments = new AtomicDouble(0.0);
 
   public LemmaIDFWeights(LemmaDB lemmaDb) {
     this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
@@ -63,11 +70,10 @@ public class LemmaIDFWeights {
       lemmaWeightInfo.putIfAbsent(lemmaId, new LemmaWeightInfo(lemmaId));
 
       LemmaWeightInfo info = lemmaWeightInfo.get(lemmaId);
-      info.totalOccurances += entry.weight * documentWeight;
-      info.documentOccurance.add(entry.weight * documentWeight);
+      info.update(entry, documentWeight);
     }
 
-    numDocuments += documentWeight;
+    numDocuments.getAndAdd(documentWeight);
   }
 
   public boolean isDocumentValid(Document document) {
@@ -147,7 +153,7 @@ public class LemmaIDFWeights {
       for (double occurances : weightInfo.documentOccurance) {
         double p = (double) occurances / (double) weightInfo.totalOccurances;
 
-        entropySum += p * Math.log(p) / Math.log(numDocuments);
+        entropySum += p * Math.log(p) / Math.log(numDocuments.get());
         Log.out("p: " + p + " " + entropySum);
       }
 
