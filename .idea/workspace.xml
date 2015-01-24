@@ -27,11 +27,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.50093806">
       <split-first>
         <leaf>
-          <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="6900">
-                  <caret line="118" column="92" selection-start-line="118" selection-start-column="92" selection-end-line="118" selection-end-column="92" />
+                <state vertical-scroll-proportion="0.44524053" vertical-offset="795" max-vertical-offset="6900">
+                  <caret line="104" column="60" selection-start-line="104" selection-start-column="60" selection-end-line="104" selection-end-column="60" />
                   <folding />
                 </state>
               </provider>
@@ -51,10 +51,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DocumentVectoriser.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="DocumentVectoriser.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.5087001" vertical-offset="163" max-vertical-offset="1170">
+                <state vertical-scroll-proportion="0.0" vertical-offset="163" max-vertical-offset="1170">
                   <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
                   <folding />
                 </state>
@@ -189,8 +189,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/Word2VecDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/WebsiteDocument.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriser.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
       </list>
     </option>
   </component>
@@ -1165,18 +1165,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="6900">
-          <caret line="118" column="92" selection-start-line="118" selection-start-column="92" selection-end-line="118" selection-end-column="92" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="163" max-vertical-offset="1170">
+          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriser.java">
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5087001" vertical-offset="163" max-vertical-offset="1170">
-          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.44524053" vertical-offset="795" max-vertical-offset="6900">
+          <caret line="104" column="60" selection-start-line="104" selection-start-column="60" selection-end-line="104" selection-end-column="60" />
           <folding />
         </state>
       </provider>

@@ -102,7 +102,7 @@ public class Main {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
 
-    final Executor executor = Executors.newFixedThreadPool(1);
+    final Executor executor = Executors.newFixedThreadPool(8);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
 
