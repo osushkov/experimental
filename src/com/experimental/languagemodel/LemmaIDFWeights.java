@@ -45,10 +45,12 @@ public class LemmaIDFWeights {
   // This is used for when we are computing the token idf weights from the documents.
   private final Map<LemmaId, LemmaWeightInfo> lemmaWeightInfo = new ConcurrentHashMap<LemmaId, LemmaWeightInfo>();
   private final LemmaDB lemmaDb;
+  private final LemmaMorphologies lemmaMorphologies;
   private AtomicDouble numDocuments = new AtomicDouble(0.0);
 
-  public LemmaIDFWeights(LemmaDB lemmaDb) {
+  public LemmaIDFWeights(LemmaDB lemmaDb, LemmaMorphologies lemmaMorphologies) {
     this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
+    this.lemmaMorphologies = Preconditions.checkNotNull(lemmaMorphologies);
   }
 
   public double getLemmaWeight(Lemma lemma) {
@@ -66,6 +68,10 @@ public class LemmaIDFWeights {
     Preconditions.checkNotNull(document);
 
     for (BagOfWeightedLemmas.WeightedLemmaEntry entry : document.getBagOfLemmas().getEntries()) {
+      if (numLemmaOccurances(entry.lemma) < 10) {
+        continue;
+      }
+
       LemmaId lemmaId = lemmaDb.addLemma(entry.lemma);
       lemmaWeightInfo.putIfAbsent(lemmaId, new LemmaWeightInfo(lemmaId));
 
@@ -74,6 +80,22 @@ public class LemmaIDFWeights {
     }
 
     numDocuments.getAndAdd(documentWeight);
+  }
+
+  private int numLemmaOccurances(Lemma lemma) {
+    try {
+      lemmaMorphologies.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Map<String, Integer> occurances = lemmaMorphologies.getMorphologiesFor(lemma);
+
+    int sum = 0;
+    for (int num : occurances.values()) {
+      sum += num;
+    }
+    return sum;
   }
 
   public boolean isDocumentValid(Document document) {

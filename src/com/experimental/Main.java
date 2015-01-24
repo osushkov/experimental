@@ -80,7 +80,7 @@ public class Main {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
 
-    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance);
+    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
 
     final Executor executor = Executors.newFixedThreadPool(8);
     final AtomicInteger numDocuments = new AtomicInteger(0);
@@ -401,7 +401,7 @@ public class Main {
   private static void buildLemmaMorphologiesMap() {
     Log.out("buildLemmaMorphologiesMap running...");
 
-    final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies();
+    final LemmaMorphologies lemmaMorphologies = LemmaMorphologies.instance;
     try {
       if (lemmaMorphologies.tryLoad()) {
         Log.out("loaded LemmaMorphologies from disk");

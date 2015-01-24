@@ -3,6 +3,7 @@ package com.experimental;
 import com.experimental.documentmodel.*;
 import com.experimental.languagemodel.LemmaDB;
 import com.experimental.languagemodel.LemmaIDFWeights;
+import com.experimental.languagemodel.LemmaMorphologies;
 import com.experimental.utils.Log;
 import com.google.common.collect.Lists;
 
@@ -26,7 +27,7 @@ public class Pipeline {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE, DocumentNameGenerator.DocumentType.TOPICAL);
 
-    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance);
+    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
 
     final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);

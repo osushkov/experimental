@@ -31,6 +31,10 @@ public class LemmaMorphologies {
 
   private boolean isLoaded = false;
 
+  public static final LemmaMorphologies instance = new LemmaMorphologies();
+
+  private LemmaMorphologies() {}
+
   public void addToken(Token token) {
     Preconditions.checkNotNull(token);
 
@@ -67,7 +71,6 @@ public class LemmaMorphologies {
 
   public Map<String, Integer> getMorphologiesFor(Lemma lemma) {
     Preconditions.checkNotNull(lemma);
-
 
     Map<String, Integer> result = new HashMap<String, Integer>();
 

@@ -28,7 +28,7 @@ import java.util.Properties;
  */
 public class SentenceProcessor {
   private static final String TAG = "SentenceProcessor";
-  private final LemmaMorphologies lemmaMorphologies = new LemmaMorphologies();
+  private final LemmaMorphologies lemmaMorphologies = LemmaMorphologies.instance;
   private final StanfordCoreNLP pipeline;
 
   public static final SentenceProcessor instance = new SentenceProcessor();
