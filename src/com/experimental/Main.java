@@ -95,21 +95,25 @@ public class Main {
         new DocumentStream.DocumentStreamOutput() {
           @Override
           public void processDocument(final Document document) {
-            WebsiteDocument webDoc = (WebsiteDocument) document;
+            try {
+              WebsiteDocument webDoc = (WebsiteDocument) document;
 
-            ConceptVector documentVector = document.getConceptVector();
-            if (documentVector != null && webDoc.getSitePages().size() > 0) {
-              if (numProcessed.get()%1000 == 0) {
-                List<DocumentVectorDB.DocumentSimilarityPair> similarDocs =
-                    documentVectorDB.getNearestDocuments(document, 5);
-                Log.out(webDoc.getSitePages().get(0).url);
-                for (DocumentVectorDB.DocumentSimilarityPair similarDoc : similarDocs) {
-                  WebsiteDocument webSimilarDoc = (WebsiteDocument) similarDoc.document;
-                  Log.out(Double.toString(similarDoc.similarity) + " " + webSimilarDoc.getSitePages().get(0).url);
+              ConceptVector documentVector = document.getConceptVector();
+              if (documentVector != null && webDoc.getSitePages().size() > 0) {
+                if (numProcessed.get() % 1000 == 0) {
+                  List<DocumentVectorDB.DocumentSimilarityPair> similarDocs =
+                      documentVectorDB.getNearestDocuments(document, 5);
+                  Log.out(webDoc.getSitePages().get(0).url);
+                  for (DocumentVectorDB.DocumentSimilarityPair similarDoc : similarDocs) {
+                    WebsiteDocument webSimilarDoc = (WebsiteDocument) similarDoc.document;
+                    Log.out(Double.toString(similarDoc.similarity) + " " + webSimilarDoc.getSitePages().get(0).url);
+                  }
                 }
-              }
 
-              numProcessed.incrementAndGet();
+                numProcessed.incrementAndGet();
+              }
+            } catch (Throwable e) {
+              e.printStackTrace();
             }
           }
         });
