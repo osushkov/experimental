@@ -18,7 +18,7 @@ public abstract class Document {
   private static final String TOKENISED_SENTENCES_FILENAME = "sentences.txt";
   private static final String CONCEPT_VECTOR_FILENAME = "concept_vector.txt";
 
-  protected final String rootDirectoryPath;
+  public final String rootDirectoryPath;
 
   private List<Sentence> sentences = null;
   private BagOfWeightedLemmas bagOfLemmas = null;

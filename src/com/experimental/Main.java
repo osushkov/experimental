@@ -106,7 +106,11 @@ public class Main {
                   Log.out(webDoc.getSitePages().get(0).url);
                   for (DocumentVectorDB.DocumentSimilarityPair similarDoc : similarDocs) {
                     WebsiteDocument webSimilarDoc = (WebsiteDocument) similarDoc.document;
-                    Log.out(Double.toString(similarDoc.similarity) + " " + webSimilarDoc.getSitePages().get(0).url);
+                    if (webSimilarDoc.getSitePages().size() == 0) {
+                      Log.out("what the fuck: " + webSimilarDoc.rootDirectoryPath);
+                    } else {
+                      Log.out(Double.toString(similarDoc.similarity) + " " + webSimilarDoc.getSitePages().get(0).url);
+                    }
                   }
                 }
 
