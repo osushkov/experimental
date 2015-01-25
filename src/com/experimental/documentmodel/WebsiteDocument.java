@@ -1,6 +1,7 @@
 package com.experimental.documentmodel;
 
 import com.experimental.sitepage.SitePage;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
@@ -119,6 +120,7 @@ public class WebsiteDocument extends Document {
   }
 
   private void loadSitePages(File file) throws IOException {
+    Log.out("loadSitePages for: " + rootDirectoryPath);
     BufferedReader br = null;
     try {
       br = new BufferedReader(new FileReader(file.getAbsolutePath()));
