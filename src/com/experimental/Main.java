@@ -4,6 +4,7 @@ import com.experimental.documentmodel.*;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.thirdparty.*;
 import com.experimental.documentvector.ConceptVector;
+import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.documentvector.DocumentVectoriser;
 import com.experimental.documentvector.Word2VecDB;
 import com.experimental.languagemodel.*;
@@ -49,7 +50,8 @@ public class Main {
 //    }
 
 //    buildLemmaIdfWeights();
-    vectoriseDocuments();
+//    vectoriseDocuments();
+    findDocumentNearestNeighbours();
 
 //    try {
 //      URL main = new URL("http://shit.com/");
@@ -77,6 +79,40 @@ public class Main {
   public static void cssBoxExperiment() {
     PageParser pageParser = new PageParser("http://www.cbdplumbers.com.au/", SentenceProcessor.instance);
     pageParser.parsePage();
+  }
+
+  public static void findDocumentNearestNeighbours() {
+    final DocumentVectorDB documentVectorDB = new DocumentVectorDB();
+    documentVectorDB.load();
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+
+    final AtomicInteger numProcessed = new AtomicInteger(0);
+
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess,
+        new DocumentStream.DocumentStreamOutput() {
+          @Override
+          public void processDocument(final Document document) {
+            WebsiteDocument webDoc = (WebsiteDocument) document;
+
+            ConceptVector documentVector = document.getConceptVector();
+            if (documentVector != null && webDoc.getSitePages().size() > 0) {
+              if (numProcessed.get()%1000 == 0) {
+                List<DocumentVectorDB.DocumentSimilarityPair> similarDocs =
+                    documentVectorDB.getNearestDocuments(document, 5);
+                Log.out(webDoc.getSitePages().get(0).url);
+                for (DocumentVectorDB.DocumentSimilarityPair similarDoc : similarDocs) {
+                  WebsiteDocument webSimilarDoc = (WebsiteDocument) similarDoc.document;
+                  Log.out(Double.toString(similarDoc.similarity) + " " + webSimilarDoc.getSitePages().get(0).url);
+                }
+              }
+
+              numProcessed.incrementAndGet();
+            }
+          }
+        });
   }
 
   public static void vectoriseDocuments() {
