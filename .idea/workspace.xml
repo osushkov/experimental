@@ -27,30 +27,29 @@
     <splitter split-orientation="horizontal" split-proportion="0.50093806">
       <split-first>
         <leaf>
-          <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="436" max-vertical-offset="7485">
-                  <caret line="102" column="18" selection-start-line="102" selection-start-column="18" selection-end-line="102" selection-end-column="18" />
+                <state vertical-scroll-proportion="0.73819304" vertical-offset="436" max-vertical-offset="7455">
+                  <caret line="100" column="82" selection-start-line="100" selection-start-column="82" selection-end-line="100" selection-end-column="82" />
                   <folding>
-                    <element signature="e#2796#3906#0" expanded="true" />
-                    <element signature="e#3905#3906#0" expanded="true" />
+                    <element signature="e#2796#3779#0" expanded="true" />
+                    <element signature="e#3778#3779#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DocumentVectorDB.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="DocumentVectorDB.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectorDB.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.59958935" vertical-offset="286" max-vertical-offset="1425">
-                  <caret line="58" column="79" selection-start-line="58" selection-start-column="79" selection-end-line="58" selection-end-column="79" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="286" max-vertical-offset="1425">
+                  <caret line="55" column="19" selection-start-line="55" selection-start-column="19" selection-end-line="55" selection-end-column="19" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1174#1380#0" expanded="true" />
                     <element signature="e#1379#1380#0" expanded="true" />
                     <element signature="e#1455#1473#0" expanded="true" />
-                    <element signature="e#1791#2196#0" expanded="true" />
                     <element signature="e#2195#2196#0" expanded="true" />
                     <element signature="e#2452#2476#0" expanded="true" />
                   </folding>
@@ -206,8 +205,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/Document.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/WebsiteDocument.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectorDB.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
       </list>
     </option>
   </component>
@@ -1190,29 +1189,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="436" max-vertical-offset="7485">
-          <caret line="102" column="18" selection-start-line="102" selection-start-column="18" selection-end-line="102" selection-end-column="18" />
-          <folding>
-            <element signature="e#2796#3906#0" expanded="true" />
-            <element signature="e#3905#3906#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectorDB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.59958935" vertical-offset="286" max-vertical-offset="1425">
-          <caret line="58" column="79" selection-start-line="58" selection-start-column="79" selection-end-line="58" selection-end-column="79" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="286" max-vertical-offset="1425">
+          <caret line="55" column="19" selection-start-line="55" selection-start-column="19" selection-end-line="55" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1174#1380#0" expanded="true" />
             <element signature="e#1379#1380#0" expanded="true" />
             <element signature="e#1455#1473#0" expanded="true" />
-            <element signature="e#1791#2196#0" expanded="true" />
             <element signature="e#2195#2196#0" expanded="true" />
             <element signature="e#2452#2476#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.73819304" vertical-offset="436" max-vertical-offset="7455">
+          <caret line="100" column="82" selection-start-line="100" selection-start-column="82" selection-end-line="100" selection-end-column="82" />
+          <folding>
+            <element signature="e#2796#3779#0" expanded="true" />
+            <element signature="e#3778#3779#0" expanded="true" />
           </folding>
         </state>
       </provider>
