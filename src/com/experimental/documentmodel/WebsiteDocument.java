@@ -120,7 +120,6 @@ public class WebsiteDocument extends Document {
   }
 
   private void loadSitePages(File file) throws IOException {
-    Log.out("loadSitePages for: " + rootDirectoryPath);
     BufferedReader br = null;
     try {
       br = new BufferedReader(new FileReader(file.getAbsolutePath()));
