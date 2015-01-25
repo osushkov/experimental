@@ -56,7 +56,8 @@ public class DocumentVectorDB {
           @Override
           public void processDocument(final Document document) {
             ConceptVector documentVector = document.getConceptVector();
-            if (documentVector != null && !Double.isNaN(documentVector.length())) {
+            if (documentVector != null && !Double.isNaN(documentVector.length()) &&
+                Double.isFinite(documentVector.length())) {
               vectoredDocuments.add(new VectoredDocument(documentVector, document));
             }
           }
