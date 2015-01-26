@@ -112,7 +112,11 @@ public class Main {
         new DocumentStream.DocumentStreamOutput() {
           @Override
           public void processDocument(final Document document) {
-            corpusLemmaBag.addBag(document.getBagOfLemmas());
+            try {
+              corpusLemmaBag.addBag(document.getBagOfLemmas());
+            } catch (Throwable e) {
+              return;
+            }
           }
         });
 
