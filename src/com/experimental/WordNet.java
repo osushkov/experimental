@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.experimental.languagemodel.Lemma;
+import com.experimental.nlp.SimplePOSTag;
 import com.experimental.utils.Log;
+import com.google.common.base.Preconditions;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.RAMDictionary;
@@ -21,84 +24,85 @@ public class WordNet {
 
   private IDictionary dict = null;
   private IStemmer stemmer = null;
-
   private int totalSize = 0;
 
-  public void loadWordNet() throws IOException {
-    URL url = new URL("file" , null , WORDNET_DICT_PATH) ;
-
-    dict = new Dictionary(url);
+  public boolean loadWordNet() {
+    try {
+      URL url = new URL("file" , null , WORDNET_DICT_PATH);
+      dict = new Dictionary(url);
 //    dict = new RAMDictionary(url, ILoadPolicy.IMMEDIATE_LOAD);
-    dict.open();
+      dict.open();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
 
     stemmer = new WordnetStemmer(dict);
     totalSize = getTotalNumWords();
 
-    List<ISynsetID> s0 = getSynsetsFor("walk", POS.VERB);
-    List<ISynsetID> s1 = getSynsetsFor("run", POS.VERB);
+    return true;
+  }
 
+  public double getLemmaSimilarity(Lemma lemma0, Lemma lemma1) {
+    Preconditions.checkNotNull(lemma0);
+    Preconditions.checkNotNull(lemma1);
+
+    if (lemma0.tag == SimplePOSTag.OTHER || lemma1.tag == SimplePOSTag.OTHER) {
+      return 0.0;
+    }
+
+    POS pos0 = getPos(lemma0.tag);
+    POS pos1 = getPos(lemma1.tag);
+
+    String stemmed0 = stemWord(lemma0.lemma, pos0);
+    String stemmed1 = stemWord(lemma1.lemma, pos1);
+
+    if (stemmed0 == null || stemmed1 == null) {
+      return 0.0;
+    }
+
+    List<ISynsetID> s0 = getSynsetsFor(stemmed0, pos0);
+    List<ISynsetID> s1 = getSynsetsFor(stemmed1, pos1);
+
+    if (s0 == null || s1 == null) {
+      return 0.0;
+    }
+
+    double sum = 0.0;
+    int num = 0;
     double maxSimilarity = 0.0;
     for (ISynsetID s0Id : s0) {
       for (ISynsetID s1Id : s1) {
-        double similarity = getSynsetSimilarity(s0Id, s1Id);
-        maxSimilarity = Math.max(maxSimilarity, similarity);
+        sum += getSynsetSimilarity(s0Id, s1Id);
+        num++;
       }
     }
 
-    Log.out(Double.toString(maxSimilarity));
+    return num == 0 ? 0.0 : sum / num;
+  }
 
-//    String inputWord = "dog";
-//    POS pos = POS.NOUN;
-//
-//    String stemmedWord = stemWord(inputWord, pos);
-//    System.out.println("stemmed: " + stemmedWord);
-//    if (stemmedWord == null) {
-//      System.out.println("Word cannot be stemmed");
-//      return;
-//    }
-//
-//    IIndexWord idxWord = dict.getIndexWord(stemmedWord, pos) ;
-//    IWordID wordID = idxWord.getWordIDs().get(0);
-//    IWord word = dict.getWord(wordID);
-//    System.out.println("Lemma = " + word.getLemma());
-//
-//    ISynset synonyms = word.getSynset();
-//
-//    outputHypernymHeirarchy(synonyms);
-
-    System.out.println("finished");
-
-    //printAll();
+  private POS getPos(SimplePOSTag posTag) {
+    switch(posTag) {
+      case ADJECTIVE: return POS.ADJECTIVE;
+      case ADVERB: return POS.ADVERB;
+      case NOUN: return POS.NOUN;
+      case VERB: return POS.VERB;
+      default: return null;
+    }
   }
 
   private String stemWord(String word, POS pos) {
-    return stemmer.findStems(word, pos).get(0);
-  }
-
-
-
-  private void outputHypernymHeirarchy(ISynset synset) {
-    List<ISynsetID> hypernyms = synset.getRelatedSynsets(Pointer.HYPERNYM);
-    for (ISynsetID hypernymId : hypernyms) {
-      ISynset hypernym = dict.getSynset(hypernymId);
-      System.out.print("{ ");
-      for (IWord word : hypernym.getWords()) {
-        System.out.print(word.getLemma() + ",");
-      }
-      System.out.println(" }");
-
-    }
-
-    for (ISynsetID hypernymId : hypernyms) {
-      ISynset hypernym = dict.getSynset(hypernymId);
-      outputHypernymHeirarchy(hypernym);
+    List<String> stems = stemmer.findStems(word, pos);
+    if (stems.isEmpty()) {
+      return null;
+    } else {
+      return stems.get(0);
     }
   }
 
   private List<ISynsetID> getSynsetsFor(String word, POS pos) {
     String stemmedWord = stemWord(word, pos);
     if (stemmedWord == null) {
-      Log.out("no synset for " + word);
       return null;
     }
 
@@ -180,29 +184,11 @@ public class WordNet {
     return synset.getRelatedSynsets(Pointer.HYPONYM).isEmpty();
   }
 
-  private void printAll() {
-    Iterator<ISynset> iter = dict.getSynsetIterator(POS.VERB);
-
-    int num = 0;
-    while(iter.hasNext()) {
-      ISynset synset = iter.next();
-      System.out.print("{ ");
-      for (IWord word : synset.getWords()) {
-        System.out.print(word.getLemma() + ",");
-        num++;
-      }
-      System.out.println(" }");
-    }
-
-    System.out.println("num : " + num);
-  }
-
   private int getTotalNumWords() {
     return getTotalNumWords(POS.ADJECTIVE) +
         getTotalNumWords(POS.ADVERB) +
         getTotalNumWords(POS.VERB) +
         getTotalNumWords(POS.NOUN);
-
   }
 
   private int getTotalNumWords(POS pos) {

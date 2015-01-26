@@ -33,12 +33,15 @@ public class BagOfWeightedLemmas {
   private final Map<Lemma, WeightedLemmaEntry> bag = new HashMap<Lemma, WeightedLemmaEntry>();
   private double sumWeight = 0.0;
 
+  public BagOfWeightedLemmas() {}
+
   public BagOfWeightedLemmas(List<Sentence> sentences) {
     Preconditions.checkNotNull(sentences);
     for (Sentence sentence : sentences) {
       for (Token token : sentence.tokens) {
         Lemma tokenLemma = Lemma.fromToken(token);
 
+        addLemma(tokenLemma, sentence.emphasis);
         WeightedLemmaEntry curEntry = bag.get(tokenLemma);
         if (curEntry == null) {
           curEntry = new WeightedLemmaEntry(tokenLemma);
@@ -51,11 +54,32 @@ public class BagOfWeightedLemmas {
     }
   }
 
+  public void addBag(BagOfWeightedLemmas otherBag) {
+    for (WeightedLemmaEntry otherEntry : otherBag.bag.values()) {
+      addLemma(otherEntry.lemma, otherEntry.weight);
+    }
+  }
+
   public Collection<WeightedLemmaEntry> getEntries() {
     return bag.values();
   }
 
+  public Map<Lemma, WeightedLemmaEntry> getBag() {
+    return bag;
+  }
+
   public double getSumWeight() {
     return sumWeight;
+  }
+
+  private void addLemma(Lemma lemma, double weight) {
+    WeightedLemmaEntry curEntry = bag.get(lemma);
+    if (curEntry == null) {
+      curEntry = new WeightedLemmaEntry(lemma);
+      bag.put(lemma, curEntry);
+    }
+
+    curEntry.weight += weight;
+    sumWeight += weight;
   }
 }

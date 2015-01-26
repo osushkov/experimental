@@ -63,18 +63,64 @@ public class Main {
 //    } catch (URISyntaxException e) {
 //      e.printStackTrace();
 //    }
-    aggregateLemmaQuality();
+//    aggregateLemmaQuality();
+    generateBasisVector();
 //    wordNetExperiment();
     Log.out("FINISHED");
   }
 
-  public static void wordNetExperiment() {
-    WordNet wordnet = new WordNet();
+  private static void generateBasisVector() {
+    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
     try {
-      wordnet.loadWordNet();
+      if (!lemmaIDFWeights.tryLoad()) {
+        Log.out("could not load lemma idf weights");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    Word2VecDB word2VecDb = Word2VecDB.tryLoad();
+    if (word2VecDb == null) {
+      Log.out("could not load Word2VecDB");
+      return;
+    }
+
+    WordNet wordnet = new WordNet();
+    if (!wordnet.loadWordNet()) {
+      Log.out("could not load WordNet");
+      return;
+    }
+
+    try {
+      if (!LemmaMorphologies.instance.tryLoad()) {
+        Log.out("could not load LemmaMorphologies");
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
+
+    LemmaSimilarityMeasure lemmaSimilarityMeasure = new LemmaSimilarityMeasure(wordnet, word2VecDb);
+
+    final BagOfWeightedLemmas corpusLemmaBag = new BagOfWeightedLemmas();
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess,
+        new DocumentStream.DocumentStreamOutput() {
+          @Override
+          public void processDocument(final Document document) {
+            corpusLemmaBag.addBag(document.getBagOfLemmas());
+          }
+        });
+
+    BasisVectorGenerator basisVectorGenerator = new BasisVectorGenerator(
+        corpusLemmaBag, LemmaMorphologies.instance, lemmaSimilarityMeasure, lemmaIDFWeights, LemmaDB.instance);
+
+    BasisVector basisVector = basisVectorGenerator.buildBasisVector(600);
+    Log.out(basisVector.toString());
   }
 
   public static void cssBoxExperiment() {

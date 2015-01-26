@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LemmaQuality {
   private static final String QUALITY_DATA_FILENAME = "lemma_quality.txt";
 
-  private static class LemmaQualityInfo {
+  public static class LemmaQualityInfo {
     final LemmaDB.LemmaId lemmaId;
 
     double quality = 0.0;
