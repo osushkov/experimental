@@ -51,7 +51,7 @@ public class Main {
 
 //    buildLemmaIdfWeights();
 //    findDocumentNearestNeighbours();
-//    vectoriseDocuments();
+    vectoriseDocuments();
 
 //    try {
 //      URL main = new URL("http://shit.com/");
@@ -64,7 +64,7 @@ public class Main {
 //      e.printStackTrace();
 //    }
 //    aggregateLemmaQuality();
-    generateBasisVector();
+//    generateBasisVector();
 //    wordNetExperiment();
     Log.out("FINISHED");
   }
@@ -174,24 +174,31 @@ public class Main {
   }
 
   public static void vectoriseDocuments() {
-    final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
-    try {
-      if (!lemmaIDFWeights.tryLoad()) {
-        Log.out("could not load lemma idf weights");
-        return;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
     Word2VecDB word2VecDb = Word2VecDB.tryLoad();
     if (word2VecDb == null) {
       Log.out("could not load Word2VecDB");
       return;
     }
 
-    final DocumentVectoriser documentVectoriser = new DocumentVectoriser(word2VecDb, lemmaIDFWeights);
+    WordNet wordnet = new WordNet();
+    if (!wordnet.loadWordNet()) {
+      Log.out("could not load WordNet");
+      return;
+    }
+
+    LemmaSimilarityMeasure lemmaSimilarityMeasure = new LemmaSimilarityMeasure(wordnet, word2VecDb);
+
+    BasisVector basisVector = new BasisVector();
+    try {
+      if (!basisVector.tryLoad()) {
+        Log.out("could not load BasisVector");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    final DocumentVectoriser documentVectoriser = new DocumentVectoriser(basisVector, lemmaSimilarityMeasure);
 
 //    Document doc = new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A0A28B");
 //    ConceptVector vector = documentVectoriser.computeDocumentVector(doc);
@@ -199,7 +206,7 @@ public class Main {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
 
-    final Executor executor = Executors.newFixedThreadPool(1);
+    final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
 

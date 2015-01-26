@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.experimental.languagemodel.Lemma;
 import com.experimental.nlp.SimplePOSTag;
@@ -24,8 +25,8 @@ public class WordNet {
   private IStemmer stemmer = null;
   private int totalSize = 0;
 
-  private Map<ISynsetID, Integer> synsetSizeCache = new HashMap<ISynsetID, Integer>();
-  private Map<ISynsetID, List<ISynsetID>> pathToRootCache = new HashMap<ISynsetID, List<ISynsetID>>();
+  private Map<ISynsetID, Integer> synsetSizeCache = new ConcurrentHashMap<ISynsetID, Integer>();
+  private Map<ISynsetID, List<ISynsetID>> pathToRootCache = new ConcurrentHashMap<ISynsetID, List<ISynsetID>>();
 
   public boolean loadWordNet() {
     try {
@@ -148,7 +149,7 @@ public class WordNet {
     }
 
     List<ISynsetID> result = getSynsetPathToRoot(synsetId, new ArrayList<ISynsetID>());
-    pathToRootCache.put(synsetId, result);
+    pathToRootCache.putIfAbsent(synsetId, result);
     return result;
   }
 
@@ -179,7 +180,7 @@ public class WordNet {
       size += getSynsetSyze(hyponymId);
     }
 
-    synsetSizeCache.put(synsetId, size);
+    synsetSizeCache.putIfAbsent(synsetId, size);
     return size;
   }
 
