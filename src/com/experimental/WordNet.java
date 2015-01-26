@@ -3,9 +3,7 @@ package com.experimental;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.experimental.languagemodel.Lemma;
 import com.experimental.nlp.SimplePOSTag;
@@ -25,6 +23,9 @@ public class WordNet {
   private IDictionary dict = null;
   private IStemmer stemmer = null;
   private int totalSize = 0;
+
+  private Map<ISynsetID, Integer> synsetSizeCache = new HashMap<ISynsetID, Integer>();
+  private Map<ISynsetID, List<ISynsetID>> pathToRootCache = new HashMap<ISynsetID, List<ISynsetID>>();
 
   public boolean loadWordNet() {
     try {
@@ -128,8 +129,8 @@ public class WordNet {
   }
 
   private ISynsetID findLowestCommonSynset(ISynsetID s0, ISynsetID s1) {
-    List<ISynsetID> path0 = getSynsetPathToRoot(s0, new ArrayList<ISynsetID>());
-    List<ISynsetID> path1 = getSynsetPathToRoot(s1, new ArrayList<ISynsetID>());
+    List<ISynsetID> path0 = getSynsetPathToRoot(s0);
+    List<ISynsetID> path1 = getSynsetPathToRoot(s1);
 
     ISynsetID result = null;
     int index = 0;
@@ -138,6 +139,16 @@ public class WordNet {
       index++;
     }
 
+    return result;
+  }
+
+  private List<ISynsetID> getSynsetPathToRoot(ISynsetID synsetId) {
+    if (pathToRootCache.containsKey(synsetId)) {
+      return pathToRootCache.get(synsetId);
+    }
+
+    List<ISynsetID> result = getSynsetPathToRoot(synsetId, new ArrayList<ISynsetID>());
+    pathToRootCache.put(synsetId, result);
     return result;
   }
 
@@ -156,6 +167,10 @@ public class WordNet {
 
 
   private int getSynsetSyze(ISynsetID synsetId) {
+    if (synsetSizeCache.containsKey(synsetId)) {
+      return synsetSizeCache.get(synsetId);
+    }
+
     ISynset synset = dict.getSynset(synsetId);
     int size = getSynsetDirectSize(synset);
 
@@ -164,6 +179,7 @@ public class WordNet {
       size += getSynsetSyze(hyponymId);
     }
 
+    synsetSizeCache.put(synsetId, size);
     return size;
   }
 
