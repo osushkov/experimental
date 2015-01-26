@@ -74,7 +74,7 @@ public class BasisVectorGenerator {
       return false;
     }
 
-    if (corpusLemmaBag.getBag().get(lemma).weight < 100.0) {
+    if (!corpusLemmaBag.getBag().containsKey(lemma) || corpusLemmaBag.getBag().get(lemma).weight < 100.0) {
       Log.out("too few corpus occurances: " + lemma.lemma);
       return false;
     }
