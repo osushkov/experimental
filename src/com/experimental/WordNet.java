@@ -110,6 +110,9 @@ public class WordNet {
 
     List<ISynsetID> result = new ArrayList<ISynsetID>();
     IIndexWord idxWord = dict.getIndexWord(stemmedWord, pos);
+    if (idxWord == null) {
+      return null;
+    }
     for (IWordID wordId : idxWord.getWordIDs()) {
       result.add(dict.getWord(wordId).getSynset().getID());
     }

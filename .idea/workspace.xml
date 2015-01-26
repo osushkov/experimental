@@ -25,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.045289855" vertical-offset="2225" max-vertical-offset="8940">
-              <caret line="176" column="0" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2495" max-vertical-offset="8940">
+              <caret line="198" column="5" selection-start-line="198" selection-start-column="5" selection-end-line="198" selection-end-column="5" />
               <folding>
                 <element signature="e#3299#3603#0" expanded="true" />
                 <element signature="e#3602#3603#0" expanded="true" />
@@ -47,6 +47,20 @@
               <caret line="19" column="23" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WordNet.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/experimental/WordNet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.35929203" vertical-offset="1492" max-vertical-offset="3360">
+              <caret line="113" column="18" selection-start-line="113" selection-start-column="18" selection-end-line="113" selection-end-column="18" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#894#914#0" expanded="true" />
+                <element signature="e#999#1027#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -125,9 +139,9 @@
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaQuality.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/BasisVector.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/BasisVectorGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/WordNet.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/WordNet.java" />
       </list>
     </option>
   </component>
@@ -663,7 +677,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24102564" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24102564" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1095,20 +1109,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/WordNet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1790" max-vertical-offset="3345">
-          <caret line="151" column="32" selection-start-line="151" selection-start-column="32" selection-end-line="151" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#894#914#0" expanded="true" />
-            <element signature="e#999#1027#0" expanded="true" />
-            <element signature="e#5328#5329#0" expanded="true" />
-            <element signature="e#5369#5370#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/BasisVectorGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.62477875" vertical-offset="952" max-vertical-offset="2280">
@@ -1157,13 +1157,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.045289855" vertical-offset="2225" max-vertical-offset="8940">
-          <caret line="176" column="0" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2495" max-vertical-offset="8940">
+          <caret line="198" column="5" selection-start-line="198" selection-start-column="5" selection-end-line="198" selection-end-column="5" />
           <folding>
             <element signature="e#3299#3603#0" expanded="true" />
             <element signature="e#3602#3603#0" expanded="true" />
             <element signature="e#14510#15090#0" expanded="true" />
             <element signature="e#15089#15090#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/WordNet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35929203" vertical-offset="1492" max-vertical-offset="3360">
+          <caret line="113" column="18" selection-start-line="113" selection-start-column="18" selection-end-line="113" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#894#914#0" expanded="true" />
+            <element signature="e#999#1027#0" expanded="true" />
           </folding>
         </state>
       </provider>
