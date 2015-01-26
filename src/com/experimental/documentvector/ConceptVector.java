@@ -20,4 +20,6 @@ public interface ConceptVector {
   void scale(double factor);
 
   ConceptVector getCopy();
+
+  double distanceTo(ConceptVector other);
 }

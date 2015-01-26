@@ -18,9 +18,8 @@ public class LemmaVariances {
 
   private static class LemmaVarianceInfo {
     final LemmaId lemmaId;
-    int numDocumentsOccured = 0;
 
-    double quality = 0.0;
+    double variance = 0.0;
     double sumOfSquares = 0.0;
     double sum = 0.0;
 
@@ -32,13 +31,13 @@ public class LemmaVariances {
   private static final Comparator<LemmaVarianceInfo> QUALITY_ORDER =
       new Comparator<LemmaVarianceInfo>() {
         public int compare(LemmaVarianceInfo e1, LemmaVarianceInfo e2) {
-          return Double.compare(e2.quality, e1.quality);
+          return Double.compare(e2.variance, e1.variance);
         }
       };
 
   private final LemmaDB lemmaDB = LemmaDB.instance;
   private final Map<LemmaId, LemmaVarianceInfo> lemmaQualityMap = new HashMap<LemmaId, LemmaVarianceInfo>();
-  private boolean haveQuality = false;
+  private boolean haveVariance = false;
   private int totalDocuments = 0;
 
   public void addDocument(Document document) {
@@ -64,21 +63,24 @@ public class LemmaVariances {
         lemmaQualityMap.put(lemmaId, qualityEntry);
       }
 
-      qualityEntry.numDocumentsOccured++;
-      qualityEntry.sum += entry.weight / totalWeight;
-      qualityEntry.sumOfSquares += (entry.weight / totalWeight) * (entry.weight / totalWeight);
+      double frequency = entry.weight / totalWeight;
+
+      qualityEntry.sum += frequency;
+      qualityEntry.sumOfSquares += frequency * frequency;
     }
 
     totalDocuments++;
-    haveQuality = false;
+    haveVariance = false;
   }
 
-  public void computeQuality() {
+  public void computeVariances() {
     for (LemmaVarianceInfo entry : lemmaQualityMap.values()) {
-      entry.quality = entry.sumOfSquares - entry.sum * entry.sum / totalDocuments;
+      double expectedSumOfSquares = entry.sumOfSquares / totalDocuments;
+      double expectedSum = entry.sum / totalDocuments;
+      entry.variance = expectedSumOfSquares - expectedSum*expectedSum;
     }
 
-    haveQuality = true;
+    haveVariance = true;
   }
 
   public boolean tryLoadFromDisk() throws IOException {
@@ -109,13 +111,13 @@ public class LemmaVariances {
       }
     }
 
-    haveQuality = true;
+    haveVariance = true;
     return true;
   }
 
   public void save() throws IOException {
-    if (!haveQuality) {
-      computeQuality();
+    if (!haveVariance) {
+      computeVariances();
     }
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
@@ -146,8 +148,7 @@ public class LemmaVariances {
   }
 
   private void saveLemmaQualityInfo(LemmaVarianceInfo info, BufferedWriter bw) throws IOException {
-    bw.write(Integer.toString(info.numDocumentsOccured) + " ");
-    bw.write(Double.toString(info.quality) + " ");
+    bw.write(Double.toString(info.variance) + " ");
     bw.write(Double.toString(info.sumOfSquares) + " ");
     bw.write(Double.toString(info.sum) + "\n");
 
@@ -157,19 +158,17 @@ public class LemmaVariances {
   private LemmaVarianceInfo loadLemmaQualityInfo(BufferedReader br) throws IOException {
     String line = Preconditions.checkNotNull(br.readLine());
     String[] lineTokens = line.split(" ");
-    Preconditions.checkState(lineTokens.length == 4);
+    Preconditions.checkState(lineTokens.length == 3);
 
-    int numDocumentsOccured = Integer.parseInt(lineTokens[0]);
-    double quality = Double.parseDouble(lineTokens[1]);
-    double sumOfSquares = Double.parseDouble(lineTokens[2]);
-    double sum = Double.parseDouble(lineTokens[3]);
+    double quality = Double.parseDouble(lineTokens[0]);
+    double sumOfSquares = Double.parseDouble(lineTokens[1]);
+    double sum = Double.parseDouble(lineTokens[2]);
 
     Lemma lemma = Lemma.readFrom(br);
     LemmaId lemmaId = lemmaDB.addLemma(lemma);
 
     LemmaVarianceInfo result = new LemmaVarianceInfo(lemmaId);
-    result.numDocumentsOccured = numDocumentsOccured;
-    result.quality = quality;
+    result.variance = quality;
     result.sumOfSquares = sumOfSquares;
     result.sum = sum;
 

@@ -50,8 +50,8 @@ public class Main {
 //    }
 
 //    buildLemmaIdfWeights();
+//    findDocumentNearestNeighbours();
 //    vectoriseDocuments();
-    findDocumentNearestNeighbours();
 
 //    try {
 //      URL main = new URL("http://shit.com/");
@@ -63,7 +63,8 @@ public class Main {
 //    } catch (URISyntaxException e) {
 //      e.printStackTrace();
 //    }
-
+    aggregateLemmaQuality();
+//    wordNetExperiment();
     Log.out("FINISHED");
   }
 
@@ -137,10 +138,13 @@ public class Main {
 
     final DocumentVectoriser documentVectoriser = new DocumentVectoriser(word2VecDb, lemmaIDFWeights);
 
+//    Document doc = new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A0A28B");
+//    ConceptVector vector = documentVectoriser.computeDocumentVector(doc);
+
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
 
-    final Executor executor = Executors.newFixedThreadPool(8);
+    final Executor executor = Executors.newFixedThreadPool(1);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
 
@@ -345,7 +349,7 @@ public class Main {
   private static void aggregateLemmaQuality() {
     Log.out("aggregateLemmaQuality running...");
 
-    final LemmaVariances lemmaQualityAggregator = new LemmaVariances();
+    final LemmaQuality lemmaQualityAggregator = new LemmaQuality();
     try {
       if (lemmaQualityAggregator.tryLoadFromDisk()) {
         Log.out("loaded LemmaQualityAggregator from disk");
@@ -355,13 +359,47 @@ public class Main {
       e.printStackTrace();
     }
 
+    final Executor executor = Executors.newFixedThreadPool(12);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+    final Random rand = new Random();
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
+
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
-    documentStream.streamDocuments(new DocumentStream.DocumentStreamOutput() {
+    documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
       @Override
-      public void processDocument(Document document) {
-        lemmaQualityAggregator.addDocument(document);
+      public void processDocument(final Document document) {
+        numDocuments.incrementAndGet();
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              lemmaQualityAggregator.addDocument(document);
+            } catch (Throwable e) {
+              return;
+            } finally {
+              sem.release();
+            }
+
+            if (rand.nextInt()%5000 == 0) {
+              System.gc();
+            }
+          }
+        });
+
       }
     });
+
+    Log.out("processed all docs");
+    for (int i = 0; i < numDocuments.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
 
     try {
       lemmaQualityAggregator.save();

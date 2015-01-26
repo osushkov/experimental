@@ -47,6 +47,18 @@ public class ConceptVectorImpl implements ConceptVector {
   }
 
   @Override
+  public double distanceTo(ConceptVector other) {
+    Preconditions.checkArgument(dimensions == other.dimensions());
+
+    double sumSq = 0.0;
+    for (int i = 0; i < dimensions; i++) {
+      sumSq += (values[i] - other.getValue(i))*(values[i] - other.getValue(i));
+    }
+
+    return Math.sqrt(sumSq);
+  }
+
+  @Override
   public int dimensions() {
     return dimensions;
   }
@@ -112,15 +124,8 @@ public class ConceptVectorImpl implements ConceptVector {
     Preconditions.checkNotNull(other);
     Preconditions.checkArgument(dimensions == other.dimensions());
 
-    if (other instanceof SparseConceptVectorImpl) {
-      SparseConceptVectorImpl otherSparse = (SparseConceptVectorImpl) other;
-      for (int i = 0; i < otherSparse.numElements; i++) {
-        values[otherSparse.entries.get(i).index] += otherSparse.entries.get(i).value;
-      }
-    } else {
-      for (int i = 0; i < dimensions; i++) {
-        values[i] += other.getValue(i);
-      }
+    for (int i = 0; i < dimensions; i++) {
+      values[i] += other.getValue(i);
     }
   }
 

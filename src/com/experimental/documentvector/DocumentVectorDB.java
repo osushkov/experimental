@@ -43,6 +43,13 @@ public class DocumentVectorDB {
         }
       };
 
+  private static final Comparator<DocumentSimilarityPair> DISTANCE_ASCENDING_ORDER =
+      new Comparator<DocumentSimilarityPair>() {
+        public int compare(DocumentSimilarityPair e1, DocumentSimilarityPair e2) {
+          return Double.compare(e1.similarity, e2.similarity);
+        }
+      };
+
   private final List<VectoredDocument> vectoredDocuments = new ArrayList<VectoredDocument>();
 
 
@@ -76,10 +83,12 @@ public class DocumentVectorDB {
 
     for (VectoredDocument dbDocument : vectoredDocuments) {
       double similarity = targetVector.dotProduct(dbDocument.vector);
-      result.add(new DocumentSimilarityPair(dbDocument.document, similarity));
+      double distance = targetVector.distanceTo(dbDocument.vector);
+
+      result.add(new DocumentSimilarityPair(dbDocument.document, distance));
     }
 
-    result.sort(SIMILARITY_DESCENDING_ORDER);
+    result.sort(DISTANCE_ASCENDING_ORDER);
     if (num > 0) {
       return result.subList(0, Math.min(num, result.size()));
     } else {

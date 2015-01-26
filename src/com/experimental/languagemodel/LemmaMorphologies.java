@@ -113,6 +113,17 @@ public class LemmaMorphologies {
     return result;
   }
 
+  public int numLemmaOccurances(Lemma lemma) {
+    Preconditions.checkNotNull(lemma);
+    Map<String, Integer> occurances = getMorphologiesFor(lemma);
+
+    int sum = 0;
+    for (int num : occurances.values()) {
+      sum += num;
+    }
+    return sum;
+  }
+
   public synchronized  void save() throws IOException {
     trim();
 

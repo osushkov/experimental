@@ -63,7 +63,8 @@ public class LemmaIDFWeights {
     if (!lemmaIdfWeights.containsKey(lemmaId)) {
       return 0.0;
     } else {
-      return lemmaIdfWeights.get(lemmaId);
+      double weight = lemmaIdfWeights.get(lemmaId);
+      return weight * weight;
     }
   }
 
@@ -92,13 +93,7 @@ public class LemmaIDFWeights {
       e.printStackTrace();
     }
 
-    Map<String, Integer> occurances = lemmaMorphologies.getMorphologiesFor(lemma);
-
-    int sum = 0;
-    for (int num : occurances.values()) {
-      sum += num;
-    }
-    return sum;
+    return lemmaMorphologies.numLemmaOccurances(lemma);
   }
 
   public boolean isDocumentValid(Document document) {

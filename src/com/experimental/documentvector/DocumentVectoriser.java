@@ -44,17 +44,22 @@ public class DocumentVectoriser {
         continue;
       }
 
-      double weight = getPosWeight(entry) * getLocalWeight(entry) * getGlobalWeight(entry);
-      entryVector.scale(weight);
+      double posWeight = getPosWeight(entry);
+      double localWeight = getLocalWeight(entry);
+      double globalWeight = getGlobalWeight(entry);
+      double weight = posWeight * localWeight * globalWeight;
+      Preconditions.checkState(weight >= 0.0);
 
+//      Log.out(Double.toString(weight) + " " + entry.lemma.lemma);
+      entryVector.scale(weight);
       result.add(entryVector);
       weightSum += weight;
 
     }
 
     // Normalise the document or just divide it by the sum of weights?
-    result.normalise();
-//    result.scale(1.0 / weightSum);
+//    result.normalise();
+    result.scale(1.0 / weightSum);
 
     return result;
   }
@@ -64,7 +69,8 @@ public class DocumentVectoriser {
   }
 
   private double getLocalWeight(BagOfWeightedLemmas.WeightedLemmaEntry entry) {
-    return Math.log(entry.weight);
+    return entry.weight;
+//    return Math.log(entry.weight + 1.0);
   }
 
   private double getGlobalWeight(BagOfWeightedLemmas.WeightedLemmaEntry entry) {
@@ -74,8 +80,8 @@ public class DocumentVectoriser {
   private double getPosWeight(BagOfWeightedLemmas.WeightedLemmaEntry entry) {
     switch (entry.lemma.tag) {
       case ADVERB:    return 0.2;
-      case VERB:      return 0.5;
-      case ADJECTIVE: return 0.66;
+      case VERB:      return 1.0;
+      case ADJECTIVE: return 1.0;
       case NOUN:      return 1.0;
       case OTHER:     return 0.0;
       default:        return 0.0;
