@@ -36,6 +36,7 @@ public class BasisVectorGenerator {
   }
 
   public BasisVector buildBasisVector(int size) {
+    Log.out("buildBasisVector");
     try {
       if (!tryLoadingLemmaQuality()) {
         Log.out("Could not load lemma quality file");
@@ -49,6 +50,7 @@ public class BasisVectorGenerator {
     List<BasisVector.BasisElement> basisElements = new ArrayList<BasisVector.BasisElement>();
 
     for (LemmaQuality.LemmaQualityInfo lemmaQuality : lemmaQualityList) {
+      Log.out(Integer.toString(basisElements.size()));
       if (basisElements.size() == size) {
         break;
       }
