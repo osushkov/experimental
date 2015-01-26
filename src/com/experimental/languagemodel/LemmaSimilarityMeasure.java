@@ -26,7 +26,11 @@ public class LemmaSimilarityMeasure {
   }
 
   private double getWordNetSimilarity(Lemma lemma0, Lemma lemma1) {
-    return wordnet.getLemmaSimilarity(lemma0, lemma1);
+    try {
+      return wordnet.getLemmaSimilarity(lemma0, lemma1);
+    } catch (Throwable e) {
+      return 0.0;
+    }
   }
 
   private double getWord2VecSimilairty(Lemma lemma0, Lemma lemma1) {
