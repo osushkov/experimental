@@ -125,6 +125,11 @@ public class Main {
 
     BasisVector basisVector = basisVectorGenerator.buildBasisVector(600);
     Log.out(basisVector.toString());
+    try {
+      basisVector.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void cssBoxExperiment() {
