@@ -75,7 +75,16 @@ public class Main {
   private static void generateNounPhrases() {
     Log.out("generateNounPhrases running...");
 
-    final NounPhrasesDB nounPhrasesDb = new NounPhrasesDB(LemmaDB.instance);
+    try {
+      if (!LemmaMorphologies.instance.tryLoad()) {
+        Log.out("could not load LemmaMorphologies");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    final NounPhrasesDB nounPhrasesDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
     try {
       if (nounPhrasesDb.tryLoad()) {
         Log.out("loaded NounPhrasesDB from disk");

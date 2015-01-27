@@ -41,10 +41,12 @@ public class NounPhrasesDB {
       new ConcurrentHashMap<LemmaDB.LemmaId, Set<NounPhraseEntry>>();
 
   private final LemmaDB lemmaDb;
+  private final LemmaMorphologies lemmaMorphologies;
   private final NounPhraseExtractor phraseExtractor;
 
-  public NounPhrasesDB(LemmaDB lemmaDb) {
+  public NounPhrasesDB(LemmaDB lemmaDb, LemmaMorphologies lemmaMorphologies) {
     this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
+    this.lemmaMorphologies = Preconditions.checkNotNull(lemmaMorphologies);
     this.phraseExtractor = new NounPhraseExtractor(lemmaDb);
   }
 
@@ -52,13 +54,22 @@ public class NounPhrasesDB {
     Preconditions.checkNotNull(sentence);
     List<NounPhrase> nounPhrases = phraseExtractor.extractNounPhrases(sentence);
     for (NounPhrase phrase : nounPhrases) {
-      if (phrase.isCompositePhrase()) {
+      if (phrase.isCompositePhrase() && isCommonPhrase(phrase)) {
         phraseEntries.putIfAbsent(phrase, new NounPhraseEntry(phrase));
 
         NounPhraseEntry entry = phraseEntries.get(phrase);
         entry.numOccurances.incrementAndGet();
       }
     }
+  }
+
+  private boolean isCommonPhrase(NounPhrase phrase) {
+    for (Lemma lemma : phrase.getPhraseLemmas()) {
+      if (lemmaMorphologies.numLemmaOccurances(lemma) < 1000) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private void insertLookup(NounPhraseEntry phraseEntry) {
