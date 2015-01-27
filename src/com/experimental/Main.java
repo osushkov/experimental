@@ -62,10 +62,10 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    aggregateLemmaQuality();
-    generateBasisVector();
-    vectoriseDocuments();
-//    findDocumentNearestNeighbours();
+//    aggregateLemmaQuality();
+//    generateBasisVector();
+//    vectoriseDocuments();
+    findDocumentNearestNeighbours();
 
     Log.out("FINISHED");
   }
