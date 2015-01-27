@@ -50,8 +50,8 @@ public class Main {
 //    }
 
 //    buildLemmaIdfWeights();
-    findDocumentNearestNeighbours();
-//    vectoriseDocuments();
+//    findDocumentNearestNeighbours();
+    vectoriseDocuments();
 
 //    try {
 //      URL main = new URL("http://shit.com/");

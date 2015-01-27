@@ -19,10 +19,11 @@ public class LemmaSimilarityMeasure {
   }
 
   public double getLemmaSimilarity(Lemma lemma0, Lemma lemma1) {
-    double wordnetSimilarity = getWordNetSimilarity(lemma0, lemma1);
+    //double wordnetSimilarity = getWordNetSimilarity(lemma0, lemma1);
     double word2vecSimilarity = getWord2VecSimilairty(lemma0, lemma1);
 
-    return (wordnetSimilarity + word2vecSimilarity) / 2.0;
+    return word2vecSimilarity;
+//    return (wordnetSimilarity + word2vecSimilarity) / 2.0;
   }
 
   private double getWordNetSimilarity(Lemma lemma0, Lemma lemma1) {

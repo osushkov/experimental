@@ -66,8 +66,9 @@ public class DocumentVectoriser {
         result.setValue(i, posWeight * localWeight * element.weight);
       } else {
         double similarity = lemmaSimilarityMeasure.getLemmaSimilarity(element.lemma, entry.lemma);
-        if (similarity > 0.7) {
-          result.setValue(i, similarity * posWeight * localWeight * element.weight);
+        if (similarity > 0.0) {
+          double similarityWeight = similarity * similarity;
+          result.setValue(i, similarityWeight * posWeight * localWeight * element.weight);
         }
       }
     }
