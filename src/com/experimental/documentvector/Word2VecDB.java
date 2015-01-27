@@ -87,11 +87,9 @@ public class Word2VecDB {
       line = Preconditions.checkNotNull(in.readLine());
       lineTokens = line.split(" ");
       if (lineTokens.length != (dimensions + 1)) {
-        Log.out(line);
-        Log.out(lineTokens[0]);
-        Log.out(Integer.toString(lineTokens.length) + " " + dimensions);
+        Log.out("invalid data for: " + lineTokens[0]);
+        continue;
       }
-      Preconditions.checkState(lineTokens.length == (dimensions + 1));
 
       String word = lineTokens[0];
       ConceptVector wordVec = new ConceptVectorImpl(dimensions);
