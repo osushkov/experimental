@@ -7,9 +7,7 @@ import com.experimental.documentmodel.DocumentStream;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by sushkov on 25/01/15.
@@ -51,6 +49,8 @@ public class DocumentVectorDB {
       };
 
   private final List<VectoredDocument> vectoredDocuments = new ArrayList<VectoredDocument>();
+  private Map<Document, List<DocumentSimilarityPair>> similarDocumentsCache =
+      new HashMap<Document, List<DocumentSimilarityPair>>();
 
 
   public void load() {
@@ -74,6 +74,15 @@ public class DocumentVectorDB {
   public List<DocumentSimilarityPair> getNearestDocuments(Document document, int num) {
     Preconditions.checkNotNull(document);
 
+    if (similarDocumentsCache.containsKey(document)) {
+      List<DocumentSimilarityPair> cached = similarDocumentsCache.get(document);
+      if (cached.size() > num) {
+        return cached.subList(0, Math.min(num, cached.size()));
+      } else if (cached.size() == num) {
+        return cached;
+      }
+    }
+
     ConceptVector targetVector = document.getConceptVector();
     List<DocumentSimilarityPair> result = new ArrayList<DocumentSimilarityPair>();
 
@@ -89,11 +98,14 @@ public class DocumentVectorDB {
     }
 
     result.sort(SIMILARITY_DESCENDING_ORDER);
+
     if (num > 0) {
-      return result.subList(0, Math.min(num, result.size()));
+      List<DocumentSimilarityPair> trimmedResult = result.subList(0, Math.min(num, result.size()));
+      similarDocumentsCache.put(document, trimmedResult);
+      return trimmedResult;
     } else {
+      similarDocumentsCache.put(document, result);
       return result;
     }
   }
-
 }

@@ -23,6 +23,7 @@ public class DocumentVectoriser {
   private final BasisVector basisVector;
   private final LemmaSimilarityMeasure lemmaSimilarityMeasure;
 
+
   public DocumentVectoriser(BasisVector basisVector, LemmaSimilarityMeasure lemmaSimilarityMeasure) {
     this.basisVector = Preconditions.checkNotNull(basisVector);
     this.lemmaSimilarityMeasure = Preconditions.checkNotNull(lemmaSimilarityMeasure);
