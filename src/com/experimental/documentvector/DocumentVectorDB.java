@@ -83,12 +83,12 @@ public class DocumentVectorDB {
 
     for (VectoredDocument dbDocument : vectoredDocuments) {
       double similarity = targetVector.dotProduct(dbDocument.vector);
-      double distance = targetVector.distanceTo(dbDocument.vector);
+//      double distance = targetVector.distanceTo(dbDocument.vector);
 
-      result.add(new DocumentSimilarityPair(dbDocument.document, distance));
+      result.add(new DocumentSimilarityPair(dbDocument.document, similarity));
     }
 
-    result.sort(DISTANCE_ASCENDING_ORDER);
+    result.sort(SIMILARITY_DESCENDING_ORDER);
     if (num > 0) {
       return result.subList(0, Math.min(num, result.size()));
     } else {
