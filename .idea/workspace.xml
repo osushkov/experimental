@@ -30,13 +30,17 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.702925" vertical-offset="326" max-vertical-offset="8955">
-                  <caret line="96" column="9" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
+                <state vertical-scroll-proportion="0.44515538" vertical-offset="203" max-vertical-offset="9885">
+                  <caret line="69" column="23" selection-start-line="69" selection-start-column="4" selection-end-line="69" selection-end-column="23" />
                   <folding>
-                    <element signature="e#3278#3582#0" expanded="true" />
-                    <element signature="e#3581#3582#0" expanded="true" />
-                    <element signature="e#14489#15069#0" expanded="true" />
-                    <element signature="e#15068#15069#0" expanded="true" />
+                    <element signature="e#2878#3446#0" expanded="true" />
+                    <element signature="e#3064#3430#0" expanded="true" />
+                    <element signature="e#3429#3430#0" expanded="true" />
+                    <element signature="e#3445#3446#0" expanded="true" />
+                    <element signature="e#5104#5408#0" expanded="true" />
+                    <element signature="e#5407#5408#0" expanded="true" />
+                    <element signature="e#16315#16895#0" expanded="true" />
+                    <element signature="e#16894#16895#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -87,8 +91,8 @@
           <file leaf-file-name="NounPhrasesDB.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/NounPhrasesDB.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.36314362" vertical-offset="138" max-vertical-offset="2190">
-                  <caret line="36" column="62" selection-start-line="36" selection-start-column="49" selection-end-line="36" selection-end-column="62" />
+                <state vertical-scroll-proportion="1.4878049" vertical-offset="228" max-vertical-offset="2220">
+                  <caret line="125" column="9" selection-start-line="125" selection-start-column="9" selection-end-line="125" selection-end-column="9" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1140#1169#0" expanded="true" />
@@ -101,7 +105,7 @@
           <file leaf-file-name="NounPhrase.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/nlp/NounPhrase.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1395">
+                <state vertical-scroll-proportion="0.0" vertical-offset="63" max-vertical-offset="1395">
                   <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
                   <folding>
                     <element signature="e#491#508#0" expanded="true" />
@@ -1186,6 +1190,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaQuality.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1353" max-vertical-offset="3135">
+          <caret line="144" column="23" selection-start-line="144" selection-start-column="23" selection-end-line="144" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/nlp/NounPhrase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1395">
@@ -1204,20 +1218,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaQuality.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1353" max-vertical-offset="3135">
-          <caret line="144" column="23" selection-start-line="144" selection-start-column="23" selection-end-line="144" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/NounPhrasesDB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36314362" vertical-offset="138" max-vertical-offset="2190">
-          <caret line="36" column="62" selection-start-line="36" selection-start-column="49" selection-end-line="36" selection-end-column="62" />
+        <state vertical-scroll-proportion="1.4878049" vertical-offset="228" max-vertical-offset="2220">
+          <caret line="125" column="9" selection-start-line="125" selection-start-column="9" selection-end-line="125" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1140#1169#0" expanded="true" />
@@ -1228,13 +1232,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.702925" vertical-offset="326" max-vertical-offset="8955">
-          <caret line="96" column="9" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.44515538" vertical-offset="203" max-vertical-offset="9885">
+          <caret line="69" column="23" selection-start-line="69" selection-start-column="4" selection-end-line="69" selection-end-column="23" />
           <folding>
-            <element signature="e#3278#3582#0" expanded="true" />
-            <element signature="e#3581#3582#0" expanded="true" />
-            <element signature="e#14489#15069#0" expanded="true" />
-            <element signature="e#15068#15069#0" expanded="true" />
+            <element signature="e#2878#3446#0" expanded="true" />
+            <element signature="e#3064#3430#0" expanded="true" />
+            <element signature="e#3429#3430#0" expanded="true" />
+            <element signature="e#3445#3446#0" expanded="true" />
+            <element signature="e#5104#5408#0" expanded="true" />
+            <element signature="e#5407#5408#0" expanded="true" />
+            <element signature="e#16315#16895#0" expanded="true" />
+            <element signature="e#16894#16895#0" expanded="true" />
           </folding>
         </state>
       </provider>

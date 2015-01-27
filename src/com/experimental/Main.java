@@ -65,9 +65,71 @@ public class Main {
 //    aggregateLemmaQuality();
 //    generateBasisVector();
 //    vectoriseDocuments();
-    findDocumentNearestNeighbours();
+    //findDocumentNearestNeighbours();
+
+    generateNounPhrases();
 
     Log.out("FINISHED");
+  }
+
+  private static void generateNounPhrases() {
+    Log.out("generateNounPhrases running...");
+
+    final NounPhrasesDB nounPhrasesDb = new NounPhrasesDB(LemmaDB.instance);
+    try {
+      if (nounPhrasesDb.tryLoad()) {
+        Log.out("loaded NounPhrasesDB from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    final Executor executor = Executors.newFixedThreadPool(12);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess = Lists.newArrayList(
+        DocumentNameGenerator.DocumentType.TOPICAL, DocumentNameGenerator.DocumentType.UNRELATED_COLLECTION);
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
+      @Override
+      public void processDocument(final Document document) {
+        numDocuments.incrementAndGet();
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              for (Sentence sentence : document.getSentences()) {
+                nounPhrasesDb.addSentence(sentence);
+              }
+            } catch (Throwable e) {
+              return;
+            } finally {
+              sem.release();
+            }
+          }
+        });
+      }
+    });
+
+    Log.out("processed all docs");
+    for (int i = 0; i < numDocuments.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    try {
+      nounPhrasesDb.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Log.out("generateNounPhrases finished");
+
   }
 
   private static void generateBasisVector() {
