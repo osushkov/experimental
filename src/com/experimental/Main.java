@@ -51,9 +51,6 @@ public class Main {
 
 //    buildLemmaIdfWeights();
 
-    vectoriseDocuments();
-    findDocumentNearestNeighbours();
-
 //    try {
 //      URL main = new URL("http://shit.com/");
 //      URI mainUri = main.toURI();
@@ -64,9 +61,12 @@ public class Main {
 //    } catch (URISyntaxException e) {
 //      e.printStackTrace();
 //    }
-//    aggregateLemmaQuality();
-//    generateBasisVector();
-//    wordNetExperiment();
+
+    aggregateLemmaQuality();
+    generateBasisVector();
+    vectoriseDocuments();
+//    findDocumentNearestNeighbours();
+
     Log.out("FINISHED");
   }
 
@@ -82,11 +82,11 @@ public class Main {
       return;
     }
 
-    Word2VecDB word2VecDb = Word2VecDB.tryLoad();
-    if (word2VecDb == null) {
-      Log.out("could not load Word2VecDB");
-      return;
-    }
+//    Word2VecDB word2VecDb = Word2VecDB.tryLoad();
+//    if (word2VecDb == null) {
+//      Log.out("could not load Word2VecDB");
+//      return;
+//    }
 
     WordNet wordnet = new WordNet();
     if (!wordnet.loadWordNet()) {
@@ -102,7 +102,7 @@ public class Main {
       e.printStackTrace();
     }
 
-    LemmaSimilarityMeasure lemmaSimilarityMeasure = new LemmaSimilarityMeasure(wordnet, word2VecDb);
+    LemmaSimilarityMeasure lemmaSimilarityMeasure = new LemmaSimilarityMeasure(wordnet, null);
 
     final BagOfWeightedLemmas corpusLemmaBag = new BagOfWeightedLemmas();
 
@@ -428,7 +428,7 @@ public class Main {
     final Random rand = new Random();
 
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
 
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {

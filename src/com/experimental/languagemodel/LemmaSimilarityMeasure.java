@@ -15,14 +15,15 @@ public class LemmaSimilarityMeasure {
 
   public LemmaSimilarityMeasure(WordNet wordnet, Word2VecDB word2Vec) {
     this.wordnet = Preconditions.checkNotNull(wordnet);
-    this.word2Vec = Preconditions.checkNotNull(word2Vec);
+    this.word2Vec = null; //Preconditions.checkNotNull(word2Vec);
   }
 
   public double getLemmaSimilarity(Lemma lemma0, Lemma lemma1) {
-    //double wordnetSimilarity = getWordNetSimilarity(lemma0, lemma1);
-    double word2vecSimilarity = getWord2VecSimilairty(lemma0, lemma1);
+    double wordnetSimilarity = getWordNetSimilarity(lemma0, lemma1);
+    //double word2vecSimilarity = getWord2VecSimilairty(lemma0, lemma1);
 
-    return word2vecSimilarity;
+    //return word2vecSimilarity;
+    return wordnetSimilarity;
 //    return (wordnetSimilarity + word2vecSimilarity) / 2.0;
   }
 

@@ -70,17 +70,14 @@ public class WordNet {
       return 0.0;
     }
 
-    double sum = 0.0;
-    int num = 0;
-    double maxSimilarity = 0.0;
+    double max = 0.0;
     for (ISynsetID s0Id : s0) {
       for (ISynsetID s1Id : s1) {
-        sum += getSynsetSimilarity(s0Id, s1Id);
-        num++;
+        max = Math.max(max, getSynsetSimilarity(s0Id, s1Id));
       }
     }
 
-    return num == 0 ? 0.0 : sum / num;
+    return max;
   }
 
   private POS getPos(SimplePOSTag posTag) {
