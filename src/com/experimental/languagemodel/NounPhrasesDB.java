@@ -56,9 +56,6 @@ public class NounPhrasesDB {
         phraseEntries.putIfAbsent(phrase, new NounPhraseEntry(phrase));
 
         NounPhraseEntry entry = phraseEntries.get(phrase);
-        if (entry.numOccurances.get() == 0) {
-          insertLookup(entry);
-        }
         entry.numOccurances.incrementAndGet();
       }
     }

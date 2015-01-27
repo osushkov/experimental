@@ -88,6 +88,7 @@ public class Main {
     final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
+    final Random rand = new Random();
 
     List<DocumentNameGenerator.DocumentType> docTypesToProcess = Lists.newArrayList(
         DocumentNameGenerator.DocumentType.TOPICAL, DocumentNameGenerator.DocumentType.UNRELATED_COLLECTION);
@@ -107,6 +108,10 @@ public class Main {
               return;
             } finally {
               sem.release();
+            }
+
+            if (rand.nextInt()%5000 == 0) {
+              System.gc();
             }
           }
         });
