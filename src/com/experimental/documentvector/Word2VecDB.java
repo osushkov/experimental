@@ -86,6 +86,9 @@ public class Word2VecDB {
     for (int i = 0; i < numWords; i++) {
       line = Preconditions.checkNotNull(in.readLine());
       lineTokens = line.split(" ");
+      if (lineTokens.length != (dimensions + 1)) {
+        Log.out(Integer.toString(lineTokens.length) + " " + dimensions);
+      }
       Preconditions.checkState(lineTokens.length == (dimensions + 1));
 
       String word = lineTokens[0];

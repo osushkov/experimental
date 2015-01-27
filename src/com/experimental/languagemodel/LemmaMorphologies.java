@@ -30,6 +30,7 @@ public class LemmaMorphologies {
       new ConcurrentHashMap<MorphologyId, Map<LemmaId, AtomicInteger>>();
 
   private boolean isLoaded = false;
+  private int totalCorpusSize = 0;
 
   public static final LemmaMorphologies instance = new LemmaMorphologies();
 
@@ -122,6 +123,10 @@ public class LemmaMorphologies {
       sum += num;
     }
     return sum;
+  }
+
+  public double lemmaOccuranceFrequency(Lemma lemma) {
+    return numLemmaOccurances(lemma) / totalCorpusSize;
   }
 
   public synchronized  void save() throws IOException {
@@ -220,6 +225,8 @@ public class LemmaMorphologies {
 
           addTokenToLemmaToMorphologyMap(morphology, lemma, occurances);
           addTokenToMorphologyToLemmaMap(morphology, lemma, occurances);
+
+          totalCorpusSize += occurances;
         }
       }
     } catch (FileNotFoundException e) {
