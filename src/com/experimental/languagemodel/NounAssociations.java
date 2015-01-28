@@ -5,6 +5,7 @@ import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.Token;
 import com.experimental.languagemodel.LemmaDB.LemmaId;
+import com.experimental.nlp.SimplePOSTag;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
@@ -21,6 +22,7 @@ public class NounAssociations {
 
   private final Map<LemmaId, NounAssociation> nounAssociations = new ConcurrentHashMap<LemmaId, NounAssociation>();
   private final LemmaDB lemmaDB = LemmaDB.instance;
+  private boolean isLoaded = false;
 
   public void addDocument(Document document) {
     Preconditions.checkNotNull(document);
@@ -28,6 +30,56 @@ public class NounAssociations {
     for (Sentence sentence : document.getSentences()) {
       processSentence(sentence);
     }
+  }
+
+  public int getTotalVerbAssociations(Lemma lemma) {
+    return getTotalAssociations(lemma, SimplePOSTag.VERB);
+  }
+
+  public int getTotalAdjectiveAssociations(Lemma lemma) {
+    return getTotalAssociations(lemma, SimplePOSTag.ADJECTIVE);
+  }
+
+  public int getNumAssociationsBetween(Lemma noun, Lemma verbOrAdjective) {
+    Preconditions.checkNotNull(noun);
+    Preconditions.checkNotNull(verbOrAdjective);
+    Preconditions.checkArgument(verbOrAdjective.tag == SimplePOSTag.VERB ||
+        verbOrAdjective.tag == SimplePOSTag.ADJECTIVE);
+
+    LemmaId nounId = lemmaDB.addLemma(noun);
+
+    NounAssociation nounAssociation = nounAssociations.get(nounId);
+    if (nounAssociation == null) {
+      return 0;
+    }
+
+    NounAssociation.Association association = nounAssociation.getAssociationsWith(verbOrAdjective);
+    if (association == null) {
+      return 0;
+    } else {
+      return association.weight;
+    }
+  }
+
+  private int getTotalAssociations(Lemma noun, SimplePOSTag verbOrAdjective) {
+    Preconditions.checkNotNull(noun);
+    Preconditions.checkArgument(verbOrAdjective == SimplePOSTag.VERB || verbOrAdjective == SimplePOSTag.ADJECTIVE);
+
+    LemmaId lemmaId = lemmaDB.addLemma(noun);
+    NounAssociation associations = nounAssociations.get(lemmaId);
+    if (associations == null) {
+      return 0;
+    }
+
+    Collection<NounAssociation.Association> posAssociations =
+        verbOrAdjective == SimplePOSTag.ADJECTIVE ? associations.getAdjectiveAssociations() :
+            associations.getVerbAssociations();
+
+    int sum = 0;
+    for (NounAssociation.Association association : posAssociations) {
+      sum += association.weight;
+    }
+    return sum;
   }
 
   private void processSentence(Sentence sentence) {
@@ -98,6 +150,11 @@ public class NounAssociations {
   }
 
   public boolean tryLoad() throws IOException {
+    if (isLoaded) {
+      return true;
+    }
+
+    Log.out("NounAssociations tryLoad");
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String associationsFilePath = aggregateDataFile.toPath().resolve(NOUN_ASSOCIATIONS_FILENAME).toString();
 

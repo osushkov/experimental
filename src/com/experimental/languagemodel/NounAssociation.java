@@ -2,6 +2,7 @@ package com.experimental.languagemodel;
 
 import com.experimental.Constants;
 import com.experimental.languagemodel.LemmaDB.LemmaId;
+import com.experimental.nlp.SimplePOSTag;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
@@ -49,6 +50,18 @@ public class NounAssociation {
   public synchronized void associateAdjective(LemmaId adjectiveId) {
     Preconditions.checkNotNull(adjectiveId);
     associate(adjectiveAssociations, adjectiveId);
+  }
+
+  public Association getAssociationsWith(Lemma other) {
+    Preconditions.checkNotNull(other);
+    Preconditions.checkArgument(other.tag == SimplePOSTag.VERB || other.tag == SimplePOSTag.ADJECTIVE);
+
+    LemmaId otherId = lemmaDB.addLemma(other);
+    if (other.tag == SimplePOSTag.VERB) {
+      return verbAssociations.get(otherId);
+    } else {
+      return adjectiveAssociations.get(otherId);
+    }
   }
 
   public Collection<Association> getVerbAssociations() {

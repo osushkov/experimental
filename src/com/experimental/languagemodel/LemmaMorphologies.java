@@ -116,11 +116,19 @@ public class LemmaMorphologies {
 
   public int numLemmaOccurances(Lemma lemma) {
     Preconditions.checkNotNull(lemma);
-    Map<String, Integer> occurances = getMorphologiesFor(lemma);
+
+    LemmaId lemmaId = lemmaDb.getLemmaId(lemma);
+    if (lemmaId == null) {
+      return 0;
+    }
+
+    if (!lemmaToMorphologyMap.containsKey(lemmaId)) {
+      return 0;
+    }
 
     int sum = 0;
-    for (int num : occurances.values()) {
-      sum += num;
+    for (AtomicInteger entry : lemmaToMorphologyMap.get(lemmaId).values()) {
+      sum += entry.get();
     }
     return sum;
   }

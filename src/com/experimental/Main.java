@@ -94,7 +94,7 @@ public class Main {
       e.printStackTrace();
     }
 
-    final Executor executor = Executors.newFixedThreadPool(12);
+    final Executor executor = Executors.newFixedThreadPool(8);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
     final Random rand = new Random();
@@ -110,8 +110,10 @@ public class Main {
           @Override
           public void run() {
             try {
-              for (Sentence sentence : document.getSentences()) {
-                nounPhrasesDb.addSentence(sentence);
+              if (rand.nextInt()%2 == 0) {
+                for (Sentence sentence : document.getSentences()) {
+                  nounPhrasesDb.addSentence(sentence);
+                }
               }
             } catch (Throwable e) {
               return;
@@ -129,6 +131,10 @@ public class Main {
 
     Log.out("processed all docs");
     for (int i = 0; i < numDocuments.get(); i++) {
+      int remaining = numDocuments.get() - i;
+      if (remaining%1000 == 0) {
+        Log.out("remaining: " + remaining);
+      }
       try {
         sem.acquire();
       } catch (InterruptedException e) {
@@ -136,6 +142,7 @@ public class Main {
       }
     }
 
+    Log.out("saving");
     try {
       nounPhrasesDb.save();
     } catch (IOException e) {
