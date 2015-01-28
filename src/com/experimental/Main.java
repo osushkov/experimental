@@ -16,6 +16,7 @@ import com.experimental.pageparser.PageParser;
 import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Log;
 import com.google.common.collect.Lists;
+import edu.mit.jwi.item.POS;
 
 import java.io.*;
 import java.util.List;

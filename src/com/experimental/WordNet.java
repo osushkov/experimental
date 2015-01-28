@@ -70,6 +70,7 @@ public class WordNet {
       return 0.0;
     }
 
+
     double max = 0.0;
     for (ISynsetID s0Id : s0) {
       for (ISynsetID s1Id : s1) {
@@ -111,6 +112,9 @@ public class WordNet {
       return null;
     }
     for (IWordID wordId : idxWord.getWordIDs()) {
+      if (result.size() >= 2) {
+        break;
+      }
       result.add(dict.getWord(wordId).getSynset().getID());
     }
     return result;

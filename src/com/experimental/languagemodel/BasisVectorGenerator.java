@@ -69,7 +69,7 @@ public class BasisVectorGenerator {
   private boolean isLemmaSuitable(LemmaDB.LemmaId lemmaId, List<BasisVector.BasisElement> basisElementsSoFar) {
     Lemma lemma = lemmaDb.getLemma(lemmaId);
 
-    if (lemmaMorphologies.numLemmaOccurances(lemma) < 10000) {
+    if (lemmaMorphologies.numLemmaOccurances(lemma) < 1000) {
       Log.out("too few morphology occurances: " + lemma.lemma);
       return false;
     }
@@ -81,7 +81,7 @@ public class BasisVectorGenerator {
 
     for (BasisVector.BasisElement existingElement : basisElementsSoFar) {
       double similarity = similarityMeasure.getLemmaSimilarity(lemma, existingElement.lemma);
-      if (similarity > 0.8) {
+      if (similarity > 0.9) {
         Log.out("too similar: " + lemma.lemma + "," + existingElement.lemma.lemma + " " + similarity);
         return false;
       }
