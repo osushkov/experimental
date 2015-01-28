@@ -94,7 +94,7 @@ public class Main {
       e.printStackTrace();
     }
 
-    final Executor executor = Executors.newFixedThreadPool(8);
+    final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
     final Random rand = new Random();
