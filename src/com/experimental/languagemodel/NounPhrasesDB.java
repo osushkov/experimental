@@ -56,7 +56,7 @@ public class NounPhrasesDB {
     List<NounPhrase> nounPhrases = phraseExtractor.extractNounPhrases(sentence);
     for (NounPhrase phrase : nounPhrases) {
       if (phrase.isCompositePhrase() && isCommonPhrase(phrase)) {
-        Log.out(phrase.toString());
+//        Log.out(phrase.toString());
         if (!phraseEntries.containsKey(phrase)) {
           phraseEntries.put(phrase, new NounPhraseEntry(phrase));
         }
