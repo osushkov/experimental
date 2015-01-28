@@ -64,11 +64,11 @@ public class Main {
 //    }
 
 //    aggregateLemmaQuality();
-//    generateBasisVector();
-//    vectoriseDocuments();
-    //findDocumentNearestNeighbours();
+    generateBasisVector();
+    vectoriseDocuments();
+    findDocumentNearestNeighbours();
 
-    generateNounPhrases();
+//    generateNounPhrases();
 //    testKeywordCandidateExtraction();
 //    stanfordNlpDemo();
 
@@ -226,7 +226,7 @@ public class Main {
     BasisVectorGenerator basisVectorGenerator = new BasisVectorGenerator(
         corpusLemmaBag, LemmaMorphologies.instance, lemmaSimilarityMeasure, lemmaIDFWeights, LemmaDB.instance);
 
-    BasisVector basisVector = basisVectorGenerator.buildBasisVector(600);
+    BasisVector basisVector = basisVectorGenerator.buildBasisVector(1200);
     Log.out(basisVector.toString());
     try {
       basisVector.save();
