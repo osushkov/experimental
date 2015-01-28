@@ -5,7 +5,6 @@ import com.experimental.documentmodel.Token;
 import com.experimental.languagemodel.Lemma;
 import com.experimental.languagemodel.LemmaDB;
 import com.google.common.base.Preconditions;
-import edu.stanford.nlp.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class NounPhraseExtractor {
       } else {
         if (haveNoun) {
           Preconditions.checkState(curNounPhrase.size() > 0);
-          result.add(new NounPhrase(tokensToLemmas(curNounPhrase), lemmaDb));
+          result.addAll(generateAllSubPhrases(curNounPhrase));
         }
 
         curNounPhrase.clear();
@@ -48,9 +47,38 @@ public class NounPhraseExtractor {
 
     if (haveNoun) {
       Preconditions.checkState(curNounPhrase.size() > 0);
-      result.add(new NounPhrase(tokensToLemmas(curNounPhrase), lemmaDb));
+      result.addAll(generateAllSubPhrases(curNounPhrase));
     }
 
+    return result;
+  }
+
+  private List<NounPhrase> generateAllSubPhrases(List<Token> tokens) {
+    List<NounPhrase> result = new ArrayList<NounPhrase>();
+    if (!tokens.get(tokens.size()-1).partOfSpeech.isNoun()) {
+      return result;
+    }
+
+    for (int i = 0; i < tokens.size(); i++) {
+      int phraseLength = tokens.size() - i;
+      if (phraseLength >= 2 && phraseLength <= 3) {
+        List<Token> subPhrase = tokens.subList(i, tokens.size());
+        if (countAdjectives(subPhrase) <= 1) {
+          result.add(new NounPhrase(tokensToLemmas(subPhrase), lemmaDb));
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private int countAdjectives(List<Token> tokens) {
+    int result = 0;
+    for (Token token : tokens) {
+      if (token.partOfSpeech.isAdjective()) {
+        result++;
+      }
+    }
     return result;
   }
 

@@ -29,7 +29,7 @@ public class Demo {
     props.put("annotators", "tokenize, ssplit, pos, lemma");
     props.put("threads", "4");
     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-    Annotation annotation = new Annotation("lawyers.");
+    Annotation annotation = new Annotation("Where can I work out in Sydney?");
 
     pipeline.annotate(annotation);
     pipeline.prettyPrint(annotation, out);

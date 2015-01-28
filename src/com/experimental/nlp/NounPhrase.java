@@ -71,7 +71,7 @@ public class NounPhrase {
   public String toString() {
     StringBuffer buffer = new StringBuffer();
     for (Lemma lemma : getPhraseLemmas()) {
-      buffer.append(lemma.lemma).append(" ");
+      buffer.append(lemma.lemma).append("(").append(lemma.tag.toString()).append(") ");
     }
     return buffer.toString();
   }

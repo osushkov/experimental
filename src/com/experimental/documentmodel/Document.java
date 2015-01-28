@@ -199,7 +199,9 @@ public abstract class Document {
       }
 
       for (int i = 0; i < Integer.parseInt(line); i++) {
-        this.sentences.add(Sentence.readFrom(br));
+        Sentence newSentence = Sentence.readFrom(br);
+        this.sentences.add(newSentence);
+
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();

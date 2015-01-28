@@ -7,6 +7,7 @@ import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.documentvector.DocumentVectoriser;
 import com.experimental.documentvector.Word2VecDB;
+import com.experimental.keywords.KeywordCandidateGenerator;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.Demo;
 import com.experimental.nlp.SimplePOSTag;
@@ -68,8 +69,26 @@ public class Main {
     //findDocumentNearestNeighbours();
 
     generateNounPhrases();
+//    testKeywordCandidateExtraction();
+//    stanfordNlpDemo();
 
     Log.out("FINISHED");
+  }
+
+  private static void testKeywordCandidateExtraction() {
+    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator();
+
+    WebsiteDocument testDocument =
+        new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
+
+    List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(testDocument);
+//    for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {
+//      for (Lemma lemma : candidate.phraseLemmas) {
+//        System.out.print(lemma.lemma + " ");
+//      }
+//      System.out.print("\n");
+//    }
+
   }
 
   private static void generateNounPhrases() {

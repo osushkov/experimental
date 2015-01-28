@@ -4,6 +4,7 @@ import com.experimental.Constants;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.nlp.NounPhrase;
 import com.experimental.nlp.NounPhraseExtractor;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
@@ -55,6 +56,7 @@ public class NounPhrasesDB {
     List<NounPhrase> nounPhrases = phraseExtractor.extractNounPhrases(sentence);
     for (NounPhrase phrase : nounPhrases) {
       if (phrase.isCompositePhrase() && isCommonPhrase(phrase)) {
+        Log.out(phrase.toString());
         if (!phraseEntries.containsKey(phrase)) {
           phraseEntries.put(phrase, new NounPhraseEntry(phrase));
         }
