@@ -16,39 +16,44 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by sushkov on 11/01/15.
  */
-public class LemmaVariances {
-  private static final String VARIANCES_DATA_FILENAME = "lemma_variances.txt";
+public class LemmaOccuranceStatsAggregator {
+  private static final String VARIANCES_DATA_FILENAME = "global_lemma_occurance_statistics.txt";
 
-  private static class LemmaVarianceInfo {
+  public static class LemmaStats {
     final LemmaId lemmaId;
 
-    double standardDeviation = 0.0;
+    public double weightStandardDeviation = 0.0;
+    public double averageWeightPerDocument = 0.0;
+    public double fractionOfDocumentOccured = 0.0;
+
+    int totalDocsOccuredIn = 0;
     double sumOfSquares = 0.0;
     double sum = 0.0;
 
-    LemmaVarianceInfo(LemmaId lemmaId) {
+    LemmaStats(LemmaId lemmaId) {
       this.lemmaId = Preconditions.checkNotNull(lemmaId);
     }
-
 
     synchronized void addEntry(BagOfWeightedLemmas.WeightedLemmaEntry entry, double totalBagWeight) {
       double frequency = (double) entry.weight / (double) totalBagWeight;
 
       sum += frequency;
       sumOfSquares += frequency * frequency;
+      totalDocsOccuredIn++;
     }
   }
 
-  private static final Comparator<LemmaVarianceInfo> VARIANCE_ORDER =
-      new Comparator<LemmaVarianceInfo>() {
-        public int compare(LemmaVarianceInfo e1, LemmaVarianceInfo e2) {
-          return Double.compare(e2.standardDeviation, e1.standardDeviation);
+  private static final Comparator<LemmaStats> VARIANCE_ORDER =
+      new Comparator<LemmaStats>() {
+        public int compare(LemmaStats e1, LemmaStats e2) {
+          return Double.compare(e2.weightStandardDeviation, e1.weightStandardDeviation);
         }
       };
 
   private final LemmaDB lemmaDB = LemmaDB.instance;
   private final LemmaMorphologies lemmaMorphologies = LemmaMorphologies.instance;
-  private final Map<LemmaId, LemmaVarianceInfo> lemmaVarianceMap = new ConcurrentHashMap<LemmaId, LemmaVarianceInfo>();
+  private final Map<LemmaId, LemmaStats> lemmaVarianceMap = new ConcurrentHashMap<LemmaId, LemmaStats>();
+
   private final AtomicInteger totalDocuments = new AtomicInteger(0);
   private boolean haveVariance = false;
 
@@ -83,8 +88,8 @@ public class LemmaVariances {
       LemmaId lemmaId = lemmaDB.addLemma(entry.lemma);
       Preconditions.checkNotNull(lemmaId);
 
-      lemmaVarianceMap.putIfAbsent(lemmaId, new LemmaVarianceInfo(lemmaId));
-      LemmaVarianceInfo varianceEntry = lemmaVarianceMap.get(lemmaId);
+      lemmaVarianceMap.putIfAbsent(lemmaId, new LemmaStats(lemmaId));
+      LemmaStats varianceEntry = lemmaVarianceMap.get(lemmaId);
       varianceEntry.addEntry(entry, totalWeight);
     }
 
@@ -92,11 +97,20 @@ public class LemmaVariances {
     haveVariance = false;
   }
 
-  public void computeVariances() {
-    for (LemmaVarianceInfo entry : lemmaVarianceMap.values()) {
+  public LemmaStats getLemmaStats(Lemma lemma) {
+    Preconditions.checkNotNull(lemma);
+    LemmaId lemmaId = lemmaDB.addLemma(lemma);
+    return lemmaVarianceMap.get(lemmaId);
+  }
+
+  public void computeStats() {
+    for (LemmaStats entry : lemmaVarianceMap.values()) {
       double expectedSumOfSquares = entry.sumOfSquares / totalDocuments.get();
       double expectedSum = entry.sum / totalDocuments.get();
-      entry.standardDeviation = Math.sqrt(expectedSumOfSquares - expectedSum*expectedSum);
+
+      entry.weightStandardDeviation = Math.sqrt(expectedSumOfSquares - expectedSum*expectedSum);
+      entry.averageWeightPerDocument = entry.sum / totalDocuments.get();
+      entry.fractionOfDocumentOccured = (double) entry.totalDocsOccuredIn / (double) totalDocuments.get();
     }
 
     Log.out("total documentS: " + totalDocuments.get());
@@ -119,7 +133,7 @@ public class LemmaVariances {
 
       int numEntries = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
       for (int i = 0; i < numEntries; i++) {
-        LemmaVarianceInfo newInfo = loadLemmaVarianceInfo(br);
+        LemmaStats newInfo = loadLemmaVarianceInfo(br);
         lemmaVarianceMap.put(newInfo.lemmaId, newInfo);
       }
     } catch (FileNotFoundException e) {
@@ -137,7 +151,7 @@ public class LemmaVariances {
 
   public void save() throws IOException {
     if (!haveVariance) {
-      computeVariances();
+      computeStats();
     }
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
@@ -154,10 +168,10 @@ public class LemmaVariances {
       }
 
       bw.write(Integer.toString(lemmaVarianceMap.values().size()) + "\n");
-      List<LemmaVarianceInfo> values = new ArrayList(lemmaVarianceMap.values());
+      List<LemmaStats> values = new ArrayList(lemmaVarianceMap.values());
       Collections.sort(values, VARIANCE_ORDER);
 
-      for (LemmaVarianceInfo info : values) {
+      for (LemmaStats info : values) {
         saveLemmaVarianceInfo(info, bw);
       }
     } finally {
@@ -167,28 +181,48 @@ public class LemmaVariances {
     }
   }
 
-  private void saveLemmaVarianceInfo(LemmaVarianceInfo info, BufferedWriter bw) throws IOException {
-    bw.write(Double.toString(info.standardDeviation) + " ");
+  private void saveLemmaVarianceInfo(LemmaStats info, BufferedWriter bw) throws IOException {
+    bw.write(Double.toString(info.weightStandardDeviation) + " ");
+    bw.write(Double.toString(info.averageWeightPerDocument) + " ");
+    bw.write(Double.toString(info.fractionOfDocumentOccured) + " ");
+
+    bw.write(Integer.toString(info.totalDocsOccuredIn) + " ");
     bw.write(Double.toString(info.sumOfSquares) + " ");
     bw.write(Double.toString(info.sum) + "\n");
 
     lemmaDB.getLemma(info.lemmaId).writeTo(bw);
   }
 
-  private LemmaVarianceInfo loadLemmaVarianceInfo(BufferedReader br) throws IOException {
+  private LemmaStats loadLemmaVarianceInfo(BufferedReader br) throws IOException {
     String line = Preconditions.checkNotNull(br.readLine());
     String[] lineTokens = line.split(" ");
-    Preconditions.checkState(lineTokens.length == 3);
+    Preconditions.checkState(lineTokens.length == 6);
 
-    double variance = Double.parseDouble(lineTokens[0]);
-    double sumOfSquares = Double.parseDouble(lineTokens[1]);
-    double sum = Double.parseDouble(lineTokens[2]);
+
+    double weightStandardDeviation = Double.parseDouble(lineTokens[0]);
+    double averageWeightPerDocument = Double.parseDouble(lineTokens[1]);
+    double fractionOfDocumentOccured = Double.parseDouble(lineTokens[2]);
+
+    int totalDocsOccuredIn = Integer.parseInt(lineTokens[3]);
+    double sumOfSquares = Double.parseDouble(lineTokens[4]);
+    double sum = Double.parseDouble(lineTokens[5]);
+
+    Preconditions.checkState(weightStandardDeviation >= 0.0);
+    Preconditions.checkState(averageWeightPerDocument >= 0.0);
+    Preconditions.checkState(fractionOfDocumentOccured >= 0.0 && fractionOfDocumentOccured <= 1.0);
+    Preconditions.checkState(totalDocsOccuredIn >= 0);
+    Preconditions.checkState(sumOfSquares >= 0.0);
+    Preconditions.checkState(sum >= 0.0);
 
     Lemma lemma = Lemma.readFrom(br);
     LemmaId lemmaId = lemmaDB.addLemma(lemma);
 
-    LemmaVarianceInfo result = new LemmaVarianceInfo(lemmaId);
-    result.standardDeviation = variance;
+    LemmaStats result = new LemmaStats(lemmaId);
+    result.weightStandardDeviation = weightStandardDeviation;
+    result.averageWeightPerDocument = averageWeightPerDocument;
+    result.fractionOfDocumentOccured = fractionOfDocumentOccured;
+
+    result.totalDocsOccuredIn = totalDocsOccuredIn;
     result.sumOfSquares = sumOfSquares;
     result.sum = sum;
 

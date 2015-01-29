@@ -16,7 +16,6 @@ import com.experimental.pageparser.PageParser;
 import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Log;
 import com.google.common.collect.Lists;
-import edu.mit.jwi.item.POS;
 
 import java.io.*;
 import java.util.*;
@@ -561,7 +560,7 @@ public class Main {
   private static void aggregateLemmaVariance() {
     Log.out("aggregateLemmaVariance running...");
 
-    final LemmaVariances lemmaVarianceAggregator = new LemmaVariances();
+    final LemmaOccuranceStatsAggregator lemmaVarianceAggregator = new LemmaOccuranceStatsAggregator();
     try {
       if (lemmaVarianceAggregator.tryLoadFromDisk()) {
         Log.out("loaded LemmaVariances from disk");
