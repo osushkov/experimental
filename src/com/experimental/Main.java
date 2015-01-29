@@ -19,9 +19,7 @@ import com.google.common.collect.Lists;
 import edu.mit.jwi.item.POS;
 
 import java.io.*;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -65,30 +63,78 @@ public class Main {
 //    }
 
 //    aggregateLemmaQuality();
-    generateBasisVector();
-    vectoriseDocuments();
-    findDocumentNearestNeighbours();
+
+//    generateBasisVector();
+//    vectoriseDocuments();
+//    findDocumentNearestNeighbours();
 
 //    generateNounPhrases();
 //    testKeywordCandidateExtraction();
 //    stanfordNlpDemo();
 
+//    try {
+//      if (!LemmaMorphologies.instance.tryLoad()) {
+//        Log.out("could not load LemmaMorphologies");
+//      }
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//      return;
+//    }
+
+//    testNounPhraseDB();
+
+    aggregateLemmaVariance();
+
     Log.out("FINISHED");
   }
 
+  private static void testNounPhraseDB() {
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading");
+
+    List<NounPhrasesDB.NounPhraseEntry> phraseEntries =
+        new ArrayList(nounPhraseDb.getLemmaPhrases(new Lemma("arthroscopy", SimplePOSTag.NOUN)));
+
+    Comparator<NounPhrasesDB.NounPhraseEntry> orderFunc =
+        new Comparator<NounPhrasesDB.NounPhraseEntry>() {
+          public int compare(NounPhrasesDB.NounPhraseEntry e1, NounPhrasesDB.NounPhraseEntry e2) {
+            return Double.compare(e2.numOccurances.get(), e1.numOccurances.get());
+          }
+        };
+    phraseEntries.sort(orderFunc);
+    Log.out("num entries: " + phraseEntries.size());
+
+    for (NounPhrasesDB.NounPhraseEntry entry : phraseEntries) {
+      Log.out(entry.phrase.toString() + " " + entry.numOccurances.get());
+    }
+  }
+
   private static void testKeywordCandidateExtraction() {
-    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator();
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading");
+
+    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
 
     List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(testDocument);
-//    for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {
-//      for (Lemma lemma : candidate.phraseLemmas) {
-//        System.out.print(lemma.lemma + " ");
-//      }
-//      System.out.print("\n");
-//    }
+    for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {
+      for (Lemma lemma : candidate.phraseLemmas) {
+        System.out.print(lemma.lemma + " ");
+      }
+      System.out.print("\n");
+    }
 
   }
 
@@ -510,6 +556,70 @@ public class Main {
     recursiveParser.parseDocuments();
 
     Log.out("parseWebbaseDocuments finished");
+  }
+
+  private static void aggregateLemmaVariance() {
+    Log.out("aggregateLemmaVariance running...");
+
+    final LemmaVariances lemmaVarianceAggregator = new LemmaVariances();
+    try {
+      if (lemmaVarianceAggregator.tryLoadFromDisk()) {
+        Log.out("loaded LemmaVariances from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    final Executor executor = Executors.newFixedThreadPool(8);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+    final Random rand = new Random();
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
+      @Override
+      public void processDocument(final Document document) {
+        numDocuments.incrementAndGet();
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              lemmaVarianceAggregator.addDocument(document);
+            } catch (Throwable e) {
+              return;
+            } finally {
+              sem.release();
+            }
+
+            if (rand.nextInt()%5000 == 0) {
+              System.gc();
+            }
+          }
+        });
+
+      }
+    });
+
+    Log.out("processed all docs");
+    for (int i = 0; i < numDocuments.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    try {
+      lemmaVarianceAggregator.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Log.out("aggregateLemmaVariance finished");
   }
 
   private static void aggregateLemmaQuality() {

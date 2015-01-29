@@ -18,9 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class NounPhrasesDB {
   private static final String NOUN_PHRASE_FILENAME = "noun_phrases.txt";
 
-  private static class NounPhraseEntry {
-    final NounPhrase phrase;
-    final AtomicInteger numOccurances;
+  public static class NounPhraseEntry {
+    public final NounPhrase phrase;
+    public final AtomicInteger numOccurances;
 
     NounPhraseEntry(NounPhrase phrase) {
       this.phrase = Preconditions.checkNotNull(phrase);
@@ -65,6 +65,16 @@ public class NounPhrasesDB {
         entry.numOccurances.incrementAndGet();
       }
     }
+  }
+
+  public Set<NounPhraseEntry> getLemmaPhrases(Lemma lemma) {
+    LemmaDB.LemmaId lemmaId = lemmaDb.addLemma(lemma);
+    return lemmaPhrases.get(lemmaId);
+  }
+
+  public NounPhraseEntry getPhraseEntry(NounPhrase phrase) {
+    Preconditions.checkNotNull(phrase);
+    return phraseEntries.get(phrase);
   }
 
   private boolean isCommonPhrase(NounPhrase phrase) {
