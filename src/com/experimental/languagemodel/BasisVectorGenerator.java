@@ -81,7 +81,7 @@ public class BasisVectorGenerator {
 
     for (BasisVector.BasisElement existingElement : basisElementsSoFar) {
       double similarity = similarityMeasure.getLemmaSimilarity(lemma, existingElement.lemma);
-      if (similarity > 0.9) {
+      if (similarity > 0.95) {
         Log.out("too similar: " + lemma.lemma + "," + existingElement.lemma.lemma + " " + similarity);
         return false;
       }
