@@ -1,5 +1,7 @@
 package com.experimental;
 
+import com.experimental.classifier.KeywordVector;
+import com.experimental.classifier.KeywordVectoriser;
 import com.experimental.documentmodel.*;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.thirdparty.*;
@@ -83,8 +85,62 @@ public class Main {
 //    testNounPhraseDB();
 
     aggregateLemmaVariance();
+    testKeywordVectoriser();
 
     Log.out("FINISHED");
+  }
+
+  private static void testKeywordVectoriser() {
+    LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
+    try {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+        Log.out("could not load LemmaOccuranceStatsAggregator from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    LemmaQuality lemmaQuality = new LemmaQuality();
+    try {
+      if (!lemmaQuality.tryLoadFromDisk()) {
+        Log.out("could not load LemmaQuality from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    DocumentVectorDB documentVectorDb = new DocumentVectorDB();
+    documentVectorDb.load();
+
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
+
+    WebsiteDocument testDocument =
+        new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
+
+    List<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
+    List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
+
+    for (KeywordVector vector : vectors) {
+      Log.out(vector.toString());
+    }
+  }
+
+  private static List<KeywordCandidateGenerator.KeywordCandidate> getCandidateKeywords(WebsiteDocument document) {
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      Log.out("loading NounPhrasesDB...");
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading NounPhrasesDB");
+
+    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb);
+    return candidateGenerator.generateCandidates(document);
   }
 
   private static void testNounPhraseDB() {

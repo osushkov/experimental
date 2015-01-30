@@ -68,17 +68,17 @@ public class KeywordVectoriser {
     resultVector.add(components.lemmaWeightRatio());
     resultVector.add(components.lemmaQuality());
 
-    resultVector.add(components.weightToGobalRatio());
+    resultVector.add(components.weightToGobalRatio()); // 3
     resultVector.add(components.globalAverageWeightPerDocument());
     resultVector.add(components.globalFractionOfDocumentsOccured());
     resultVector.add(components.globalWeightStandardDeviation());
-    resultVector.add(components.weightToGlobalMeanDistance());
+    resultVector.add(components.weightToGlobalMeanDistance()); // 7
 
     resultVector.add(components.weightToLocalRatio());
     resultVector.add(components.localAverageWeightPerDocument());
     resultVector.add(components.localFractionOfDocumentsOccured());
     resultVector.add(components.localWeightStandardDeviation());
-    resultVector.add(components.weightToLocalMeanDistance());
+    resultVector.add(components.weightToLocalMeanDistance()); // 12
 
     resultVector.add(components.localToGlobalAverageWeightRatio());
     resultVector.add(components.localToGlobalStandardDeviationRatio());
