@@ -1,9 +1,17 @@
 package com.experimental.classifier;
 
+import com.experimental.documentmodel.BagOfWeightedLemmas;
+import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.WebsiteDocument;
+import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.keywords.KeywordCandidateGenerator;
+import com.experimental.languagemodel.Lemma;
+import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
+import com.experimental.languagemodel.LemmaQuality;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,41 +19,182 @@ import java.util.List;
  */
 public class KeywordVectoriser {
 
+  private final LemmaOccuranceStatsAggregator globalLemmaStats;
+  private final LemmaQuality lemmaQuality;
+  private final DocumentVectorDB documentVectorDb;
 
-  public List<Double> vectoriseKeywordCandidate(KeywordCandidateGenerator.KeywordCandidate candidate,
-                                                WebsiteDocument document) {
-    Preconditions.checkNotNull(candidate);
+  public KeywordVectoriser(LemmaOccuranceStatsAggregator globalLemmaStats,
+                           LemmaQuality lemmaQuality,
+                           DocumentVectorDB documentVectorDb) {
+    this.globalLemmaStats = Preconditions.checkNotNull(globalLemmaStats);
+    this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
+    this.documentVectorDb = Preconditions.checkNotNull(documentVectorDb);
+  }
+
+  public List<KeywordVector> vectoriseKeywordCandidates(List<KeywordCandidateGenerator.KeywordCandidate> candidates,
+                                                        WebsiteDocument document) {
+    Preconditions.checkNotNull(candidates);
     Preconditions.checkNotNull(document);
 
-    if (candidate.phraseLemmas.size() == 1) {
-      return vectoriseKeywordCandidateOneWord(candidate, document);
-    } else if (candidate.phraseLemmas.size() == 2) {
-      return vectoriseKeywordCandidateTwoWord(candidate, document);
-    } else if (candidate.phraseLemmas.size() == 3) {
-      return vectoriseKeywordCandidateThreeWord(candidate, document);
-    } else {
-      return null;
+    LemmaOccuranceStatsAggregator localLemmaStats = getLocalLemmaStats(document);
+
+    List<KeywordVector> result = new ArrayList<KeywordVector>();
+    for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {
+      if (candidate.phraseLemmas.size() == 1) {
+        result.add(vectoriseKeywordCandidateOneWord(candidate, document, localLemmaStats));
+      } else if (candidate.phraseLemmas.size() == 2) {
+        result.add(vectoriseKeywordCandidateTwoWord(candidate, document, localLemmaStats));
+      } else if (candidate.phraseLemmas.size() == 3) {
+        result.add(vectoriseKeywordCandidateThreeWord(candidate, document, localLemmaStats));
+      }
     }
+    return result;
   }
 
-  private List<Double> vectoriseKeywordCandidateOneWord(KeywordCandidateGenerator.KeywordCandidate candidate,
-                                                        WebsiteDocument document) {
+  private KeywordVector vectoriseKeywordCandidateOneWord(KeywordCandidateGenerator.KeywordCandidate candidate,
+                                                        WebsiteDocument document,
+                                                        LemmaOccuranceStatsAggregator localOccuranceStats) {
     Preconditions.checkArgument(candidate.phraseLemmas.size() == 1);
 
-    return null;
+    Lemma phraseLemma = candidate.phraseLemmas.get(0);
+    LemmaOccuranceStatsAggregator.LemmaStats localStats = localOccuranceStats.getLemmaStats(phraseLemma);
+    LemmaOccuranceStatsAggregator.LemmaStats globalStats = globalLemmaStats.getLemmaStats(phraseLemma);
+
+    KeywordVectorComponents components =
+        new KeywordVectorComponents(phraseLemma, document, lemmaQuality, localStats, globalStats);
+
+    List<Double> resultVector = new ArrayList<Double>();
+    resultVector.add(components.lemmaWeight());
+    resultVector.add(components.lemmaWeightRatio());
+    resultVector.add(components.lemmaQuality());
+
+    resultVector.add(components.weightToGobalRatio());
+    resultVector.add(components.globalAverageWeightPerDocument());
+    resultVector.add(components.globalFractionOfDocumentsOccured());
+    resultVector.add(components.globalWeightStandardDeviation());
+    resultVector.add(components.weightToGlobalMeanDistance());
+
+    resultVector.add(components.weightToLocalRatio());
+    resultVector.add(components.localAverageWeightPerDocument());
+    resultVector.add(components.localFractionOfDocumentsOccured());
+    resultVector.add(components.localWeightStandardDeviation());
+    resultVector.add(components.weightToLocalMeanDistance());
+
+    resultVector.add(components.localToGlobalAverageWeightRatio());
+    resultVector.add(components.localToGlobalStandardDeviationRatio());
+
+    return new KeywordVector(candidate, resultVector);
   }
 
-  private List<Double> vectoriseKeywordCandidateTwoWord(KeywordCandidateGenerator.KeywordCandidate candidate,
-                                                        WebsiteDocument document) {
+  private KeywordVector vectoriseKeywordCandidateTwoWord(KeywordCandidateGenerator.KeywordCandidate candidate,
+                                                        WebsiteDocument document,
+                                                        LemmaOccuranceStatsAggregator localOccuranceStats) {
     Preconditions.checkArgument(candidate.phraseLemmas.size() == 2);
 
-    return null;
+    KeywordVectorComponents c0 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(0), document, lemmaQuality,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)));
+
+    KeywordVectorComponents c1 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(1), document, lemmaQuality,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)));
+
+    List<Double> resultVector = new ArrayList<Double>();
+    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality())));
+
+    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToGobalRatio(), c1.weightToGobalRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.globalAverageWeightPerDocument(), c1.globalAverageWeightPerDocument())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.globalFractionOfDocumentsOccured(), c1.globalFractionOfDocumentsOccured())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.globalWeightStandardDeviation(), c1.globalWeightStandardDeviation())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance())));
+
+    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToLocalRatio(), c1.weightToLocalRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.localAverageWeightPerDocument(), c1.localAverageWeightPerDocument())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.localFractionOfDocumentsOccured(), c1.localFractionOfDocumentsOccured())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.localWeightStandardDeviation(), c1.localWeightStandardDeviation())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance())));
+
+    resultVector.add(featureAverage(Lists.newArrayList(c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
+
+    return new KeywordVector(candidate, resultVector);
   }
 
-  private List<Double> vectoriseKeywordCandidateThreeWord(KeywordCandidateGenerator.KeywordCandidate candidate,
-                                                          WebsiteDocument document) {
+  private KeywordVector vectoriseKeywordCandidateThreeWord(KeywordCandidateGenerator.KeywordCandidate candidate,
+                                                          WebsiteDocument document,
+                                                          LemmaOccuranceStatsAggregator localOccuranceStats) {
     Preconditions.checkArgument(candidate.phraseLemmas.size() == 3);
 
-    return null;
+    KeywordVectorComponents c0 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(0), document, lemmaQuality,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)));
+
+    KeywordVectorComponents c1 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(1), document, lemmaQuality,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)));
+
+    KeywordVectorComponents c2 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(2), document, lemmaQuality,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(2)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(2)));
+
+    List<Double> resultVector = new ArrayList<Double>();
+    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight(), c2.lemmaWeight())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio(), c2.lemmaWeightRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality(), c2.lemmaQuality())));
+
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.weightToGobalRatio(), c1.weightToGobalRatio(),c2.weightToGobalRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.globalAverageWeightPerDocument(), c1.globalAverageWeightPerDocument(), c2.globalAverageWeightPerDocument())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.globalFractionOfDocumentsOccured(), c1.globalFractionOfDocumentsOccured(), c2.globalFractionOfDocumentsOccured())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.globalWeightStandardDeviation(), c1.globalWeightStandardDeviation(), c2.globalWeightStandardDeviation())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance(), c2.weightToGlobalMeanDistance())));
+
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.weightToLocalRatio(), c1.weightToLocalRatio(), c2.weightToLocalRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.localAverageWeightPerDocument(), c1.localAverageWeightPerDocument(), c2.localAverageWeightPerDocument())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.localFractionOfDocumentsOccured(), c1.localFractionOfDocumentsOccured(), c2.localFractionOfDocumentsOccured())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.localWeightStandardDeviation(), c1.localWeightStandardDeviation(), c2.localWeightStandardDeviation())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance(), c2.weightToLocalMeanDistance())));
+
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio(), c2.localToGlobalAverageWeightRatio())));
+    resultVector.add(featureAverage(Lists.newArrayList(
+        c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio(), c2.localToGlobalStandardDeviationRatio())));
+
+    return new KeywordVector(candidate, resultVector);
+  }
+
+  private LemmaOccuranceStatsAggregator getLocalLemmaStats(WebsiteDocument document) {
+    List<DocumentVectorDB.DocumentSimilarityPair> similarityPairs = documentVectorDb.getNearestDocuments(document, 50);
+
+    LemmaOccuranceStatsAggregator result = new LemmaOccuranceStatsAggregator();
+    for (DocumentVectorDB.DocumentSimilarityPair pair : similarityPairs) {
+      result.addDocument(pair.document);
+    }
+    result.computeStats();
+    return result;
+  }
+
+  private double featureAverage(List<Double> values) {
+    double sum = 0.0;
+    for (double val : values) {
+      sum += val;
+    }
+    return sum / values.size();
   }
 }

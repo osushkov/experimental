@@ -99,6 +99,20 @@ public class LemmaQuality {
     haveQuality = true;
   }
 
+  public double getLemmaQuality(Lemma lemma) {
+    Preconditions.checkNotNull(lemma);
+
+    LemmaDB.LemmaId lemmaId = lemmaDB.addLemma(lemma);
+    Preconditions.checkNotNull(lemmaId);
+
+    LemmaQualityInfo entry = lemmaQualityMap.get(lemmaId);
+    if (entry == null) {
+      return 0.0;
+    } else {
+      return entry.quality;
+    }
+  }
+
   private double getLemmaPosWeight(Lemma lemma) {
     if (lemma == null) {
       return 0.0;
