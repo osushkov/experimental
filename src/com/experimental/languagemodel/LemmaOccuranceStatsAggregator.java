@@ -34,8 +34,8 @@ public class LemmaOccuranceStatsAggregator {
       this.lemmaId = Preconditions.checkNotNull(lemmaId);
     }
 
-    synchronized void addEntry(BagOfWeightedLemmas.WeightedLemmaEntry entry) {
-      double frequency = (double) entry.weight;
+    synchronized void addEntry(BagOfWeightedLemmas.WeightedLemmaEntry entry, double totalBagWeight) {
+      double frequency = (double) entry.weight / (double) totalBagWeight;
 
       sum += frequency;
       sumOfSquares += frequency * frequency;
@@ -62,7 +62,8 @@ public class LemmaOccuranceStatsAggregator {
     Preconditions.checkNotNull(document);
 
     BagOfWeightedLemmas documentBag = document.getBagOfLemmas();
-    if (documentBag.getSumWeight() < 1.0) {
+    double totalWeight = documentBag.getSumWeight();
+    if (totalWeight < 1.0) {
       return;
     }
 
@@ -89,7 +90,7 @@ public class LemmaOccuranceStatsAggregator {
 
       lemmaVarianceMap.putIfAbsent(lemmaId, new LemmaStats(lemmaId));
       LemmaStats varianceEntry = lemmaVarianceMap.get(lemmaId);
-      varianceEntry.addEntry(entry);
+      varianceEntry.addEntry(entry, totalWeight);
     }
 
     totalDocuments.incrementAndGet();
