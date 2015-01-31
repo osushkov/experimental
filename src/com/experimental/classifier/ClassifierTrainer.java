@@ -178,6 +178,7 @@ public class ClassifierTrainer {
 
       String line = br.readLine();
       while(line != null) {
+        Log.out("line: " + line);
         if (current.documentRootPath == null) {
           current.documentRootPath = line;
           line = br.readLine(); // skip the next line
