@@ -29,7 +29,14 @@ public class WebsiteDocument extends Document {
       tryLoadSitePages();
     }
 
-    return sitePages;
+    List<SitePage> result = new ArrayList<SitePage>();
+    if (frontPage == null) {
+      return result;
+    }
+
+    result.add(frontPage);
+    result.addAll(sitePages);
+    return result;
   }
 
   public void setFrontPage(SitePage page) {

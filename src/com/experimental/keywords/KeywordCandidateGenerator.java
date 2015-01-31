@@ -114,14 +114,29 @@ public class KeywordCandidateGenerator {
       }
     }
 
-    for (int i = 0; i < Math.min(10, nouns.size()); i++) {
-      for (int j = 0; j < Math.min(10, nouns.size()); j++) {
-        if (i == j) {
-          continue;
-        }
-        List<Lemma> phrase = Lists.newArrayList(nouns.get(i).lemma, nouns.get(j).lemma);
-        if (isValidPhrase(phrase)) {
-          result.add(new KeywordCandidate(phrase));
+    for (int i = 0; i < Math.min(10, nouns.size())-1; i++) {
+      for (int j = i+1; j < Math.min(10, nouns.size()); j++) {
+        List<Lemma> forwardPhrase = Lists.newArrayList(nouns.get(i).lemma, nouns.get(j).lemma);
+        List<Lemma> backwardPhrase = Lists.newArrayList(nouns.get(j).lemma, nouns.get(i).lemma);
+        boolean isForwardValid = isValidPhrase(forwardPhrase);
+        boolean isBackwardValid = isValidPhrase(backwardPhrase);
+
+        if (isForwardValid && isForwardValid) {
+          NounPhrasesDB.NounPhraseEntry forwardEntry =
+              nounPhraseDb.getPhraseEntry(new NounPhrase(forwardPhrase, LemmaDB.instance));
+          NounPhrasesDB.NounPhraseEntry backwardEntry =
+              nounPhraseDb.getPhraseEntry(new NounPhrase(backwardPhrase, LemmaDB.instance));
+
+          if (forwardEntry.numOccurances.get() > backwardEntry.numOccurances.get()) {
+            result.add(new KeywordCandidate(forwardPhrase));
+          } else {
+            result.add(new KeywordCandidate(backwardPhrase));
+          }
+
+        } else if (isForwardValid) {
+          result.add(new KeywordCandidate(forwardPhrase));
+        } else if (isBackwardValid) {
+          result.add(new KeywordCandidate(backwardPhrase));
         }
       }
     }
