@@ -14,5 +14,6 @@
     <orderEntry type="library" name="cssbox-4.7" level="project" />
     <orderEntry type="library" name="jstyleparser-1.19" level="project" />
     <orderEntry type="library" name="stanford-corenlp-3.5.0" level="project" />
+    <orderEntry type="library" name="spark" level="project" />
   </component>
 </module>

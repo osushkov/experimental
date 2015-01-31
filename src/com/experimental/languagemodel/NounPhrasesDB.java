@@ -44,6 +44,7 @@ public class NounPhrasesDB {
   private final LemmaDB lemmaDb;
   private final LemmaMorphologies lemmaMorphologies;
   private final NounPhraseExtractor phraseExtractor;
+  private boolean isLoaded = false;
 
   public NounPhrasesDB(LemmaDB lemmaDb, LemmaMorphologies lemmaMorphologies) {
     this.lemmaDb = Preconditions.checkNotNull(lemmaDb);
@@ -120,6 +121,12 @@ public class NounPhrasesDB {
   }
 
   public boolean tryLoad() throws IOException {
+    if (isLoaded) {
+      return true;
+    }
+
+    Log.out("NounPhraseDB loading...");
+
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String nounPhraseFilePath = aggregateDataFile.toPath().resolve(NOUN_PHRASE_FILENAME).toString();
 
@@ -157,6 +164,8 @@ public class NounPhrasesDB {
       }
     }
 
+    Log.out("finsihed loading NounPhraseDB");
+    isLoaded = true;
     return true;
   }
 

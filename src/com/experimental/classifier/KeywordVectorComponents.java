@@ -43,7 +43,7 @@ public class KeywordVectorComponents {
   }
 
   public double weightToGobalRatio() {
-    double lemmaWeight = getLemmaWeight(phraseLemma, document);
+    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
     return globalStats != null ? lemmaWeight / Math.max(Double.MIN_VALUE, globalStats.averageWeightPerDocument) : 0.0;
   }
 
@@ -60,13 +60,13 @@ public class KeywordVectorComponents {
   }
 
   public double weightToGlobalMeanDistance() {
-    double lemmaWeight = getLemmaWeight(phraseLemma, document);
+    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
     return globalStats != null ?
         (lemmaWeight - globalStats.averageWeightPerDocument) / globalStats.weightStandardDeviation : 0.0;
   }
 
   public double weightToLocalRatio() {
-    double lemmaWeight = getLemmaWeight(phraseLemma, document);
+    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
     return localStats != null ? lemmaWeight / Math.max(Double.MIN_VALUE, localStats.averageWeightPerDocument) : 0.0;
   }
 
@@ -83,7 +83,7 @@ public class KeywordVectorComponents {
   }
 
   public double weightToLocalMeanDistance() {
-    double lemmaWeight = getLemmaWeight(phraseLemma, document);
+    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
     return localStats != null ?
         (lemmaWeight - localStats.averageWeightPerDocument) / localStats.weightStandardDeviation : 0.0;
   }

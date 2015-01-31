@@ -59,7 +59,7 @@ public class KeywordCandidateGenerator {
   public List<KeywordCandidate> generateCandidates(WebsiteDocument document) {
     List<KeywordCandidate> result = new ArrayList<KeywordCandidate>();
 
-//    result.addAll(getCandidatesFromNounPhrases(document));
+    result.addAll(getCandidatesFromNounPhrases(document));
     result.addAll(getCandidatesFromCompositedPhrases(document));
 
     return result;
@@ -68,11 +68,9 @@ public class KeywordCandidateGenerator {
   private List<KeywordCandidate> getCandidatesFromNounPhrases(WebsiteDocument document) {
     List<WeightedNounPhrase> weightedPhrases = extractNounPhrases(document);
     List<KeywordCandidate> result = new ArrayList<KeywordCandidate>();
-    for (WeightedNounPhrase phrase : weightedPhrases) {
-      if (phrase.weight > 1.0) {
-        Log.out(phrase.phrase.toString() + " " + phrase.weight);
-        result.add(phrase.toKeywordCandidate());
-      }
+    for (int i = 0; i < Math.min(weightedPhrases.size(), 10); i++) {
+      WeightedNounPhrase phrase = weightedPhrases.get(i);
+      result.add(phrase.toKeywordCandidate());
     }
     return result;
   }
@@ -118,6 +116,9 @@ public class KeywordCandidateGenerator {
 
     for (int i = 0; i < Math.min(10, nouns.size()); i++) {
       for (int j = 0; j < Math.min(10, nouns.size()); j++) {
+        if (i == j) {
+          continue;
+        }
         List<Lemma> phrase = Lists.newArrayList(nouns.get(i).lemma, nouns.get(j).lemma);
         if (isValidPhrase(phrase)) {
           result.add(new KeywordCandidate(phrase));
@@ -130,13 +131,7 @@ public class KeywordCandidateGenerator {
 
   private boolean isValidPhrase(List<Lemma> phrase) {
     NounPhrase nounPhrase = new NounPhrase(phrase, LemmaDB.instance);
-    Log.out("checking candidate: " + nounPhrase.toString());
     NounPhrasesDB.NounPhraseEntry entry = nounPhraseDb.getPhraseEntry(nounPhrase);
-    if (entry == null) {
-      Log.out("null");
-    } else {
-      Log.out(Integer.toString(entry.numOccurances.get()));
-    }
     return entry != null && entry.numOccurances.get() > 5;
   }
 

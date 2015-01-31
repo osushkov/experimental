@@ -2,6 +2,7 @@ package com.experimental;
 
 import com.experimental.classifier.KeywordVector;
 import com.experimental.classifier.KeywordVectoriser;
+import com.experimental.classifier.TrainingDataGenerator;
 import com.experimental.documentmodel.*;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.thirdparty.*;
@@ -16,8 +17,18 @@ import com.experimental.nlp.SimplePOSTag;
 import com.experimental.pageparser.PageCrawler;
 import com.experimental.pageparser.PageParser;
 import com.experimental.sitepage.SitePage;
+import com.experimental.utils.Common;
 import com.experimental.utils.Log;
 import com.google.common.collect.Lists;
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.mllib.classification.LogisticRegressionModel;
+import org.apache.spark.mllib.classification.LogisticRegressionWithSGD;
+import org.apache.spark.mllib.classification.SVMModel;
+import org.apache.spark.mllib.classification.SVMWithSGD;
+import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.mllib.regression.LabeledPoint;
 
 import java.io.*;
 import java.util.*;
@@ -84,10 +95,85 @@ public class Main {
 
 //    testNounPhraseDB();
 
-    aggregateLemmaVariance();
-    testKeywordVectoriser();
+    //aggregateLemmaVariance();
+//    testKeywordVectoriser();
+
+    try {
+      outputKeywordCandidates();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
     Log.out("FINISHED");
+  }
+
+  private static void outputKeywordCandidates() throws IOException {
+    final String TRAINING_DATA_FILENAME = "keyword_training_data.txt";
+
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    final TrainingDataGenerator trainingDataGenerator = new TrainingDataGenerator(nounPhraseDb);
+
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String trainingDataFilePath = aggregateDataFile.toPath().resolve(TRAINING_DATA_FILENAME).toString();
+
+    BufferedWriter bw = null;
+    try {
+      FileWriter fw = new FileWriter(trainingDataFilePath);
+      bw = new BufferedWriter(fw);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    final BufferedWriter out = bw;
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
+      @Override
+      public void processDocument(final Document document) {
+        if (document instanceof  WebsiteDocument) {
+          try {
+            trainingDataGenerator.outputTrainingData((WebsiteDocument) document, out);
+          } catch (Exception e) {
+            return;
+          }
+        }
+      }
+    });
+
+    out.close();
+  }
+
+  private static void testSpark() {
+    SparkConf conf = new SparkConf().setAppName("myApp").setMaster("local");
+    JavaSparkContext sc = new JavaSparkContext(conf);
+
+    List<LabeledPoint> trainingList = new ArrayList<LabeledPoint>();
+
+    Random rand = new Random();
+    for (int i = 0; i < 100; i++) {
+      double x = 2.0 * rand.nextDouble() - 1.0;
+      x *= 10.0;
+      double y = 2.0 * rand.nextDouble() - 1.0;
+      y *= 10.0;
+
+      trainingList.add(new LabeledPoint(y > x ? 1.0 : 0.0, Vectors.dense(x, y)));
+    }
+
+    JavaRDD < LabeledPoint > trainingData = sc.parallelize(trainingList);
+    trainingData.cache();
+
+    int numIterations = 1000;
+    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
+    model.clearThreshold();
+
+    double r = model.predict(Vectors.dense(5.0, 2.0));
+    Log.out("predicted: " + r);
+
+    r = model.predict(Vectors.dense(4.8, 5.0));
+    Log.out("predicted: " + r);
   }
 
   private static void testKeywordVectoriser() {
