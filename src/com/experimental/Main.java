@@ -1,5 +1,6 @@
 package com.experimental;
 
+import com.experimental.classifier.ClassifierTrainer;
 import com.experimental.classifier.KeywordVector;
 import com.experimental.classifier.KeywordVectoriser;
 import com.experimental.classifier.TrainingDataGenerator;
@@ -98,13 +99,65 @@ public class Main {
     //aggregateLemmaVariance();
 //    testKeywordVectoriser();
 
+//    try {
+//      outputKeywordCandidates();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+
+    trainClassifier();
+
+    Log.out("FINISHED");
+  }
+
+  private static void trainClassifier() {
     try {
-      outputKeywordCandidates();
+      if (!LemmaMorphologies.instance.tryLoad()) {
+        Log.out("could not load LemmaMorphologies");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      Log.out("loading NounPhrasesDB...");
+      nounPhraseDb.tryLoad();
     } catch (IOException e) {
       e.printStackTrace();
     }
+    Log.out("finished loading NounPhrasesDB");
 
-    Log.out("FINISHED");
+    LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
+    try {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+        Log.out("could not load LemmaOccuranceStatsAggregator from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    LemmaQuality lemmaQuality = new LemmaQuality();
+    try {
+      if (!lemmaQuality.tryLoadFromDisk()) {
+        Log.out("could not load LemmaQuality from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    DocumentVectorDB documentVectorDb = new DocumentVectorDB();
+    documentVectorDb.load();
+
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
+
+    ClassifierTrainer trainer = new ClassifierTrainer(nounPhraseDb, keywordVectoriser);
+    trainer.train();
   }
 
   private static void outputKeywordCandidates() throws IOException {
