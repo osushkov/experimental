@@ -110,16 +110,16 @@
           <file leaf-file-name="ClassifierTrainer.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.62185794" vertical-offset="106" max-vertical-offset="3015">
-                  <caret line="45" column="67" selection-start-line="45" selection-start-column="67" selection-end-line="45" selection-end-column="67" />
+                <state vertical-scroll-proportion="0.7038251" vertical-offset="361" max-vertical-offset="3180">
+                  <caret line="67" column="47" selection-start-line="67" selection-start-column="47" selection-end-line="67" selection-end-column="47" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1187#1201#0" expanded="true" />
                     <element signature="e#1310#1324#0" expanded="true" />
                     <element signature="e#1391#1405#0" expanded="true" />
                     <element signature="e#1480#1494#0" expanded="true" />
-                    <element signature="e#4663#4671#0" expanded="true" />
-                    <element signature="e#5944#5975#0" expanded="true" />
+                    <element signature="e#5010#5018#0" expanded="true" />
+                    <element signature="e#6291#6322#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -203,10 +203,10 @@
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifiedTrainer.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/NounPhrasesDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/TrainingDataGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/WebsiteDocument.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeywordCandidateGenerator.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
       </list>
     </option>
   </component>
@@ -1254,22 +1254,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.62185794" vertical-offset="106" max-vertical-offset="3015">
-          <caret line="45" column="67" selection-start-line="45" selection-start-column="67" selection-end-line="45" selection-end-column="67" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1187#1201#0" expanded="true" />
-            <element signature="e#1310#1324#0" expanded="true" />
-            <element signature="e#1391#1405#0" expanded="true" />
-            <element signature="e#1480#1494#0" expanded="true" />
-            <element signature="e#4663#4671#0" expanded="true" />
-            <element signature="e#5944#5975#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5566667" vertical-offset="909" max-vertical-offset="14535">
@@ -1278,6 +1262,22 @@
             <element signature="e#5791#6156#0" expanded="true" />
             <element signature="e#6155#6156#0" expanded="true" />
             <element signature="e#6401#6415#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7038251" vertical-offset="361" max-vertical-offset="3180">
+          <caret line="67" column="47" selection-start-line="67" selection-start-column="47" selection-end-line="67" selection-end-column="47" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1187#1201#0" expanded="true" />
+            <element signature="e#1310#1324#0" expanded="true" />
+            <element signature="e#1391#1405#0" expanded="true" />
+            <element signature="e#1480#1494#0" expanded="true" />
+            <element signature="e#5010#5018#0" expanded="true" />
+            <element signature="e#6291#6322#0" expanded="true" />
           </folding>
         </state>
       </provider>

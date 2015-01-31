@@ -60,6 +60,17 @@ public class ClassifierTrainer {
   }
 
   private void trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName) {
+    Log.out("training on:");
+    for (LabeledPoint point : trainingPoints) {
+      StringBuffer buffer = new StringBuffer();
+      buffer.append(Double.toString(point.label())).append(": ");
+      for (double val : point.features().toArray()) {
+        buffer.append(Double.toString(val) + "  ");
+      }
+      Log.out(buffer.toString());
+
+    }
+
     JavaRDD< LabeledPoint > trainingData = sc.parallelize(trainingPoints);
     trainingData.cache();
 
