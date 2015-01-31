@@ -121,7 +121,7 @@ public class KeywordCandidateGenerator {
         boolean isForwardValid = isValidPhrase(forwardPhrase);
         boolean isBackwardValid = isValidPhrase(backwardPhrase);
 
-        if (isForwardValid && isForwardValid) {
+        if (isForwardValid && isBackwardValid) {
           NounPhrasesDB.NounPhraseEntry forwardEntry =
               nounPhraseDb.getPhraseEntry(new NounPhrase(forwardPhrase, LemmaDB.instance));
           NounPhrasesDB.NounPhraseEntry backwardEntry =
