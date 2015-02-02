@@ -31,7 +31,7 @@ public class KeywordCandidateGenerator {
     public String toString() {
       StringBuffer buffer = new StringBuffer();
       for (Lemma lemma : phraseLemmas) {
-        buffer.append(lemma).append(" ");
+        buffer.append(lemma.lemma).append(" ");
       }
       return buffer.toString();
     }
