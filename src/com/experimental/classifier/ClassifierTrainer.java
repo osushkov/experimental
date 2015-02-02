@@ -106,7 +106,7 @@ public class ClassifierTrainer {
         } else if (candidate.phraseLemmas.size() == 2) {
           isGood = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
         } else if (candidate.phraseLemmas.size() >= 3) {
-          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.8;
+          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.85;
         }
 
         if (isGood) {

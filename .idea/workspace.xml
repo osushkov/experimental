@@ -81,7 +81,7 @@
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.29038855" vertical-offset="1336" max-vertical-offset="4305">
-                  <caret line="108" column="101" selection-start-line="108" selection-start-column="101" selection-end-line="108" selection-end-column="101" />
+                  <caret line="108" column="102" selection-start-line="108" selection-start-column="102" selection-end-line="108" selection-end-column="102" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -1233,7 +1233,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29038855" vertical-offset="1336" max-vertical-offset="4305">
-          <caret line="108" column="101" selection-start-line="108" selection-start-column="101" selection-end-line="108" selection-end-column="101" />
+          <caret line="108" column="102" selection-start-line="108" selection-start-column="102" selection-end-line="108" selection-end-column="102" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
