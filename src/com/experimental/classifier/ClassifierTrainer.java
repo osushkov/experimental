@@ -71,10 +71,10 @@ public class ClassifierTrainer {
     TrainingData trainingData = generateTrainingData();
 
     LearnedModel learnedModel = new LearnedModel();
-    learnedModel.oneKeywordClassifier = trainClassifier(trainingData.oneKeyword, "one_keyword_classifier.txt");
-    learnedModel.twoKeywordClassifier = trainClassifier(trainingData.twoKeywords, "two_keywords_classifier.txt");
+    learnedModel.oneKeywordClassifier = trainClassifier(trainingData.oneKeyword, "one_keyword_classifier.txt", 0.5);
+    learnedModel.twoKeywordClassifier = trainClassifier(trainingData.twoKeywords, "two_keywords_classifier.txt", 0.5);
     learnedModel.threeOrModeKeywordClassifier =
-        trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt");
+        trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.9);
 
     testModel(learnedModel);
   }
@@ -100,16 +100,16 @@ public class ClassifierTrainer {
 
         KeywordCandidateGenerator.KeywordCandidate candidate = candidates.get(i);
 
-        double p = 0.0;
+        boolean isGood = false;
         if (candidate.phraseLemmas.size() == 1) {
-          p = learnedModel.oneKeywordClassifier.predict(Vectors.dense(doubleVec));
+          isGood = learnedModel.oneKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
         } else if (candidate.phraseLemmas.size() == 2) {
-          p = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec));
+          isGood = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
         } else if (candidate.phraseLemmas.size() >= 3) {
-          p = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec));
+          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.9;
         }
 
-        if (p >= 0.5) {
+        if (isGood) {
           Log.out("= " + candidate.toString());
         }
       }
@@ -117,7 +117,8 @@ public class ClassifierTrainer {
 
   }
 
-  private ClassificationModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName) {
+  private ClassificationModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
+                                              double positiveThreshold) {
     if (trainingPoints.size() == 0) {
       return null;
     }
@@ -125,7 +126,7 @@ public class ClassifierTrainer {
     JavaRDD< LabeledPoint > trainingData = sc.parallelize(trainingPoints);
     trainingData.cache();
 
-    int numIterations = 1000;
+    int numIterations = 5000;
 //    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
     final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
     model.clearThreshold();
@@ -135,7 +136,6 @@ public class ClassifierTrainer {
     int numPositiveCorrect = 0;
     int numNegativeCorrect = 0;
 
-    final double positiveThreshold = 0.5;
     for (LabeledPoint point : trainingPoints) {
       double mr = model.predict(point.features());
 
