@@ -20,12 +20,14 @@ import com.experimental.pageparser.PageParser;
 import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Common;
 import com.experimental.utils.Log;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.classification.*;
 import org.apache.spark.mllib.linalg.*;
+import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.regression.GeneralizedLinearModel;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
@@ -103,11 +105,115 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    trainClassifier();
+//    trainClassifier();
+    testClassifier();
 //    testKeywordCandidateExtraction();
 
     Log.out("FINISHED");
   }
+
+
+
+  private static void testClassifier() {
+    LogisticRegressionModel model0 = null;
+    LogisticRegressionModel model1 = null;
+    LogisticRegressionModel model2 = null;
+
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String learnedModelFilePath = aggregateDataFile.toPath().resolve("learned_classifier.txt").toString();
+
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new FileReader(learnedModelFilePath));
+
+      model0 = readModelFrom(br);
+      model1 = readModelFrom(br);
+      model2 = readModelFrom(br);
+
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+
+    LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
+    try {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+        Log.out("could not load LemmaOccuranceStatsAggregator from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    LemmaQuality lemmaQuality = new LemmaQuality();
+    try {
+      if (!lemmaQuality.tryLoadFromDisk()) {
+        Log.out("could not load LemmaQuality from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    DocumentVectorDB documentVectorDb = new DocumentVectorDB();
+    documentVectorDb.load();
+
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
+
+    WebsiteDocument testDocument =
+        new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
+
+    List<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
+    List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
+
+    for (int i = 0; i < vectors.size(); i++) {
+      KeywordVector vector = vectors.get(i);
+      KeywordCandidateGenerator.KeywordCandidate candidate = candidates.get(i);
+      double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
+
+      if (candidate.phraseLemmas.size() == 1) {
+        if (model0.predict(Vectors.dense(doubleVec)) >= 0.5) {
+          Log.out("** " + candidate.toString());
+        }
+      } else if (candidate.phraseLemmas.size() == 1) {
+        if (model1.predict(Vectors.dense(doubleVec)) >= 0.5) {
+          Log.out("** " + candidate.toString());
+        }
+      } else if (candidate.phraseLemmas.size() == 1) {
+        if (model2.predict(Vectors.dense(doubleVec)) >= 0.85) {
+          Log.out("** " + candidate.toString());
+        }
+      }
+    }
+
+  }
+
+  private static LogisticRegressionModel readModelFrom(BufferedReader in) throws IOException {
+    double intercept = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
+    int vecLength = Integer.parseInt(Preconditions.checkNotNull(in.readLine()));
+
+    List<Double> vec = new ArrayList<Double>();
+    for (int i = 0; i < vecLength; i++) {
+      vec.add(Double.parseDouble(Preconditions.checkNotNull(in.readLine())));
+    }
+
+    Vector weights = Vectors.dense(Common.listOfDoubleToArray(vec));
+
+    return new LogisticRegressionModel(weights, intercept);
+  }
+
 
   private static void trainClassifier() {
     try {

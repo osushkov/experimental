@@ -30,10 +30,11 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.9038855" vertical-offset="2011" max-vertical-offset="16095">
-                  <caret line="193" column="26" selection-start-line="193" selection-start-column="26" selection-end-line="193" selection-end-column="26" />
+                <state vertical-scroll-proportion="0.09637306" vertical-offset="1527" max-vertical-offset="17685">
+                  <caret line="108" column="21" selection-start-line="108" selection-start-column="21" selection-end-line="108" selection-end-column="21" />
                   <folding>
                     <element signature="imports" expanded="true" />
+                    <element signature="e#6375#6383#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -63,18 +64,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="KeywordCandidateGenerator.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/experimental/keywords/KeywordCandidateGenerator.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1305" max-vertical-offset="3105">
-                  <caret line="129" column="9" selection-start-line="129" selection-start-column="9" selection-end-line="129" selection-end-column="9" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
         </leaf>
       </split-first>
       <split-second>
@@ -82,8 +71,8 @@
           <file leaf-file-name="ClassifierTrainer.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7873211" vertical-offset="220" max-vertical-offset="4410">
-                  <caret line="66" column="26" selection-start-line="66" selection-start-column="22" selection-end-line="66" selection-end-column="26" />
+                <state vertical-scroll-proportion="0.58793455" vertical-offset="1480" max-vertical-offset="4410">
+                  <caret line="137" column="39" selection-start-line="137" selection-start-column="10" selection-end-line="137" selection-end-column="39" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -1151,24 +1140,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1362" max-vertical-offset="3705">
-          <caret line="143" column="55" selection-start-line="143" selection-start-column="55" selection-end-line="143" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../Ads/Libraries/ALL_JARS/spark-mllib_2.10-1.2.0.jar!/org/apache/spark/mllib/classification/LogisticRegressionModel.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33510637" vertical-offset="0" max-vertical-offset="1320">
-          <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../../Ads/Libraries/ALL_JARS/spark-mllib_2.10-1.2.0.jar!/org/apache/spark/mllib/regression/GeneralizedLinearModel.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-12.52" vertical-offset="32" max-vertical-offset="1350">
@@ -1216,18 +1187,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7873211" vertical-offset="220" max-vertical-offset="4410">
-          <caret line="66" column="26" selection-start-line="66" selection-start-column="22" selection-end-line="66" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.58793455" vertical-offset="1480" max-vertical-offset="4410">
+          <caret line="137" column="39" selection-start-line="137" selection-start-column="10" selection-end-line="137" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/../../Ads/Libraries/ALL_JARS/spark-mllib_2.10-1.2.0.jar!/org/apache/spark/mllib/classification/LogisticRegressionModel.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8351064" vertical-offset="355" max-vertical-offset="1320">
+          <caret line="87" column="9" selection-start-line="87" selection-start-column="9" selection-end-line="87" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/keywords/KeywordCandidateGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1305" max-vertical-offset="3105">
-          <caret line="129" column="9" selection-start-line="129" selection-start-column="9" selection-end-line="129" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="124" max-vertical-offset="3105">
+          <caret line="30" column="18" selection-start-line="30" selection-start-column="18" selection-end-line="30" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1362" max-vertical-offset="3705">
+          <caret line="143" column="55" selection-start-line="143" selection-start-column="55" selection-end-line="143" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1236,10 +1225,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9038855" vertical-offset="2011" max-vertical-offset="16095">
-          <caret line="193" column="26" selection-start-line="193" selection-start-column="26" selection-end-line="193" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.09637306" vertical-offset="1527" max-vertical-offset="17685">
+          <caret line="108" column="21" selection-start-line="108" selection-start-column="21" selection-end-line="108" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#6375#6383#0" expanded="true" />
           </folding>
         </state>
       </provider>
