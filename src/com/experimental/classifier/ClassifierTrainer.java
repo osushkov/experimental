@@ -55,8 +55,8 @@ public class ClassifierTrainer {
 
     SparkConf conf = new SparkConf().setAppName("myApp").setMaster("local");
     this.sc = new JavaSparkContext(conf);
-    Logger.getLogger("org").setLevel(Level.WARN);
-    Logger.getLogger("akka").setLevel(Level.WARN);
+    Logger.getLogger("org").setLevel(Level.ERROR);
+    Logger.getLogger("akka").setLevel(Level.ERROR);
 
     this.keywordVectoriser = Preconditions.checkNotNull(keywordVectoriser);
     this.candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStats);
