@@ -74,7 +74,7 @@ public class ClassifierTrainer {
     learnedModel.oneKeywordClassifier = trainClassifier(trainingData.oneKeyword, "one_keyword_classifier.txt", 0.5);
     learnedModel.twoKeywordClassifier = trainClassifier(trainingData.twoKeywords, "two_keywords_classifier.txt", 0.5);
     learnedModel.threeOrModeKeywordClassifier =
-        trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.9);
+        trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.7);
 
     testModel(learnedModel);
   }
@@ -106,7 +106,7 @@ public class ClassifierTrainer {
         } else if (candidate.phraseLemmas.size() == 2) {
           isGood = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
         } else if (candidate.phraseLemmas.size() >= 3) {
-          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.9;
+          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.7;
         }
 
         if (isGood) {

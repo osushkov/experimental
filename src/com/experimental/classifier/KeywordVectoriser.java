@@ -202,7 +202,7 @@ public class KeywordVectoriser {
   }
 
   private LemmaOccuranceStatsAggregator getLocalLemmaStats(WebsiteDocument document) {
-    List<DocumentVectorDB.DocumentSimilarityPair> similarityPairs = documentVectorDb.getNearestDocuments(document, 40);
+    List<DocumentVectorDB.DocumentSimilarityPair> similarityPairs = documentVectorDb.getNearestDocuments(document, 50);
 
     LemmaOccuranceStatsAggregator result = new LemmaOccuranceStatsAggregator();
     for (DocumentVectorDB.DocumentSimilarityPair pair : similarityPairs) {
