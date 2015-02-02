@@ -3,6 +3,8 @@ package com.experimental.classifier;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.keywords.KeywordCandidateGenerator;
 import com.experimental.languagemodel.Lemma;
+import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
+import com.experimental.languagemodel.LemmaQuality;
 import com.experimental.languagemodel.NounPhrasesDB;
 import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Log;
@@ -20,9 +22,9 @@ public class TrainingDataGenerator {
   private final NounPhrasesDB nounPhraseDb;
   private final KeywordCandidateGenerator candidateGenerator;
 
-  public TrainingDataGenerator(NounPhrasesDB nounPhraseDb) {
+  public TrainingDataGenerator(NounPhrasesDB nounPhraseDb, LemmaOccuranceStatsAggregator lemmaStats) {
     this.nounPhraseDb = Preconditions.checkNotNull(nounPhraseDb);
-    this.candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb);
+    this.candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStats);
   }
 
   public void outputTrainingData(WebsiteDocument document, BufferedWriter out) throws IOException {

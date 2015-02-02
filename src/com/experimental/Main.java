@@ -99,13 +99,14 @@ public class Main {
     //aggregateLemmaVariance();
 //    testKeywordVectoriser();
 
-//    try {
-//      outputKeywordCandidates();
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
+    try {
+      outputKeywordCandidates();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-    trainClassifier();
+//    trainClassifier();
+//    testKeywordCandidateExtraction();
 
     Log.out("FINISHED");
   }
@@ -156,7 +157,7 @@ public class Main {
 
     KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
 
-    ClassifierTrainer trainer = new ClassifierTrainer(nounPhraseDb, keywordVectoriser);
+    ClassifierTrainer trainer = new ClassifierTrainer(nounPhraseDb, keywordVectoriser, lemmaStatsAggregator);
     trainer.train();
   }
 
@@ -164,7 +165,19 @@ public class Main {
     final String TRAINING_DATA_FILENAME = "keyword_training_data.txt";
 
     NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
-    final TrainingDataGenerator trainingDataGenerator = new TrainingDataGenerator(nounPhraseDb);
+
+    LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
+    try {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+        Log.out("could not load LemmaOccuranceStatsAggregator from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    final TrainingDataGenerator trainingDataGenerator = new TrainingDataGenerator(nounPhraseDb, lemmaStatsAggregator);
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String trainingDataFilePath = aggregateDataFile.toPath().resolve(TRAINING_DATA_FILENAME).toString();
@@ -258,7 +271,7 @@ public class Main {
     KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
 
     WebsiteDocument testDocument =
-        new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
+        new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
 
     List<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
     List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
@@ -278,7 +291,18 @@ public class Main {
     }
     Log.out("finished loading NounPhrasesDB");
 
-    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb);
+    LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
+    try {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+        Log.out("could not load LemmaOccuranceStatsAggregator from disk");
+        return null;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+
+    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator);
     return candidateGenerator.generateCandidates(document);
   }
 
@@ -317,7 +341,18 @@ public class Main {
     }
     Log.out("finished loading");
 
-    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb);
+    LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
+    try {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+        Log.out("could not load LemmaOccuranceStatsAggregator from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");

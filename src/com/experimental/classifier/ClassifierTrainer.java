@@ -4,6 +4,8 @@ import com.experimental.Constants;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.keywords.KeywordCandidateGenerator;
 import com.experimental.languagemodel.Lemma;
+import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
+import com.experimental.languagemodel.LemmaQuality;
 import com.experimental.languagemodel.NounPhrasesDB;
 import com.experimental.utils.Common;
 import com.experimental.utils.Log;
@@ -21,12 +23,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
 /**
  * Created by sushkov on 31/01/15.
  */
 public class ClassifierTrainer {
 
-  private final String TRAINING_DATA_FILENAME = "keyword_training_data.txt";
+  private final String TRAINING_DATA_FILENAME = "classifier_training_data.txt";
 
   private static class DocumentKeywordTrainingBundle {
     String documentRootPath = null;
@@ -43,12 +48,18 @@ public class ClassifierTrainer {
   private final KeywordVectoriser keywordVectoriser;
   private final KeywordCandidateGenerator candidateGenerator;
 
-  public ClassifierTrainer(NounPhrasesDB nounPhraseDb, KeywordVectoriser keywordVectoriser) {
+  public ClassifierTrainer(NounPhrasesDB nounPhraseDb, KeywordVectoriser keywordVectoriser,
+                           LemmaOccuranceStatsAggregator lemmaStats) {
+    Preconditions.checkNotNull(nounPhraseDb);
+    Preconditions.checkNotNull(lemmaStats);
+
     SparkConf conf = new SparkConf().setAppName("myApp").setMaster("local");
     this.sc = new JavaSparkContext(conf);
+    Logger.getLogger("org").setLevel(Level.WARN);
+    Logger.getLogger("akka").setLevel(Level.WARN);
 
     this.keywordVectoriser = Preconditions.checkNotNull(keywordVectoriser);
-    this.candidateGenerator = new KeywordCandidateGenerator(Preconditions.checkNotNull(nounPhraseDb));
+    this.candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStats);
   }
 
   public void train() {
@@ -60,6 +71,9 @@ public class ClassifierTrainer {
   }
 
   private void trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName) {
+    if (trainingPoints.size() == 0) {
+      return;
+    }
     Log.out("training on:");
     for (LabeledPoint point : trainingPoints) {
       StringBuffer buffer = new StringBuffer();
@@ -106,6 +120,9 @@ public class ClassifierTrainer {
       result.twoKeywords.addAll(bundleResults.twoKeywords);
       result.threeOrMoreKeywords.addAll(bundleResults.threeOrMoreKeywords);
     }
+
+    Log.out("generateTrainingData: " +
+        result.oneKeyword.size() + " " + result.twoKeywords.size() + " " + result.threeOrMoreKeywords.size());
     return result;
   }
 
@@ -145,8 +162,11 @@ public class ClassifierTrainer {
     double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
     LabeledPoint label = new LabeledPoint(oneOrZero, Vectors.dense(doubleVec));
 
+    Log.out("addKeywordVector: " + oneOrZero + " " + vector.toString());
+
     switch(vector.keyword.phraseLemmas.size()) {
       case 0:
+        Log.out("ZERO LEMMAS!");
         break;
       case 1:
         outData.oneKeyword.add(label);
@@ -192,6 +212,8 @@ public class ClassifierTrainer {
 
         line = br.readLine();
       }
+
+      result.add(current);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       return null;
@@ -201,6 +223,11 @@ public class ClassifierTrainer {
       }
     }
 
+    Log.out("num document training bundes: " + result.size());
+    for (DocumentKeywordTrainingBundle bundle : result) {
+      Log.out(bundle.documentRootPath);
+      Log.out(Integer.toString(bundle.documentKeywords.size()));
+    }
     return result;
   }
 

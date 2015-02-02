@@ -102,24 +102,24 @@ public class KeywordVectoriser {
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)));
 
     List<Double> resultVector = new ArrayList<Double>();
-    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality())));
 
-    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToGobalRatio(), c1.weightToGobalRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.globalAverageWeightPerDocument(), c1.globalAverageWeightPerDocument())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.globalFractionOfDocumentsOccured(), c1.globalFractionOfDocumentsOccured())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.globalWeightStandardDeviation(), c1.globalWeightStandardDeviation())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance())));
+    resultVector.add(logSum(Lists.newArrayList(c0.weightToGobalRatio(), c1.weightToGobalRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.globalAverageWeightPerDocument(), c1.globalAverageWeightPerDocument())));
+    resultVector.add(logSum(Lists.newArrayList(c0.globalFractionOfDocumentsOccured(), c1.globalFractionOfDocumentsOccured())));
+    resultVector.add(logSum(Lists.newArrayList(c0.globalWeightStandardDeviation(), c1.globalWeightStandardDeviation())));
+    resultVector.add(logSum(Lists.newArrayList(c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance())));
 
-    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToLocalRatio(), c1.weightToLocalRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.localAverageWeightPerDocument(), c1.localAverageWeightPerDocument())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.localFractionOfDocumentsOccured(), c1.localFractionOfDocumentsOccured())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.localWeightStandardDeviation(), c1.localWeightStandardDeviation())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance())));
+    resultVector.add(logSum(Lists.newArrayList(c0.weightToLocalRatio(), c1.weightToLocalRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localAverageWeightPerDocument(), c1.localAverageWeightPerDocument())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localFractionOfDocumentsOccured(), c1.localFractionOfDocumentsOccured())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localWeightStandardDeviation(), c1.localWeightStandardDeviation())));
+    resultVector.add(logSum(Lists.newArrayList(c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance())));
 
-    resultVector.add(featureAverage(Lists.newArrayList(c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
 
     return new KeywordVector(candidate, resultVector);
   }
@@ -145,35 +145,35 @@ public class KeywordVectoriser {
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(2)));
 
     List<Double> resultVector = new ArrayList<Double>();
-    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight(), c2.lemmaWeight())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio(), c2.lemmaWeightRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality(), c2.lemmaQuality())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight(), c2.lemmaWeight())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio(), c2.lemmaWeightRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality(), c2.lemmaQuality())));
 
-    resultVector.add(featureAverage(Lists.newArrayList(
-        c0.weightToGobalRatio(), c1.weightToGobalRatio(),c2.weightToGobalRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.weightToGobalRatio(), c1.weightToGobalRatio(), c2.weightToGobalRatio())));
+    resultVector.add(logSum(Lists.newArrayList(
         c0.globalAverageWeightPerDocument(), c1.globalAverageWeightPerDocument(), c2.globalAverageWeightPerDocument())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.globalFractionOfDocumentsOccured(), c1.globalFractionOfDocumentsOccured(), c2.globalFractionOfDocumentsOccured())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.globalWeightStandardDeviation(), c1.globalWeightStandardDeviation(), c2.globalWeightStandardDeviation())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance(), c2.weightToGlobalMeanDistance())));
 
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.weightToLocalRatio(), c1.weightToLocalRatio(), c2.weightToLocalRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.localAverageWeightPerDocument(), c1.localAverageWeightPerDocument(), c2.localAverageWeightPerDocument())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.localFractionOfDocumentsOccured(), c1.localFractionOfDocumentsOccured(), c2.localFractionOfDocumentsOccured())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.localWeightStandardDeviation(), c1.localWeightStandardDeviation(), c2.localWeightStandardDeviation())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance(), c2.weightToLocalMeanDistance())));
 
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio(), c2.localToGlobalAverageWeightRatio())));
-    resultVector.add(featureAverage(Lists.newArrayList(
+    resultVector.add(logSum(Lists.newArrayList(
         c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio(), c2.localToGlobalStandardDeviationRatio())));
 
     return new KeywordVector(candidate, resultVector);
@@ -196,5 +196,13 @@ public class KeywordVectoriser {
       sum += val;
     }
     return sum / values.size();
+  }
+
+  private double logSum(List<Double> values) {
+    double sum = 0.0;
+    for (double val : values) {
+      sum += Math.log(1.0 + val);
+    }
+    return sum;
   }
 }

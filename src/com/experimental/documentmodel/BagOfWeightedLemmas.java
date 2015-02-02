@@ -28,6 +28,12 @@ public class BagOfWeightedLemmas {
       this.lemma = Preconditions.checkNotNull(lemma);
       this.weight = weight;
     }
+
+    public WeightedLemmaEntry(WeightedLemmaEntry other) {
+      Preconditions.checkNotNull(other);
+      this.lemma = other.lemma;
+      this.weight = other.weight;
+    }
   }
 
   private final Map<Lemma, WeightedLemmaEntry> bag = new HashMap<Lemma, WeightedLemmaEntry>();

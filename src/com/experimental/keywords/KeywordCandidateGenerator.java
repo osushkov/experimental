@@ -3,9 +3,7 @@ package com.experimental.keywords;
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.WebsiteDocument;
-import com.experimental.languagemodel.Lemma;
-import com.experimental.languagemodel.LemmaDB;
-import com.experimental.languagemodel.NounPhrasesDB;
+import com.experimental.languagemodel.*;
 import com.experimental.nlp.NounPhrase;
 import com.experimental.nlp.NounPhraseExtractor;
 import com.experimental.nlp.SimplePOSTag;
@@ -51,9 +49,11 @@ public class KeywordCandidateGenerator {
 
   private final NounPhraseExtractor nounPhraseExtractor = new NounPhraseExtractor(LemmaDB.instance);
   private final NounPhrasesDB nounPhraseDb;
+  private final LemmaOccuranceStatsAggregator lemmaStats;
 
-  public KeywordCandidateGenerator(NounPhrasesDB nounPhraseDb) {
+  public KeywordCandidateGenerator(NounPhrasesDB nounPhraseDb, LemmaOccuranceStatsAggregator lemmaStats) {
     this.nounPhraseDb = Preconditions.checkNotNull(nounPhraseDb);
+    this.lemmaStats = Preconditions.checkNotNull(lemmaStats);
   }
 
   public List<KeywordCandidate> generateCandidates(WebsiteDocument document) {
@@ -86,6 +86,10 @@ public class KeywordCandidateGenerator {
       }
     }
 
+//    for (WeightedNounPhrase entry : nounPhrasesMap.values()) {
+//      entry.weight *= getPhraseQualityScale(entry.phrase);
+//    }
+
     Comparator<WeightedNounPhrase> weightOrder =
         new Comparator<WeightedNounPhrase>() {
           public int compare(WeightedNounPhrase e1, WeightedNounPhrase e2) {
@@ -104,6 +108,10 @@ public class KeywordCandidateGenerator {
 
     List<BagOfWeightedLemmas.WeightedLemmaEntry> adjectives = getAllTaggedLemmas(document, SimplePOSTag.ADJECTIVE);
     List<BagOfWeightedLemmas.WeightedLemmaEntry> nouns = getAllTaggedLemmas(document, SimplePOSTag.NOUN);
+
+    for (int i = 0; i < Math.min(10, nouns.size()); i++) {
+      result.add(new KeywordCandidate(Lists.newArrayList(adjectives.get(i).lemma)));
+    }
 
     for (int i = 0; i < Math.min(5, adjectives.size()); i++) {
       for (int j = 0; j < Math.min(10, nouns.size()); j++) {
@@ -154,9 +162,16 @@ public class KeywordCandidateGenerator {
     List<BagOfWeightedLemmas.WeightedLemmaEntry> result = new ArrayList<BagOfWeightedLemmas.WeightedLemmaEntry>();
     for (BagOfWeightedLemmas.WeightedLemmaEntry entry : document.getBagOfLemmas().getEntries()) {
       if (entry.lemma.tag.equals(tag)) {
-        result.add(entry);
+        result.add(new BagOfWeightedLemmas.WeightedLemmaEntry(entry));
       }
     }
+
+//    for (BagOfWeightedLemmas.WeightedLemmaEntry entry : result) {
+//      LemmaOccuranceStatsAggregator.LemmaStats stats = lemmaStats.getLemmaStats(entry.lemma);
+//      if (stats != null) {
+//        entry.weight *= stats.weightStandardDeviation;
+//      }
+//    }
 
     Comparator<BagOfWeightedLemmas.WeightedLemmaEntry> orderFunc =
         new Comparator<BagOfWeightedLemmas.WeightedLemmaEntry>() {
@@ -169,4 +184,21 @@ public class KeywordCandidateGenerator {
     return result;
   }
 
+  private double getPhraseQualityScale(NounPhrase phrase) {
+    int num = 0;
+    double sum = 0.0;
+    for (Lemma lemma : phrase.getPhraseLemmas()) {
+      LemmaOccuranceStatsAggregator.LemmaStats stats = lemmaStats.getLemmaStats(lemma);
+
+      if (stats != null) {
+        num++;
+        sum += stats.weightStandardDeviation;
+      }
+    }
+    if (num > 0) {
+      return sum / num;
+    } else {
+      return 1.0;
+    }
+  }
 }
