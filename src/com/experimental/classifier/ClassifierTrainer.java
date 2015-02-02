@@ -16,6 +16,8 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.classification.LogisticRegressionModel;
 import org.apache.spark.mllib.classification.LogisticRegressionWithSGD;
+import org.apache.spark.mllib.classification.SVMModel;
+import org.apache.spark.mllib.classification.SVMWithSGD;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
@@ -79,7 +81,8 @@ public class ClassifierTrainer {
     trainingData.cache();
 
     int numIterations = 500;
-    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
+    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
+//    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
     model.clearThreshold();
 
     int numPositive = 0;
@@ -87,17 +90,18 @@ public class ClassifierTrainer {
     int numPositiveCorrect = 0;
     int numNegativeCorrect = 0;
 
+    final double positiveThreshold = 0.0;
     for (LabeledPoint point : trainingPoints) {
       double mr = model.predict(point.features());
 
       if (point.label() >= 0.5) {
         numPositive++;
-        if (mr >= 0.5) {
+        if (mr >= positiveThreshold) {
           numPositiveCorrect++;
         }
       } else {
         numNegative++;
-        if (mr < 0.5) {
+        if (mr < positiveThreshold) {
           numNegativeCorrect++;
         }
       }

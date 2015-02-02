@@ -80,8 +80,8 @@
           <file leaf-file-name="ClassifierTrainer.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-0.09368421" vertical-offset="809" max-vertical-offset="3510">
-                  <caret line="48" column="61" selection-start-line="48" selection-start-column="61" selection-end-line="48" selection-end-column="61" />
+                <state vertical-scroll-proportion="0.7431579" vertical-offset="839" max-vertical-offset="3570">
+                  <caret line="103" column="34" selection-start-line="103" selection-start-column="34" selection-end-line="103" selection-end-column="34" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -1231,8 +1231,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.09368421" vertical-offset="809" max-vertical-offset="3510">
-          <caret line="48" column="61" selection-start-line="48" selection-start-column="61" selection-end-line="48" selection-end-column="61" />
+        <state vertical-scroll-proportion="0.7431579" vertical-offset="839" max-vertical-offset="3570">
+          <caret line="103" column="34" selection-start-line="103" selection-start-column="34" selection-end-line="103" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
