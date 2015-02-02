@@ -202,7 +202,7 @@ public class KeywordVectoriser {
   }
 
   private LemmaOccuranceStatsAggregator getLocalLemmaStats(WebsiteDocument document) {
-    List<DocumentVectorDB.DocumentSimilarityPair> similarityPairs = documentVectorDb.getNearestDocuments(document, 30);
+    List<DocumentVectorDB.DocumentSimilarityPair> similarityPairs = documentVectorDb.getNearestDocuments(document, 40);
 
     LemmaOccuranceStatsAggregator result = new LemmaOccuranceStatsAggregator();
     for (DocumentVectorDB.DocumentSimilarityPair pair : similarityPairs) {
@@ -229,13 +229,13 @@ public class KeywordVectoriser {
   }
 
   private List<Double> generateSquaredVector(List<Double> vector) {
-    return vector;
-//    List<Double> result = new ArrayList(vector);
-//    for (int i = 0; i < vector.size(); i++) {
-//      for (int j = i; j < vector.size(); j++) {
-//        result.add(vector.get(i) * vector.get(j));
-//      }
-//    }
-//    return result;
+//    return vector;
+    List<Double> result = new ArrayList(vector);
+    for (int i = 0; i < vector.size(); i++) {
+      for (int j = i; j < vector.size(); j++) {
+        result.add(vector.get(i) * vector.get(j));
+      }
+    }
+    return result;
   }
 }
