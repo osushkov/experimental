@@ -26,6 +26,15 @@ public class KeywordCandidateGenerator {
       this.phraseLemmas = Preconditions.checkNotNull(phraseLemmas);
       Preconditions.checkArgument(phraseLemmas.size() > 0);
     }
+
+    @Override
+    public String toString() {
+      StringBuffer buffer = new StringBuffer();
+      for (Lemma lemma : phraseLemmas) {
+        buffer.append(lemma).append(" ");
+      }
+      return buffer.toString();
+    }
   }
 
   private static class WeightedNounPhrase {

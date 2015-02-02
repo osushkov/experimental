@@ -14,10 +14,7 @@ import com.google.common.collect.Lists;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.classification.LogisticRegressionModel;
-import org.apache.spark.mllib.classification.LogisticRegressionWithSGD;
-import org.apache.spark.mllib.classification.SVMModel;
-import org.apache.spark.mllib.classification.SVMWithSGD;
+import org.apache.spark.mllib.classification.*;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
@@ -46,6 +43,12 @@ public class ClassifierTrainer {
     public final List<LabeledPoint> threeOrMoreKeywords = new ArrayList<LabeledPoint>();
   }
 
+  private static class LearnedModel {
+    ClassificationModel oneKeywordClassifier = null;
+    ClassificationModel twoKeywordClassifier = null;
+    ClassificationModel threeOrModeKeywordClassifier = null;
+  }
+
   private final JavaSparkContext sc;
   private final KeywordVectoriser keywordVectoriser;
   private final KeywordCandidateGenerator candidateGenerator;
@@ -67,22 +70,64 @@ public class ClassifierTrainer {
   public void train() {
     TrainingData trainingData = generateTrainingData();
 
-    trainClassifier(trainingData.oneKeyword, "one_keyword_classifier.txt");
-    trainClassifier(trainingData.twoKeywords, "two_keywords_classifier.txt");
-    trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt");
+    LearnedModel learnedModel = new LearnedModel();
+    learnedModel.oneKeywordClassifier = trainClassifier(trainingData.oneKeyword, "one_keyword_classifier.txt");
+    learnedModel.twoKeywordClassifier = trainClassifier(trainingData.twoKeywords, "two_keywords_classifier.txt");
+    learnedModel.threeOrModeKeywordClassifier =
+        trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt");
+
+    testModel(learnedModel);
   }
 
-  private void trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName) {
-    if (trainingPoints.size() == 0) {
+  private void testModel(LearnedModel learnedModel) {
+    List<DocumentKeywordTrainingBundle> documentKeywords = null;
+    try {
+      documentKeywords = loadFromDisk();
+    } catch (IOException e) {
+      e.printStackTrace();
       return;
+    }
+
+    for (DocumentKeywordTrainingBundle bundle : documentKeywords) {
+      WebsiteDocument document = new WebsiteDocument(bundle.documentRootPath);
+      Log.out(document.getSitePages().get(0).url);
+      List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
+      List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, document);
+
+      for (int i = 0; i < vectors.size(); i++) {
+        KeywordVector vector = vectors.get(i);
+        double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
+
+        KeywordCandidateGenerator.KeywordCandidate candidate = candidates.get(i);
+
+        double p = 0.0;
+        if (candidate.phraseLemmas.size() == 1) {
+          p = learnedModel.oneKeywordClassifier.predict(Vectors.dense(doubleVec));
+        } else if (candidate.phraseLemmas.size() == 2) {
+          p = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec));
+        } else if (candidate.phraseLemmas.size() >= 3) {
+          p = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec));
+        }
+
+        if (p >= 0.5) {
+          Log.out("= " + candidate.toString());
+        }
+      }
+    }
+
+  }
+
+  private ClassificationModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName) {
+    if (trainingPoints.size() == 0) {
+      return null;
     }
 
     JavaRDD< LabeledPoint > trainingData = sc.parallelize(trainingPoints);
     trainingData.cache();
 
     int numIterations = 500;
-    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
-//    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
+//    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
+    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
     model.clearThreshold();
 
     int numPositive = 0;
@@ -90,7 +135,7 @@ public class ClassifierTrainer {
     int numPositiveCorrect = 0;
     int numNegativeCorrect = 0;
 
-    final double positiveThreshold = 0.0;
+    final double positiveThreshold = 0.5;
     for (LabeledPoint point : trainingPoints) {
       double mr = model.predict(point.features());
 
@@ -112,6 +157,8 @@ public class ClassifierTrainer {
     Log.out("training error: " +
         Double.toString(numPositiveCorrect / (double) numPositive) + " " +
         Double.toString(numNegativeCorrect / (double) numNegative));
+
+    return model;
   }
 
   private TrainingData generateTrainingData() {
