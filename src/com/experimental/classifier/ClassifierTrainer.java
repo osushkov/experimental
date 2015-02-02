@@ -109,7 +109,7 @@ public class ClassifierTrainer {
           p = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec));
         }
 
-        if (p >= 0.7) {
+        if (p >= 0.9) {
           Log.out("= " + candidate.toString());
         }
       }
@@ -135,7 +135,7 @@ public class ClassifierTrainer {
     int numPositiveCorrect = 0;
     int numNegativeCorrect = 0;
 
-    final double positiveThreshold = 0.7;
+    final double positiveThreshold = 0.9;
     for (LabeledPoint point : trainingPoints) {
       double mr = model.predict(point.features());
 
