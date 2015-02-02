@@ -102,24 +102,24 @@ public class KeywordVectoriser {
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)));
 
     List<Double> resultVector = new ArrayList<Double>();
-    resultVector.add(c0.lemmaWeight());       resultVector.add(c1.lemmaWeight());
-    resultVector.add(c0.lemmaWeightRatio());  resultVector.add(c1.lemmaWeightRatio());
-    resultVector.add(c0.lemmaQuality());      resultVector.add(c1.lemmaQuality());
-
-    resultVector.add(c0.weightToGobalRatio());                resultVector.add(c1.weightToGobalRatio());
-    resultVector.add(c0.globalAverageWeightPerDocument());    resultVector.add(c1.globalAverageWeightPerDocument());
-    resultVector.add(c0.globalFractionOfDocumentsOccured());  resultVector.add(c1.globalFractionOfDocumentsOccured());
-    resultVector.add(c0.globalWeightStandardDeviation());     resultVector.add(c1.globalWeightStandardDeviation());
-    resultVector.add(c0.weightToGlobalMeanDistance());        resultVector.add(c1.weightToGlobalMeanDistance());
-
-    resultVector.add(c0.weightToLocalRatio());              resultVector.add(c1.weightToLocalRatio());
-    resultVector.add(c0.localAverageWeightPerDocument());   resultVector.add(c1.localAverageWeightPerDocument());
-    resultVector.add(c0.localFractionOfDocumentsOccured()); resultVector.add(c1.localFractionOfDocumentsOccured());
-    resultVector.add(c0.localWeightStandardDeviation());    resultVector.add(c1.localWeightStandardDeviation());
-    resultVector.add(c0.weightToLocalMeanDistance());       resultVector.add(c1.weightToLocalMeanDistance());
-
-    resultVector.add(c0.localToGlobalAverageWeightRatio());     resultVector.add(c1.localToGlobalAverageWeightRatio());
-    resultVector.add(c0.localToGlobalStandardDeviationRatio()); resultVector.add(c1.localToGlobalStandardDeviationRatio());
+//    resultVector.add(c0.lemmaWeight());       resultVector.add(c1.lemmaWeight());
+//    resultVector.add(c0.lemmaWeightRatio());  resultVector.add(c1.lemmaWeightRatio());
+//    resultVector.add(c0.lemmaQuality());      resultVector.add(c1.lemmaQuality());
+//
+//    resultVector.add(c0.weightToGobalRatio());                resultVector.add(c1.weightToGobalRatio());
+//    resultVector.add(c0.globalAverageWeightPerDocument());    resultVector.add(c1.globalAverageWeightPerDocument());
+//    resultVector.add(c0.globalFractionOfDocumentsOccured());  resultVector.add(c1.globalFractionOfDocumentsOccured());
+//    resultVector.add(c0.globalWeightStandardDeviation());     resultVector.add(c1.globalWeightStandardDeviation());
+//    resultVector.add(c0.weightToGlobalMeanDistance());        resultVector.add(c1.weightToGlobalMeanDistance());
+//
+//    resultVector.add(c0.weightToLocalRatio());              resultVector.add(c1.weightToLocalRatio());
+//    resultVector.add(c0.localAverageWeightPerDocument());   resultVector.add(c1.localAverageWeightPerDocument());
+//    resultVector.add(c0.localFractionOfDocumentsOccured()); resultVector.add(c1.localFractionOfDocumentsOccured());
+//    resultVector.add(c0.localWeightStandardDeviation());    resultVector.add(c1.localWeightStandardDeviation());
+//    resultVector.add(c0.weightToLocalMeanDistance());       resultVector.add(c1.weightToLocalMeanDistance());
+//
+//    resultVector.add(c0.localToGlobalAverageWeightRatio());     resultVector.add(c1.localToGlobalAverageWeightRatio());
+//    resultVector.add(c0.localToGlobalStandardDeviationRatio()); resultVector.add(c1.localToGlobalStandardDeviationRatio());
 
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio())));
