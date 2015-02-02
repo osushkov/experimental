@@ -126,8 +126,8 @@ public class ClassifierTrainer {
     trainingData.cache();
 
     int numIterations = 10000;
-    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
-//    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
+//    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
+    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
     model.clearThreshold();
 
     int numPositive = 0;

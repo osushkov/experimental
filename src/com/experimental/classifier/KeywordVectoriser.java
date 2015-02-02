@@ -83,6 +83,7 @@ public class KeywordVectoriser {
     resultVector.add(components.localToGlobalAverageWeightRatio());
     resultVector.add(components.localToGlobalStandardDeviationRatio());
 
+    resultVector = generateSquaredVector(resultVector);
     return new KeywordVector(candidate, resultVector);
   }
 
@@ -140,6 +141,7 @@ public class KeywordVectoriser {
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
 
+    resultVector = generateSquaredVector(resultVector);
     return new KeywordVector(candidate, resultVector);
   }
 
@@ -195,11 +197,12 @@ public class KeywordVectoriser {
     resultVector.add(logSum(Lists.newArrayList(
         c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio(), c2.localToGlobalStandardDeviationRatio())));
 
+    resultVector = generateSquaredVector(resultVector);
     return new KeywordVector(candidate, resultVector);
   }
 
   private LemmaOccuranceStatsAggregator getLocalLemmaStats(WebsiteDocument document) {
-    List<DocumentVectorDB.DocumentSimilarityPair> similarityPairs = documentVectorDb.getNearestDocuments(document, 50);
+    List<DocumentVectorDB.DocumentSimilarityPair> similarityPairs = documentVectorDb.getNearestDocuments(document, 30);
 
     LemmaOccuranceStatsAggregator result = new LemmaOccuranceStatsAggregator();
     for (DocumentVectorDB.DocumentSimilarityPair pair : similarityPairs) {
@@ -223,5 +226,15 @@ public class KeywordVectoriser {
       sum += Math.log(1.0 + val);
     }
     return sum;
+  }
+
+  private List<Double> generateSquaredVector(List<Double> vector) {
+    List<Double> result = new ArrayList(vector);
+    for (int i = 0; i < vector.size(); i++) {
+      for (int j = i; j < vector.size(); j++) {
+        result.add(vector.get(i) * vector.get(j));
+      }
+    }
+    return result;
   }
 }
