@@ -105,8 +105,8 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-//    trainClassifier();
-    testClassifier();
+    trainClassifier();
+//    testClassifier();
 //    testKeywordCandidateExtraction();
 
     Log.out("FINISHED");
@@ -122,27 +122,24 @@ public class Main {
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String learnedModelFilePath = aggregateDataFile.toPath().resolve("learned_classifier.txt").toString();
 
-    BufferedReader br = null;
     try {
-      br = new BufferedReader(new FileReader(learnedModelFilePath));
+      FileInputStream fileIn = new FileInputStream(learnedModelFilePath);
+      ObjectInputStream in = new ObjectInputStream(fileIn);
 
-      model0 = readModelFrom(br);
-      model1 = readModelFrom(br);
-      model2 = readModelFrom(br);
+      model0 = readModelFrom(in);
+      model1 = readModelFrom(in);
+      model2 = readModelFrom(in);
+
+      in.close();
+      fileIn.close();
 
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       return;
     } catch (IOException e) {
       e.printStackTrace();
-    } finally {
-      if (br != null) {
-        try {
-          br.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
     }
 
     LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
@@ -200,18 +197,9 @@ public class Main {
 
   }
 
-  private static LogisticRegressionModel readModelFrom(BufferedReader in) throws IOException {
-    double intercept = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
-    int vecLength = Integer.parseInt(Preconditions.checkNotNull(in.readLine()));
-
-    List<Double> vec = new ArrayList<Double>();
-    for (int i = 0; i < vecLength; i++) {
-      vec.add(Double.parseDouble(Preconditions.checkNotNull(in.readLine())));
-    }
-
-    Vector weights = Vectors.dense(Common.listOfDoubleToArray(vec));
-
-    return new LogisticRegressionModel(weights, intercept);
+  private static LogisticRegressionModel readModelFrom(ObjectInputStream in)
+      throws IOException, ClassNotFoundException {
+    return (LogisticRegressionModel) in.readObject();
   }
 
 
@@ -267,41 +255,24 @@ public class Main {
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String learnedModelFilePath = aggregateDataFile.toPath().resolve("learned_classifier.txt").toString();
 
-    BufferedWriter bw = null;
     try {
-      FileWriter fw = new FileWriter(learnedModelFilePath);
-      bw = new BufferedWriter(fw);
+      FileOutputStream fileOut = new FileOutputStream(learnedModelFilePath);
+      ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
-      writeOutClassificationModel(learnedModel.oneKeywordClassifier, bw);
-      writeOutClassificationModel(learnedModel.twoKeywordClassifier, bw);
-      writeOutClassificationModel(learnedModel.threeOrModeKeywordClassifier, bw);
+      out.writeObject(learnedModel.oneKeywordClassifier);
+      out.writeObject(learnedModel.twoKeywordClassifier);
+      out.writeObject(learnedModel.threeOrModeKeywordClassifier);
 
+      out.close();
+      fileOut.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       return;
     } catch (IOException e) {
       e.printStackTrace();
       return;
-    } finally {
-      try {
-        bw.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
     }
   }
-
-  private static void writeOutClassificationModel(GeneralizedLinearModel model, BufferedWriter out) throws IOException {
-    out.write(Double.toString(model.intercept()) + "\n");
-
-    double[] vecData = model.weights().toArray();
-    out.write(Integer.toString(vecData.length) + "\n");
-    for (int i = 0; i < vecData.length; i++) {
-      out.write(Double.toString(vecData[i]) + "\n");
-    }
-  }
-
-
 
   private static void outputKeywordCandidates() throws IOException {
     final String TRAINING_DATA_FILENAME = "keyword_training_data.txt";
