@@ -110,7 +110,7 @@ public class KeywordCandidateGenerator {
     List<BagOfWeightedLemmas.WeightedLemmaEntry> nouns = getAllTaggedLemmas(document, SimplePOSTag.NOUN);
 
     for (int i = 0; i < Math.min(10, nouns.size()); i++) {
-      result.add(new KeywordCandidate(Lists.newArrayList(adjectives.get(i).lemma)));
+      result.add(new KeywordCandidate(Lists.newArrayList(nouns.get(i).lemma)));
     }
 
     for (int i = 0; i < Math.min(5, adjectives.size()); i++) {

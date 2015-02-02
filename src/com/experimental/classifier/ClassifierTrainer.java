@@ -74,16 +74,6 @@ public class ClassifierTrainer {
     if (trainingPoints.size() == 0) {
       return;
     }
-    Log.out("training on:");
-    for (LabeledPoint point : trainingPoints) {
-      StringBuffer buffer = new StringBuffer();
-      buffer.append(Double.toString(point.label())).append(": ");
-      for (double val : point.features().toArray()) {
-        buffer.append(Double.toString(val) + "  ");
-      }
-      Log.out(buffer.toString());
-
-    }
 
     JavaRDD< LabeledPoint > trainingData = sc.parallelize(trainingPoints);
     trainingData.cache();
@@ -92,16 +82,30 @@ public class ClassifierTrainer {
     final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
     model.clearThreshold();
 
-    int numCorrect = 0;
+    int numPositive = 0;
+    int numNegative = 0;
+    int numPositiveCorrect = 0;
+    int numNegativeCorrect = 0;
+
     for (LabeledPoint point : trainingPoints) {
       double mr = model.predict(point.features());
-      boolean correct = (mr >= 0.5 && point.label() >= 0.5) || (mr < 0.5 && point.label() < 0.5);
-      if (correct) {
-        numCorrect++;
+
+      if (point.label() >= 0.5) {
+        numPositive++;
+        if (mr >= 0.5) {
+          numPositiveCorrect++;
+        }
+      } else {
+        numNegative++;
+        if (mr < 0.5) {
+          numNegativeCorrect++;
+        }
       }
     }
 
-    Log.out("training error: " + Double.toString(numCorrect / (double) trainingPoints.size()));
+    Log.out("training error: " +
+        Double.toString(numPositiveCorrect / (double) numPositive) + " " +
+        Double.toString(numNegativeCorrect / (double) numNegative));
   }
 
   private TrainingData generateTrainingData() {
@@ -121,8 +125,6 @@ public class ClassifierTrainer {
       result.threeOrMoreKeywords.addAll(bundleResults.threeOrMoreKeywords);
     }
 
-    Log.out("generateTrainingData: " +
-        result.oneKeyword.size() + " " + result.twoKeywords.size() + " " + result.threeOrMoreKeywords.size());
     return result;
   }
 
@@ -162,8 +164,6 @@ public class ClassifierTrainer {
     double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
     LabeledPoint label = new LabeledPoint(oneOrZero, Vectors.dense(doubleVec));
 
-    Log.out("addKeywordVector: " + oneOrZero + " " + vector.toString());
-
     switch(vector.keyword.phraseLemmas.size()) {
       case 0:
         Log.out("ZERO LEMMAS!");
@@ -198,7 +198,6 @@ public class ClassifierTrainer {
 
       String line = br.readLine();
       while(line != null) {
-        Log.out("line: " + line);
         if (current.documentRootPath == null) {
           current.documentRootPath = line;
           line = br.readLine(); // skip the next line
@@ -223,11 +222,6 @@ public class ClassifierTrainer {
       }
     }
 
-    Log.out("num document training bundes: " + result.size());
-    for (DocumentKeywordTrainingBundle bundle : result) {
-      Log.out(bundle.documentRootPath);
-      Log.out(Integer.toString(bundle.documentKeywords.size()));
-    }
     return result;
   }
 
