@@ -125,7 +125,7 @@ public class ClassifierTrainer {
     JavaRDD< LabeledPoint > trainingData = sc.parallelize(trainingPoints);
     trainingData.cache();
 
-    int numIterations = 10000;
+    int numIterations = 1000;
 //    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
     final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
     model.clearThreshold();
