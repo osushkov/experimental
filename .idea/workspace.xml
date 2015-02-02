@@ -52,7 +52,7 @@
           <file leaf-file-name="KeywordVectoriser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-0.48773006" vertical-offset="2517" max-vertical-offset="3495">
+                <state vertical-scroll-proportion="0.84662575" vertical-offset="1212" max-vertical-offset="3495">
                   <caret line="136" column="16" selection-start-line="136" selection-start-column="4" selection-end-line="136" selection-end-column="16" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -80,11 +80,21 @@
           <file leaf-file-name="ClassifierTrainer.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.71157897" vertical-offset="914" max-vertical-offset="4305">
-                  <caret line="106" column="82" selection-start-line="106" selection-start-column="82" selection-end-line="106" selection-end-column="82" />
+                <state vertical-scroll-proportion="0.38" vertical-offset="1589" max-vertical-offset="4305">
+                  <caret line="130" column="0" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ClassificationModel.class" pinned="false" current-in-tab="false">
+            <entry file="jar://$PROJECT_DIR$/../../Ads/Libraries/ALL_JARS/spark-mllib_2.10-1.2.0.jar!/org/apache/spark/mllib/classification/ClassificationModel.class">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-7.8" vertical-offset="0" max-vertical-offset="345">
+                  <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -169,8 +179,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/TrainingDataGenerator.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeywordCandidateGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
       </list>
     </option>
   </component>
@@ -1176,14 +1186,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/../../Ads/Libraries/ALL_JARS/spark-mllib_2.10-1.2.0.jar!/org/apache/spark/mllib/classification/ClassificationModel.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15957446" vertical-offset="0" max-vertical-offset="940">
-          <caret line="18" column="36" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-20.392857" vertical-offset="524" max-vertical-offset="15015">
@@ -1220,20 +1222,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71157897" vertical-offset="914" max-vertical-offset="4305">
-          <caret line="106" column="82" selection-start-line="106" selection-start-column="82" selection-end-line="106" selection-end-column="82" />
+        <state vertical-scroll-proportion="0.84662575" vertical-offset="1212" max-vertical-offset="3495">
+          <caret line="136" column="16" selection-start-line="136" selection-start-column="4" selection-end-line="136" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
+    <entry file="jar://$PROJECT_DIR$/../../Ads/Libraries/ALL_JARS/spark-mllib_2.10-1.2.0.jar!/org/apache/spark/mllib/classification/ClassificationModel.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.48773006" vertical-offset="2517" max-vertical-offset="3495">
-          <caret line="136" column="16" selection-start-line="136" selection-start-column="4" selection-end-line="136" selection-end-column="16" />
+        <state vertical-scroll-proportion="-7.8" vertical-offset="0" max-vertical-offset="345">
+          <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.38" vertical-offset="1589" max-vertical-offset="4305">
+          <caret line="130" column="0" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
