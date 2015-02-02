@@ -107,6 +107,8 @@ public class ClassifierTrainer {
       }
     }
 
+    Log.out("positive: " + numPositiveCorrect + "/" + numPositive);
+    Log.out("negative: " + numNegativeCorrect + "/" + numNegative);
     Log.out("training error: " +
         Double.toString(numPositiveCorrect / (double) numPositive) + " " +
         Double.toString(numNegativeCorrect / (double) numNegative));
