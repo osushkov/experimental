@@ -24,11 +24,9 @@ import com.google.common.collect.Lists;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.classification.LogisticRegressionModel;
-import org.apache.spark.mllib.classification.LogisticRegressionWithSGD;
-import org.apache.spark.mllib.classification.SVMModel;
-import org.apache.spark.mllib.classification.SVMWithSGD;
-import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.mllib.classification.*;
+import org.apache.spark.mllib.linalg.*;
+import org.apache.spark.mllib.regression.GeneralizedLinearModel;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
 import java.io.*;
@@ -158,8 +156,46 @@ public class Main {
     KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
 
     ClassifierTrainer trainer = new ClassifierTrainer(nounPhraseDb, keywordVectoriser, lemmaStatsAggregator);
-    trainer.train();
+    final ClassifierTrainer.LearnedModel learnedModel = trainer.train();
+
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String learnedModelFilePath = aggregateDataFile.toPath().resolve("learned_classifier.txt").toString();
+
+    BufferedWriter bw = null;
+    try {
+      FileWriter fw = new FileWriter(learnedModelFilePath);
+      bw = new BufferedWriter(fw);
+
+      writeOutClassificationModel(learnedModel.oneKeywordClassifier, bw);
+      writeOutClassificationModel(learnedModel.twoKeywordClassifier, bw);
+      writeOutClassificationModel(learnedModel.threeOrModeKeywordClassifier, bw);
+
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    } finally {
+      try {
+        bw.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
+
+  private static void writeOutClassificationModel(GeneralizedLinearModel model, BufferedWriter out) throws IOException {
+    out.write(Double.toString(model.intercept()) + "\n");
+
+    double[] vecData = model.weights().toArray();
+    out.write(Integer.toString(vecData.length) + "\n");
+    for (int i = 0; i < vecData.length; i++) {
+      out.write(Double.toString(vecData[i]) + "\n");
+    }
+  }
+
+
 
   private static void outputKeywordCandidates() throws IOException {
     final String TRAINING_DATA_FILENAME = "keyword_training_data.txt";

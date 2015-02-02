@@ -16,11 +16,14 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.classification.*;
 import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.mllib.regression.GeneralizedLinearModel;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
@@ -43,10 +46,10 @@ public class ClassifierTrainer {
     public final List<LabeledPoint> threeOrMoreKeywords = new ArrayList<LabeledPoint>();
   }
 
-  private static class LearnedModel {
-    ClassificationModel oneKeywordClassifier = null;
-    ClassificationModel twoKeywordClassifier = null;
-    ClassificationModel threeOrModeKeywordClassifier = null;
+  public static class LearnedModel {
+    public GeneralizedLinearModel oneKeywordClassifier = null;
+    public GeneralizedLinearModel twoKeywordClassifier = null;
+    public GeneralizedLinearModel threeOrModeKeywordClassifier = null;
   }
 
   private final JavaSparkContext sc;
@@ -67,7 +70,7 @@ public class ClassifierTrainer {
     this.candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStats);
   }
 
-  public void train() {
+  public LearnedModel train() {
     TrainingData trainingData = generateTrainingData();
 
     LearnedModel learnedModel = new LearnedModel();
@@ -77,6 +80,8 @@ public class ClassifierTrainer {
         trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.7);
 
     testModel(learnedModel);
+
+    return learnedModel;
   }
 
   private void testModel(LearnedModel learnedModel) {
@@ -93,6 +98,8 @@ public class ClassifierTrainer {
       Log.out(document.getSitePages().get(0).url);
       List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
       List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, document);
+
+
 
       for (int i = 0; i < vectors.size(); i++) {
         KeywordVector vector = vectors.get(i);
@@ -117,7 +124,7 @@ public class ClassifierTrainer {
 
   }
 
-  private ClassificationModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
+  private GeneralizedLinearModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
                                               double positiveThreshold) {
     if (trainingPoints.size() == 0) {
       return null;
