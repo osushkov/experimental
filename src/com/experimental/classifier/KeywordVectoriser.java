@@ -82,6 +82,7 @@ public class KeywordVectoriser {
 
     resultVector.add(components.localToGlobalAverageWeightRatio());
     resultVector.add(components.localToGlobalStandardDeviationRatio());
+    resultVector.add(components.localToGlobalDocumentsOccuredRatio());
 
     resultVector = generateSquaredVector(resultVector);
     return new KeywordVector(candidate, resultVector);
@@ -140,6 +141,7 @@ public class KeywordVectoriser {
 
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalDocumentsOccuredRatio(), c1.localToGlobalDocumentsOccuredRatio())));
 
     resultVector = generateSquaredVector(resultVector);
     return new KeywordVector(candidate, resultVector);
@@ -196,6 +198,8 @@ public class KeywordVectoriser {
         c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio(), c2.localToGlobalAverageWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(
         c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio(), c2.localToGlobalStandardDeviationRatio())));
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.localToGlobalDocumentsOccuredRatio(), c1.localToGlobalDocumentsOccuredRatio(), c2.localToGlobalDocumentsOccuredRatio())));
 
     resultVector = generateSquaredVector(resultVector);
     return new KeywordVector(candidate, resultVector);

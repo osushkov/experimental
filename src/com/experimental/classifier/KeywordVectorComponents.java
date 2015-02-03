@@ -98,6 +98,11 @@ public class KeywordVectorComponents {
         localStats.weightStandardDeviation / Math.max(Double.MIN_VALUE, globalStats.weightStandardDeviation) : 0.0;
   }
 
+  public double localToGlobalDocumentsOccuredRatio() {
+    return localStats != null && globalStats != null ?
+        localStats.fractionOfDocumentOccured / Math.max(Double.MIN_VALUE, globalStats.fractionOfDocumentOccured) : 0.0;
+  }
+
 
   private double getLemmaWeight(Lemma lemma, WebsiteDocument document) {
     BagOfWeightedLemmas bagOfLemmas = document.getBagOfLemmas();
