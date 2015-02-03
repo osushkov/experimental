@@ -91,6 +91,10 @@ public class DocumentVectorDB {
     }
 
     for (VectoredDocument dbDocument : vectoredDocuments) {
+      if (dbDocument.document.rootDirectoryPath.equals(document.rootDirectoryPath)) {
+        continue;
+      }
+
       double similarity = targetVector.dotProduct(dbDocument.vector);
 //      double distance = targetVector.distanceTo(dbDocument.vector);
 

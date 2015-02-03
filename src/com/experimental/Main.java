@@ -106,7 +106,7 @@ public class Main {
 //    }
 
     trainClassifier();
-    
+
 //    testClassifier();
 //    testKeywordCandidateExtraction();
 
@@ -185,11 +185,11 @@ public class Main {
         if (model0.predict(Vectors.dense(doubleVec)) >= 0.5) {
           Log.out("** " + candidate.toString());
         }
-      } else if (candidate.phraseLemmas.size() == 1) {
+      } else if (candidate.phraseLemmas.size() == 2) {
         if (model1.predict(Vectors.dense(doubleVec)) >= 0.5) {
           Log.out("** " + candidate.toString());
         }
-      } else if (candidate.phraseLemmas.size() == 1) {
+      } else if (candidate.phraseLemmas.size() == 3) {
         if (model2.predict(Vectors.dense(doubleVec)) >= 0.85) {
           Log.out("** " + candidate.toString());
         }
