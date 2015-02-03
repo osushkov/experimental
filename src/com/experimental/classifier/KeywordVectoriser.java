@@ -225,9 +225,10 @@ public class KeywordVectoriser {
   }
 
   private double logSum(List<Double> values) {
-    double sum = 0.0;
+    double sum = 1.0;
     for (double val : values) {
-      sum += Math.log(1.0 + val);
+      sum *= val;
+//      sum += Math.log(1.0 + val);
     }
     return sum;
   }
