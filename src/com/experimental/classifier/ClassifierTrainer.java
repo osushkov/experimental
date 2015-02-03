@@ -47,9 +47,9 @@ public class ClassifierTrainer {
   }
 
   public static class LearnedModel {
-    public GeneralizedLinearModel oneKeywordClassifier = null;
-    public GeneralizedLinearModel twoKeywordClassifier = null;
-    public GeneralizedLinearModel threeOrModeKeywordClassifier = null;
+    public ClassificationModel oneKeywordClassifier = null;
+    public ClassificationModel twoKeywordClassifier = null;
+    public ClassificationModel threeOrModeKeywordClassifier = null;
   }
 
   private final JavaSparkContext sc;
@@ -113,7 +113,7 @@ public class ClassifierTrainer {
         } else if (candidate.phraseLemmas.size() == 2) {
           isGood = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
         } else if (candidate.phraseLemmas.size() >= 3) {
-          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.85;
+          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
         }
 
         if (isGood) {
@@ -124,7 +124,7 @@ public class ClassifierTrainer {
 
   }
 
-  private GeneralizedLinearModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
+  private ClassificationModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
                                               double positiveThreshold) {
     if (trainingPoints.size() == 0) {
       return null;
@@ -135,8 +135,9 @@ public class ClassifierTrainer {
 
     int numIterations = 5000;
 //    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
-    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
-    model.clearThreshold();
+//    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
+    final NaiveBayesModel model = NaiveBayes.train(trainingData.rdd());
+    //model.clearThreshold();
 
     int numPositive = 0;
     int numNegative = 0;
