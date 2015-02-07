@@ -49,7 +49,12 @@ public class KeyAssociations {
   }
 
   private boolean isAssociationCounted(NounAssociation.Association association) {
-    return true;
+    Lemma lemma = lemmaDb.getLemma(association.associatedLemma);
+    if (lemma == null) {
+      return false;
+    } else {
+      return !lemma.lemma.equalsIgnoreCase("be");
+    }
   }
 
 
