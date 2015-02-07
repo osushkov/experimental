@@ -165,10 +165,22 @@ public class Main {
       return;
     }
 
+    LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      if (!lemmaIDFWeights.tryLoad()) {
+        Log.out("could not load lemma idf weights");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
-    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
+    KeywordVectoriser keywordVectoriser =
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
@@ -245,10 +257,22 @@ public class Main {
       return;
     }
 
+    LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      if (!lemmaIDFWeights.tryLoad()) {
+        Log.out("could not load lemma idf weights");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
-    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
+    KeywordVectoriser keywordVectoriser =
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
     ClassifierTrainer trainer = new ClassifierTrainer(nounPhraseDb, keywordVectoriser, lemmaStatsAggregator);
     final ClassifierTrainer.LearnedModel learnedModel = trainer.train();
@@ -379,10 +403,22 @@ public class Main {
       return;
     }
 
+    LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      if (!lemmaIDFWeights.tryLoad()) {
+        Log.out("could not load lemma idf weights");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
-    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb);
+    KeywordVectoriser keywordVectoriser =
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");

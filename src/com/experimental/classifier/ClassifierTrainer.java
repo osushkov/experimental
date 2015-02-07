@@ -108,16 +108,20 @@ public class ClassifierTrainer {
         KeywordCandidateGenerator.KeywordCandidate candidate = candidates.get(i);
 
         boolean isGood = false;
+        double certainty = 0.0;
         if (candidate.phraseLemmas.size() == 1) {
-          isGood = learnedModel.oneKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
+          certainty = learnedModel.oneKeywordClassifier.predict(Vectors.dense(doubleVec));
+          isGood = certainty >= 0.5;
         } else if (candidate.phraseLemmas.size() == 2) {
-          isGood = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
+          certainty = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec));
+          isGood = certainty >= 0.5;
         } else if (candidate.phraseLemmas.size() >= 3) {
-          isGood = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec)) >= 0.5;
+          certainty = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec));
+          isGood = certainty >= 0.5;
         }
 
         if (isGood) {
-          Log.out("= " + candidate.toString());
+          Log.out("= " + candidate.toString() + " \t" + Double.toString(certainty));
         }
       }
     }

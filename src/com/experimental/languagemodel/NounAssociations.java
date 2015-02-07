@@ -144,6 +144,16 @@ public class NounAssociations {
     return nounAssociations.get(nounLemmaId);
   }
 
+  public NounAssociation getAssociations(Lemma lemma) {
+    Preconditions.checkNotNull(lemma);
+    if (lemma.tag != SimplePOSTag.NOUN) {
+      return null;
+    }
+
+    LemmaId nounLemmaId = lemmaDB.addLemma(lemma);
+    return nounAssociations.get(nounLemmaId);
+  }
+
   public NounAssociation getAssociations(LemmaId lemmaId) {
     Preconditions.checkNotNull(lemmaId);
     return nounAssociations.get(lemmaId);

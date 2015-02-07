@@ -3,6 +3,7 @@ package com.experimental.classifier;
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.languagemodel.Lemma;
+import com.experimental.languagemodel.LemmaIDFWeights;
 import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
 import com.experimental.languagemodel.LemmaQuality;
 import com.google.common.base.Preconditions;
@@ -14,18 +15,21 @@ public class KeywordVectorComponents {
   private final Lemma phraseLemma;
   private final WebsiteDocument document;
   private final LemmaQuality lemmaQuality;
+  private final LemmaIDFWeights lemmaIdfWeights;
   private final LemmaOccuranceStatsAggregator.LemmaStats localStats;
   private final LemmaOccuranceStatsAggregator.LemmaStats globalStats;
 
   public KeywordVectorComponents(Lemma phraseLemma,
                                  WebsiteDocument document,
                                  LemmaQuality lemmaQuality,
+                                 LemmaIDFWeights lemmaIdfWeights,
                                  LemmaOccuranceStatsAggregator.LemmaStats localStats,
                                  LemmaOccuranceStatsAggregator.LemmaStats globalStats) {
 
     this.phraseLemma = Preconditions.checkNotNull(phraseLemma);
     this.document = Preconditions.checkNotNull(document);
     this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
+    this.lemmaIdfWeights = Preconditions.checkNotNull(lemmaIdfWeights);
     this.localStats = localStats;
     this.globalStats = globalStats;
   }
@@ -40,6 +44,10 @@ public class KeywordVectorComponents {
 
   public double lemmaQuality() {
     return lemmaQuality.getLemmaQuality(phraseLemma);
+  }
+
+  public double lemmaIdfWeight() {
+    return lemmaIdfWeights.getLemmaWeight(phraseLemma);
   }
 
   public double weightToGobalRatio() {
