@@ -26,9 +26,9 @@ public class LemmaOccuranceStatsAggregator {
     public double averageWeightPerDocument = 0.0;
     public double fractionOfDocumentOccured = 0.0;
 
-    int totalDocsOccuredIn = 0;
-    double sumOfSquares = 0.0;
-    double sum = 0.0;
+    public int totalDocsOccuredIn = 0;
+    public double sumOfSquares = 0.0;
+    public double sum = 0.0;
 
     LemmaStats(LemmaId lemmaId) {
       this.lemmaId = Preconditions.checkNotNull(lemmaId);

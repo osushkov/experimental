@@ -59,6 +59,10 @@ public class KeywordVectorComponents {
     return globalStats != null ? globalStats.averageWeightPerDocument : 0.0;
   }
 
+  public double globalAverageWeightPerOccuredDocument() {
+    return globalStats != null ? (globalStats.sum / (double) globalStats.totalDocsOccuredIn) : 0.0;
+  }
+
   public double globalFractionOfDocumentsOccured() {
     return globalStats != null ? globalStats.fractionOfDocumentOccured : 0.0;
   }
@@ -80,6 +84,10 @@ public class KeywordVectorComponents {
 
   public double localAverageWeightPerDocument() {
     return localStats != null ? localStats.averageWeightPerDocument : 0.0;
+  }
+
+  public double localAverageWeightPerOccuredDocument() {
+    return localStats != null ? (localStats.sum / (double) localStats.totalDocsOccuredIn) : 0.0;
   }
 
   public double localFractionOfDocumentsOccured() {
