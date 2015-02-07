@@ -78,14 +78,14 @@ public class KeywordVectoriser {
     resultVector.add(components.globalAverageWeightPerOccuredDocument());
     resultVector.add(components.globalFractionOfDocumentsOccured());
     resultVector.add(components.globalWeightStandardDeviation());
-    resultVector.add(components.weightToGlobalMeanDistance()); // 7
+//    resultVector.add(components.weightToGlobalMeanDistance()); // 7
 
     resultVector.add(components.weightToLocalRatio());
     resultVector.add(components.localAverageWeightPerDocument());
     resultVector.add(components.localAverageWeightPerOccuredDocument());
     resultVector.add(components.localFractionOfDocumentsOccured());
     resultVector.add(components.localWeightStandardDeviation());
-    resultVector.add(components.weightToLocalMeanDistance()); // 12
+//    resultVector.add(components.weightToLocalMeanDistance()); // 12
 
     resultVector.add(components.localToGlobalAverageWeightRatio());
     resultVector.add(components.localToGlobalOccuredAverageWeightRatio());
@@ -141,20 +141,20 @@ public class KeywordVectoriser {
 
     resultVector.add(logSum(Lists.newArrayList(c0.weightToGobalRatio(), c1.weightToGobalRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.globalAverageWeightPerDocument(), c1.globalAverageWeightPerDocument())));
-//    resultVector.add(logSum(Lists.newArrayList(c0.globalAverageWeightPerOccuredDocument(), c1.globalAverageWeightPerOccuredDocument())));
+    resultVector.add(logSum(Lists.newArrayList(c0.globalAverageWeightPerOccuredDocument(), c1.globalAverageWeightPerOccuredDocument())));
     resultVector.add(logSum(Lists.newArrayList(c0.globalFractionOfDocumentsOccured(), c1.globalFractionOfDocumentsOccured())));
     resultVector.add(logSum(Lists.newArrayList(c0.globalWeightStandardDeviation(), c1.globalWeightStandardDeviation())));
-    resultVector.add(logSum(Lists.newArrayList(c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance())));
+//    resultVector.add(logSum(Lists.newArrayList(c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance())));
 
     resultVector.add(logSum(Lists.newArrayList(c0.weightToLocalRatio(), c1.weightToLocalRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localAverageWeightPerDocument(), c1.localAverageWeightPerDocument())));
-//    resultVector.add(logSum(Lists.newArrayList(c0.localAverageWeightPerOccuredDocument(), c1.localAverageWeightPerOccuredDocument())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localAverageWeightPerOccuredDocument(), c1.localAverageWeightPerOccuredDocument())));
     resultVector.add(logSum(Lists.newArrayList(c0.localFractionOfDocumentsOccured(), c1.localFractionOfDocumentsOccured())));
     resultVector.add(logSum(Lists.newArrayList(c0.localWeightStandardDeviation(), c1.localWeightStandardDeviation())));
-    resultVector.add(logSum(Lists.newArrayList(c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance())));
+//    resultVector.add(logSum(Lists.newArrayList(c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance())));
 
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio())));
-//    resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalOccuredAverageWeightRatio(), c1.localToGlobalOccuredAverageWeightRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalOccuredAverageWeightRatio(), c1.localToGlobalOccuredAverageWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalDocumentsOccuredRatio(), c1.localToGlobalDocumentsOccuredRatio())));
 
@@ -200,8 +200,8 @@ public class KeywordVectoriser {
         c0.globalFractionOfDocumentsOccured(), c1.globalFractionOfDocumentsOccured(), c2.globalFractionOfDocumentsOccured())));
     resultVector.add(logSum(Lists.newArrayList(
         c0.globalWeightStandardDeviation(), c1.globalWeightStandardDeviation(), c2.globalWeightStandardDeviation())));
-    resultVector.add(logSum(Lists.newArrayList(
-        c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance(), c2.weightToGlobalMeanDistance())));
+//    resultVector.add(logSum(Lists.newArrayList(
+//        c0.weightToGlobalMeanDistance(), c1.weightToGlobalMeanDistance(), c2.weightToGlobalMeanDistance())));
 
     resultVector.add(logSum(Lists.newArrayList(
         c0.weightToLocalRatio(), c1.weightToLocalRatio(), c2.weightToLocalRatio())));
@@ -213,8 +213,8 @@ public class KeywordVectoriser {
         c0.localFractionOfDocumentsOccured(), c1.localFractionOfDocumentsOccured(), c2.localFractionOfDocumentsOccured())));
     resultVector.add(logSum(Lists.newArrayList(
         c0.localWeightStandardDeviation(), c1.localWeightStandardDeviation(), c2.localWeightStandardDeviation())));
-    resultVector.add(logSum(Lists.newArrayList(
-        c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance(), c2.weightToLocalMeanDistance())));
+//    resultVector.add(logSum(Lists.newArrayList(
+//        c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance(), c2.weightToLocalMeanDistance())));
 
     resultVector.add(logSum(Lists.newArrayList(
         c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio(), c2.localToGlobalAverageWeightRatio())));
@@ -260,24 +260,23 @@ public class KeywordVectoriser {
   }
 
   private List<Double> generateLoggedVector(List<Double> vector) {
-    return vector;
-
-//    List<Double> result = new ArrayList();
-//    result.addAll(vector);
-//    for (double val : vector) {
-//      result.add(Math.log(1.0 + val));
-//    }
-//    return result;
+//    return vector;
+    List<Double> result = new ArrayList();
+    result.addAll(vector);
+    for (double val : vector) {
+      result.add(Math.log(1.0 + val));
+    }
+    return result;
   }
 
   private List<Double> generateSquaredVector(List<Double> vector) {
-    return vector;
-//    List<Double> result = new ArrayList(vector);
-//    for (int i = 0; i < vector.size(); i++) {
-//      for (int j = i; j < vector.size(); j++) {
-//        result.add(vector.get(i) * vector.get(j));
-//      }
-//    }
-//    return result;
+//    return vector;
+    List<Double> result = new ArrayList(vector);
+    for (int i = 0; i < vector.size(); i++) {
+      for (int j = i; j < vector.size(); j++) {
+        result.add(vector.get(i) * vector.get(j));
+      }
+    }
+    return result;
   }
 }

@@ -41,9 +41,9 @@ public class KeyAssociations {
       return 0.0;
     }
 
-//    for (NounAssociation.Association association : associations.getVerbAssociations()) {
-//      if (association.)
-//    }
+    for (NounAssociation.Association association : associations.getVerbAssociations()) {
+      if (association.)
+    }
 
     return 0.0;
   }
@@ -53,7 +53,9 @@ public class KeyAssociations {
     if (lemma == null) {
       return false;
     } else {
-      return !lemma.lemma.equalsIgnoreCase("be");
+      return !lemma.lemma.equals("be") &&
+          !lemma.lemma.equals("have") &&
+          !lemma.lemma.equals("do");
     }
   }
 
