@@ -134,6 +134,16 @@ public class KeywordVectorComponents {
     return keyAssociations.getKeyAssociationStrength(phraseLemma);
   }
 
+  public double getGlobalIdfWeight() {
+    if (globalStats == null) {
+      return 0.0;
+    } else {
+      double totalDocs = globalStats.sum / globalStats.averageWeightPerDocument;
+      Preconditions.checkState(totalDocs >= globalStats.totalDocsOccuredIn);
+      return Math.log(totalDocs / globalStats.totalDocsOccuredIn);
+    }
+  }
+
   private double getLemmaWeight(Lemma lemma, WebsiteDocument document) {
     BagOfWeightedLemmas bagOfLemmas = document.getBagOfLemmas();
     BagOfWeightedLemmas.WeightedLemmaEntry entry = bagOfLemmas.getBag().get(lemma);

@@ -64,9 +64,12 @@ public class KeyAssociations {
     if (lemma == null) {
       return false;
     } else {
-      return !lemma.lemma.equals("be") &&
-          !lemma.lemma.equals("have") &&
-          !lemma.lemma.equals("do");
+      for (String important : ASSOCIATIVE_WORDS) {
+        if (important.equals(lemma.lemma)) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 

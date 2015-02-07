@@ -96,6 +96,7 @@ public class KeywordVectoriser {
     resultVector.add(components.localToGlobalStandardDeviationRatio());
     resultVector.add(components.localToGlobalDocumentsOccuredRatio());
     resultVector.add(components.getKeyAssociationsWeight());
+    resultVector.add(components.getGlobalIdfWeight());
 
     resultVector = generateLoggedVector(resultVector);
     resultVector = generateSquaredVector(resultVector);
@@ -163,6 +164,7 @@ public class KeywordVectoriser {
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalDocumentsOccuredRatio(), c1.localToGlobalDocumentsOccuredRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.getKeyAssociationsWeight(), c1.getKeyAssociationsWeight())));
+    resultVector.add(logSum(Lists.newArrayList(c0.getGlobalIdfWeight(), c1.getGlobalIdfWeight())));
 
     resultVector = generateLoggedVector(resultVector);
     resultVector = generateSquaredVector(resultVector);
@@ -232,6 +234,8 @@ public class KeywordVectoriser {
         c0.localToGlobalDocumentsOccuredRatio(), c1.localToGlobalDocumentsOccuredRatio(), c2.localToGlobalDocumentsOccuredRatio())));
     resultVector.add(logSum(Lists.newArrayList(
         c0.getKeyAssociationsWeight(), c1.getKeyAssociationsWeight(), c2.getKeyAssociationsWeight())));
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.getGlobalIdfWeight(), c1.getGlobalIdfWeight(), c2.getGlobalIdfWeight())));
 
     resultVector = generateLoggedVector(resultVector);
     resultVector = generateSquaredVector(resultVector);
