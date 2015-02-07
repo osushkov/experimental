@@ -106,7 +106,8 @@ public class KeywordVectorComponents {
   public double weightToLocalMeanDistance() {
     double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
     return localStats != null ?
-        (lemmaWeight - localStats.averageWeightPerDocument) / localStats.weightStandardDeviation : 0.0;
+        Math.max(0.0, (lemmaWeight - localStats.averageWeightPerDocument) / localStats.weightStandardDeviation)
+        : 0.0;
   }
 
   public double localToGlobalAverageWeightRatio() {
