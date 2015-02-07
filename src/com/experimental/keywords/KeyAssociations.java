@@ -5,6 +5,7 @@ import com.experimental.languagemodel.LemmaDB;
 import com.experimental.languagemodel.NounAssociation;
 import com.experimental.languagemodel.NounAssociations;
 import com.experimental.utils.Log;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import java.io.IOException;
@@ -21,18 +22,8 @@ public class KeyAssociations {
   private final NounAssociations nounAssociations;
   private final LemmaDB lemmaDb = LemmaDB.instance;
 
-  public KeyAssociations() {
-    this.nounAssociations = new NounAssociations();
-  }
-
-  public void init() {
-    try {
-      if (!nounAssociations.tryLoad()) {
-        Log.out("Could not load NounAssociations");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  public KeyAssociations(NounAssociations nounAssociations) {
+    this.nounAssociations = Preconditions.checkNotNull(nounAssociations);
   }
 
   public double getKeyAssociationStrength(Lemma noun) {
@@ -41,11 +32,20 @@ public class KeyAssociations {
       return 0.0;
     }
 
+    double totalWeight = 0.0;
+    double importantWeight = 0;
+
     for (NounAssociation.Association association : associations.getVerbAssociations()) {
-//      if (association.)
+      if (isAssociationCounted(association)) {
+        totalWeight += association.weight;
+      }
+
+      if (isImportantAssociation(association)) {
+        importantWeight += association.weight;
+      }
     }
 
-    return 0.0;
+    return totalWeight > Double.MIN_VALUE ? importantWeight / totalWeight : 0.0;
   }
 
   private boolean isAssociationCounted(NounAssociation.Association association) {
@@ -59,6 +59,15 @@ public class KeyAssociations {
     }
   }
 
-
+  private boolean isImportantAssociation(NounAssociation.Association association) {
+    Lemma lemma = lemmaDb.getLemma(association.associatedLemma);
+    if (lemma == null) {
+      return false;
+    } else {
+      return !lemma.lemma.equals("be") &&
+          !lemma.lemma.equals("have") &&
+          !lemma.lemma.equals("do");
+    }
+  }
 
 }

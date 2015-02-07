@@ -2,6 +2,7 @@ package com.experimental.classifier;
 
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.WebsiteDocument;
+import com.experimental.keywords.KeyAssociations;
 import com.experimental.languagemodel.Lemma;
 import com.experimental.languagemodel.LemmaIDFWeights;
 import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
@@ -16,6 +17,7 @@ public class KeywordVectorComponents {
   private final WebsiteDocument document;
   private final LemmaQuality lemmaQuality;
   private final LemmaIDFWeights lemmaIdfWeights;
+  private final KeyAssociations keyAssociations;
   private final LemmaOccuranceStatsAggregator.LemmaStats localStats;
   private final LemmaOccuranceStatsAggregator.LemmaStats globalStats;
 
@@ -23,6 +25,7 @@ public class KeywordVectorComponents {
                                  WebsiteDocument document,
                                  LemmaQuality lemmaQuality,
                                  LemmaIDFWeights lemmaIdfWeights,
+                                 KeyAssociations keyAssociations,
                                  LemmaOccuranceStatsAggregator.LemmaStats localStats,
                                  LemmaOccuranceStatsAggregator.LemmaStats globalStats) {
 
@@ -30,6 +33,7 @@ public class KeywordVectorComponents {
     this.document = Preconditions.checkNotNull(document);
     this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
     this.lemmaIdfWeights = Preconditions.checkNotNull(lemmaIdfWeights);
+    this.keyAssociations = Preconditions.checkNotNull(keyAssociations);
     this.localStats = localStats;
     this.globalStats = globalStats;
   }
@@ -74,7 +78,8 @@ public class KeywordVectorComponents {
   public double weightToGlobalMeanDistance() {
     double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
     return globalStats != null ?
-        (lemmaWeight - globalStats.averageWeightPerDocument) / globalStats.weightStandardDeviation : 0.0;
+        Math.max(0.0, (lemmaWeight - globalStats.averageWeightPerDocument) / globalStats.weightStandardDeviation)
+        : 0.0;
   }
 
   public double weightToLocalRatio() {
@@ -124,6 +129,9 @@ public class KeywordVectorComponents {
         localStats.fractionOfDocumentOccured / Math.max(Double.MIN_VALUE, globalStats.fractionOfDocumentOccured) : 0.0;
   }
 
+  public double getKeyAssociationsWeight() {
+    return keyAssociations.getKeyAssociationStrength(phraseLemma);
+  }
 
   private double getLemmaWeight(Lemma lemma, WebsiteDocument document) {
     BagOfWeightedLemmas bagOfLemmas = document.getBagOfLemmas();

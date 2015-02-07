@@ -11,6 +11,7 @@ import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.documentvector.DocumentVectoriser;
 import com.experimental.documentvector.Word2VecDB;
+import com.experimental.keywords.KeyAssociations;
 import com.experimental.keywords.KeywordCandidateGenerator;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.Demo;
@@ -176,11 +177,24 @@ public class Main {
       return;
     }
 
+    NounAssociations nounAssociations = new NounAssociations();
+    try {
+      if (!nounAssociations.tryLoad()) {
+        Log.out("could not load NounAssociations from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    KeyAssociations keyAssociations = new KeyAssociations(nounAssociations);
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, keyAssociations);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
@@ -268,11 +282,24 @@ public class Main {
       return;
     }
 
+    NounAssociations nounAssociations = new NounAssociations();
+    try {
+      if (!nounAssociations.tryLoad()) {
+        Log.out("could not load NounAssociations from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    KeyAssociations keyAssociations = new KeyAssociations(nounAssociations);
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, keyAssociations);
 
     ClassifierTrainer trainer = new ClassifierTrainer(nounPhraseDb, keywordVectoriser, lemmaStatsAggregator);
     final ClassifierTrainer.LearnedModel learnedModel = trainer.train();
@@ -414,11 +441,24 @@ public class Main {
       return;
     }
 
+    NounAssociations nounAssociations = new NounAssociations();
+    try {
+      if (!nounAssociations.tryLoad()) {
+        Log.out("could not load NounAssociations from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    KeyAssociations keyAssociations = new KeyAssociations(nounAssociations);
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, keyAssociations);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");

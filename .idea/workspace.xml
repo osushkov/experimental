@@ -30,8 +30,8 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="5559" max-vertical-offset="17805">
-                  <caret line="420" column="8" selection-start-line="420" selection-start-column="8" selection-end-line="420" selection-end-column="8" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="6334" max-vertical-offset="18405">
+                  <caret line="460" column="116" selection-start-line="460" selection-start-column="116" selection-end-line="460" selection-end-column="116" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -42,8 +42,8 @@
           <file leaf-file-name="KeywordVectoriser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7533679" vertical-offset="3158" max-vertical-offset="4125">
-                  <caret line="272" column="20" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="20" />
+                <state vertical-scroll-proportion="0.7129534" vertical-offset="2597" max-vertical-offset="4230">
+                  <caret line="233" column="97" selection-start-line="233" selection-start-column="97" selection-end-line="233" selection-end-column="97" />
                   <folding />
                 </state>
               </provider>
@@ -52,11 +52,13 @@
           <file leaf-file-name="KeywordVectorComponents.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponents.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="560" max-vertical-offset="2085">
-                  <caret line="76" column="34" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="34" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="900" max-vertical-offset="2190">
+                  <caret line="131" column="40" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="40" />
                   <folding>
-                    <element signature="e#1867#1868#0" expanded="true" />
-                    <element signature="e#1927#1928#0" expanded="true" />
+                    <element signature="e#2104#2105#0" expanded="true" />
+                    <element signature="e#2164#2165#0" expanded="true" />
+                    <element signature="e#5264#5265#0" expanded="true" />
+                    <element signature="e#5335#5336#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -131,12 +133,9 @@
           <file leaf-file-name="KeyAssociations.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/keywords/KeyAssociations.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.5674847" vertical-offset="0" max-vertical-offset="978">
-                  <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
-                  <folding>
-                    <element signature="e#719#720#0" expanded="true" />
-                    <element signature="e#775#776#0" expanded="true" />
-                  </folding>
+                <state vertical-scroll-proportion="0.03374233" vertical-offset="72" max-vertical-offset="1050">
+                  <caret line="16" column="28" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="28" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -193,12 +192,12 @@
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeywordCandidateGenerator.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectorDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/NounAssociations.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaOccuranceStatsAggregator.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponents.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeyAssociations.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
       </list>
     </option>
   </component>
@@ -1208,16 +1207,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5559" max-vertical-offset="17805">
-          <caret line="420" column="8" selection-start-line="420" selection-start-column="8" selection-end-line="420" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaOccuranceStatsAggregator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2337" max-vertical-offset="3315">
@@ -1226,33 +1215,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/keywords/KeyAssociations.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.03374233" vertical-offset="72" max-vertical-offset="1050">
+          <caret line="16" column="28" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6334" max-vertical-offset="18405">
+          <caret line="460" column="116" selection-start-line="460" selection-start-column="116" selection-end-line="460" selection-end-column="116" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponents.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="605" max-vertical-offset="2085">
-          <caret line="76" column="34" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="900" max-vertical-offset="2190">
+          <caret line="131" column="40" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="40" />
           <folding>
-            <element signature="e#1867#1868#0" expanded="true" />
-            <element signature="e#1927#1928#0" expanded="true" />
+            <element signature="e#2104#2105#0" expanded="true" />
+            <element signature="e#2164#2165#0" expanded="true" />
+            <element signature="e#5264#5265#0" expanded="true" />
+            <element signature="e#5335#5336#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7533679" vertical-offset="3158" max-vertical-offset="4125">
-          <caret line="272" column="20" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.7129534" vertical-offset="2597" max-vertical-offset="4230">
+          <caret line="233" column="97" selection-start-line="233" selection-start-column="97" selection-end-line="233" selection-end-column="97" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/keywords/KeyAssociations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5674847" vertical-offset="0" max-vertical-offset="978">
-          <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
-          <folding>
-            <element signature="e#719#720#0" expanded="true" />
-            <element signature="e#775#776#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
