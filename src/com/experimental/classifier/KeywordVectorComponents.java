@@ -109,6 +109,11 @@ public class KeywordVectorComponents {
         localStats.averageWeightPerDocument / Math.max(Double.MIN_VALUE, globalStats.averageWeightPerDocument) : 0.0;
   }
 
+  public double localToGlobalOccuredAverageWeightRatio() {
+    return localStats != null && globalStats != null ?
+        localAverageWeightPerOccuredDocument() / Math.max(Double.MIN_VALUE, globalAverageWeightPerOccuredDocument()) : 0.0;
+  }
+
   public double localToGlobalStandardDeviationRatio() {
     return localStats != null && globalStats != null ?
         localStats.weightStandardDeviation / Math.max(Double.MIN_VALUE, globalStats.weightStandardDeviation) : 0.0;

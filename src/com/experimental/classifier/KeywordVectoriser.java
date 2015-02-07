@@ -88,6 +88,7 @@ public class KeywordVectoriser {
     resultVector.add(components.weightToLocalMeanDistance()); // 12
 
     resultVector.add(components.localToGlobalAverageWeightRatio());
+    resultVector.add(components.localToGlobalOccuredAverageWeightRatio());
     resultVector.add(components.localToGlobalStandardDeviationRatio());
     resultVector.add(components.localToGlobalDocumentsOccuredRatio());
 
@@ -153,6 +154,7 @@ public class KeywordVectoriser {
     resultVector.add(logSum(Lists.newArrayList(c0.weightToLocalMeanDistance(), c1.weightToLocalMeanDistance())));
 
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio())));
+    resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalOccuredAverageWeightRatio(), c1.localToGlobalOccuredAverageWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.localToGlobalDocumentsOccuredRatio(), c1.localToGlobalDocumentsOccuredRatio())));
 
@@ -216,6 +218,8 @@ public class KeywordVectoriser {
 
     resultVector.add(logSum(Lists.newArrayList(
         c0.localToGlobalAverageWeightRatio(), c1.localToGlobalAverageWeightRatio(), c2.localToGlobalAverageWeightRatio())));
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.localToGlobalOccuredAverageWeightRatio(), c1.localToGlobalOccuredAverageWeightRatio(), c2.localToGlobalOccuredAverageWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(
         c0.localToGlobalStandardDeviationRatio(), c1.localToGlobalStandardDeviationRatio(), c2.localToGlobalStandardDeviationRatio())));
     resultVector.add(logSum(Lists.newArrayList(
