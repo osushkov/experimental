@@ -42,7 +42,7 @@ public class KeyAssociations {
     }
 
     for (NounAssociation.Association association : associations.getVerbAssociations()) {
-      if (association.)
+//      if (association.)
     }
 
     return 0.0;
