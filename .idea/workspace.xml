@@ -42,8 +42,8 @@
           <file leaf-file-name="KeywordVectoriser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.74404144" vertical-offset="2627" max-vertical-offset="4290">
-                  <caret line="237" column="79" selection-start-line="237" selection-start-column="79" selection-end-line="237" selection-end-column="79" />
+                <state vertical-scroll-proportion="0.68911916" vertical-offset="3325" max-vertical-offset="4290">
+                  <caret line="280" column="14" selection-start-line="275" selection-start-column="14" selection-end-line="280" selection-end-column="14" />
                   <folding />
                 </state>
               </provider>
@@ -1250,8 +1250,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.74404144" vertical-offset="2627" max-vertical-offset="4290">
-          <caret line="237" column="79" selection-start-line="237" selection-start-column="79" selection-end-line="237" selection-end-column="79" />
+        <state vertical-scroll-proportion="0.68911916" vertical-offset="3325" max-vertical-offset="4290">
+          <caret line="280" column="14" selection-start-line="275" selection-start-column="14" selection-end-line="280" selection-end-column="14" />
           <folding />
         </state>
       </provider>
