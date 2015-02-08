@@ -39,7 +39,7 @@ public class KeywordVectorComponents {
   }
 
   public double lemmaWeight() {
-    return getLemmaWeight(phraseLemma, document);
+    return Math.log(1.0 + getLemmaWeight(phraseLemma, document));
   }
 
   public double lemmaWeightRatio() {
@@ -55,8 +55,13 @@ public class KeywordVectorComponents {
   }
 
   public double weightToGobalRatio() {
-    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
-    return globalStats != null ? lemmaWeight / Math.max(Double.MIN_VALUE, globalStats.averageWeightPerDocument) : 0.0;
+    if (globalStats == null) {
+      return 0.0;
+    } else {
+      double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
+      double ratio = lemmaWeight / Math.max(Double.MIN_VALUE, globalStats.averageWeightPerDocument);
+      return Math.log(1.0 + ratio);
+    }
   }
 
   public double globalAverageWeightPerDocument() {
@@ -76,15 +81,24 @@ public class KeywordVectorComponents {
   }
 
   public double weightToGlobalMeanDistance() {
-    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
-    return globalStats != null ?
-        Math.max(0.0, (lemmaWeight - globalStats.averageWeightPerDocument) / globalStats.weightStandardDeviation)
-        : 0.0;
+    if (globalStats == null) {
+      return 0.0;
+    } else {
+      double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
+      double dist =
+          Math.max(0.0, (lemmaWeight - globalStats.averageWeightPerDocument) / globalStats.weightStandardDeviation);
+      return Math.log(1.0 + dist);
+    }
   }
 
   public double weightToLocalRatio() {
-    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
-    return localStats != null ? lemmaWeight / Math.max(Double.MIN_VALUE, localStats.averageWeightPerDocument) : 0.0;
+    if (localStats == null) {
+      return 0.0;
+    } else {
+      double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
+      double ratio = lemmaWeight / Math.max(Double.MIN_VALUE, localStats.averageWeightPerDocument);
+      return Math.log(1.0 + ratio);
+    }
   }
 
   public double localAverageWeightPerDocument() {
@@ -104,15 +118,24 @@ public class KeywordVectorComponents {
   }
 
   public double weightToLocalMeanDistance() {
-    double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
-    return localStats != null ?
-        Math.max(0.0, (lemmaWeight - localStats.averageWeightPerDocument) / localStats.weightStandardDeviation)
-        : 0.0;
+    if (localStats == null) {
+      return 0.0;
+    } else {
+      double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
+      double dist =
+          Math.max(0.0, (lemmaWeight - localStats.averageWeightPerDocument) / localStats.weightStandardDeviation);
+      return Math.log(1.0 + dist);
+    }
   }
 
   public double localToGlobalAverageWeightRatio() {
-    return localStats != null && globalStats != null ?
-        localStats.averageWeightPerDocument / Math.max(Double.MIN_VALUE, globalStats.averageWeightPerDocument) : 0.0;
+    if (localStats == null || globalStats == null) {
+      return 0.0;
+    } else {
+      double ratio =
+          localStats.averageWeightPerDocument / Math.max(Double.MIN_VALUE, globalStats.averageWeightPerDocument);
+      return Math.log(1.0 + ratio);
+    }
   }
 
   public double localToGlobalOccuredAverageWeightRatio() {
@@ -126,8 +149,13 @@ public class KeywordVectorComponents {
   }
 
   public double localToGlobalDocumentsOccuredRatio() {
-    return localStats != null && globalStats != null ?
-        localStats.fractionOfDocumentOccured / Math.max(Double.MIN_VALUE, globalStats.fractionOfDocumentOccured) : 0.0;
+    if (localStats == null || globalStats == null) {
+      return 0.0;
+    } else {
+      double ratio =
+          localStats.fractionOfDocumentOccured / Math.max(Double.MIN_VALUE, globalStats.fractionOfDocumentOccured);
+      return Math.log(1.0 + ratio);
+    }
   }
 
   public double getKeyAssociationsWeight() {

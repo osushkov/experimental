@@ -203,10 +203,10 @@ public class ClassifierTrainer {
       if (vector.keyword.phraseLemmas.size() == 1) {
         if (isKeywordPositive(vector.keyword, bundle)) {
           addKeywordVector(1.0, vector, result);
-          Log.out("+ " + vector.toString());
+//          Log.out("+ " + vector.toString());
         } else {
           addKeywordVector(0.0, vector, result);
-          Log.out("- " + vector.toString());
+//          Log.out("- " + vector.toString());
         }
       }
     }
