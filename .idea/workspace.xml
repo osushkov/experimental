@@ -52,8 +52,8 @@
           <file leaf-file-name="KeywordVectoriser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.719171" vertical-offset="3266" max-vertical-offset="4290">
-                  <caret line="278" column="40" selection-start-line="278" selection-start-column="40" selection-end-line="278" selection-end-column="40" />
+                <state vertical-scroll-proportion="0.59481865" vertical-offset="1316" max-vertical-offset="4410">
+                  <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -209,8 +209,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaOccuranceStatsAggregator.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVector.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponents.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
       </list>
     </option>
   </component>
@@ -1250,14 +1250,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.719171" vertical-offset="3266" max-vertical-offset="4290">
-          <caret line="278" column="40" selection-start-line="278" selection-start-column="40" selection-end-line="278" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.62474436" vertical-offset="2419" max-vertical-offset="4515">
@@ -1265,6 +1257,14 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.59481865" vertical-offset="1316" max-vertical-offset="4410">
+          <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
