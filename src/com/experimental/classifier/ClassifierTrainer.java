@@ -200,14 +200,12 @@ public class ClassifierTrainer {
 
     TrainingData result = new TrainingData();
     for (KeywordVector vector : vectors) {
-      if (vector.keyword.phraseLemmas.size() == 1) {
-        if (isKeywordPositive(vector.keyword, bundle)) {
-          addKeywordVector(1.0, vector, result);
+      if (isKeywordPositive(vector.keyword, bundle)) {
+        addKeywordVector(1.0, vector, result);
 //          Log.out("+ " + vector.toString());
-        } else {
-          addKeywordVector(0.0, vector, result);
+      } else {
+        addKeywordVector(0.0, vector, result);
 //          Log.out("- " + vector.toString());
-        }
       }
     }
 
