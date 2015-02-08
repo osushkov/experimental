@@ -272,23 +272,23 @@ public class KeywordVectoriser {
   }
 
   private List<Double> generateLoggedVector(List<Double> vector) {
-//    return vector;
-    List<Double> result = new ArrayList();
-    result.addAll(vector);
-    for (double val : vector) {
-      result.add(Math.log(1.0 + val));
-    }
-    return result;
+    return vector;
+//    List<Double> result = new ArrayList();
+//    result.addAll(vector);
+//    for (double val : vector) {
+//      result.add(Math.log(1.0 + val));
+//    }
+//    return result;
   }
 
   private List<Double> generateSquaredVector(List<Double> vector) {
-//    return vector;
-    List<Double> result = new ArrayList(vector);
-    for (int i = 0; i < vector.size(); i++) {
-      for (int j = i; j < vector.size(); j++) {
-        result.add(vector.get(i) * vector.get(j));
-      }
-    }
-    return result;
+    return vector;
+//    List<Double> result = new ArrayList(vector);
+//    for (int i = 0; i < vector.size(); i++) {
+//      for (int j = i; j < vector.size(); j++) {
+//        result.add(vector.get(i) * vector.get(j));
+//      }
+//    }
+//    return result;
   }
 }
