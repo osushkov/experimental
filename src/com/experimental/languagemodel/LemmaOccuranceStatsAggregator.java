@@ -113,7 +113,6 @@ public class LemmaOccuranceStatsAggregator {
       entry.fractionOfDocumentOccured = (double) entry.totalDocsOccuredIn / (double) totalDocuments.get();
     }
 
-    Log.out("total documentS: " + totalDocuments.get());
     haveVariance = true;
   }
 

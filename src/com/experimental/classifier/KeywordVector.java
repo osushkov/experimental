@@ -26,12 +26,13 @@ public class KeywordVector {
     }
     buffer.append("\n");
 
-    buffer.append("( ");
     for (int i = 0; i < vector.size(); i++) {
       double val = vector.get(i);
-      buffer.append("[" + Integer.toString(i) +"] " + Double.toString(val) + " ");
+      if (i > 0) {
+        buffer.append(",");
+      }
+      buffer.append(Double.toString(val));
     }
-    buffer.append(")");
 
     return buffer.toString();
   }

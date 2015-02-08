@@ -202,9 +202,10 @@ public class ClassifierTrainer {
     for (KeywordVector vector : vectors) {
       if (isKeywordPositive(vector.keyword, bundle)) {
         addKeywordVector(1.0, vector, result);
-        addKeywordVector(1.0, vector, result);
+        Log.out("+ " + vector.toString());
       } else {
         addKeywordVector(0.0, vector, result);
+        Log.out("- " + vector.toString());
       }
     }
 
