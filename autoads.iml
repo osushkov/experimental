@@ -15,5 +15,6 @@
     <orderEntry type="library" name="jstyleparser-1.19" level="project" />
     <orderEntry type="library" name="stanford-corenlp-3.5.0" level="project" />
     <orderEntry type="library" name="spark" level="project" />
+    <orderEntry type="library" name="simplenlg-v4.4.2" level="project" />
   </component>
 </module>

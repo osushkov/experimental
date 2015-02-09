@@ -31,6 +31,16 @@ import org.apache.spark.mllib.linalg.*;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.regression.GeneralizedLinearModel;
 import org.apache.spark.mllib.regression.LabeledPoint;
+//import simplenlg.features.Feature;
+//import simplenlg.features.InterrogativeType;
+//import simplenlg.framework.NLGElement;
+//import simplenlg.framework.NLGFactory;
+//import simplenlg.lexicon.Lexicon;
+//import simplenlg.phrasespec.NPPhraseSpec;
+//import simplenlg.phrasespec.PPPhraseSpec;
+//import simplenlg.phrasespec.SPhraseSpec;
+//import simplenlg.phrasespec.VPPhraseSpec;
+//import simplenlg.realiser.english.Realiser;
 
 import java.io.*;
 import java.util.*;
@@ -44,7 +54,7 @@ public class Main {
 //    parseWikipediaDocuments();
 //    parseWebbaseDocuments();
 
-    aggregateLemmaQuality();
+//    aggregateLemmaQuality();
 //    outputConcatenatedLemmatisedDocuments();
 //    generateNounAssociations();
 
@@ -63,7 +73,7 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-//    buildLemmaIdfWeights();
+    buildLemmaIdfWeights();
 
 //    try {
 //      URL main = new URL("http://shit.com/");
@@ -111,10 +121,36 @@ public class Main {
 //    testClassifier();
 //    testKeywordCandidateExtraction();
 
+//    testNLG();
+
     Log.out("FINISHED");
   }
 
 
+//  private static void testNLG() {
+//    Lexicon lexicon = Lexicon.getDefaultLexicon();
+//    NLGFactory nlgFactory = new NLGFactory(lexicon);
+//    Realiser realiser = new Realiser(lexicon);
+//
+//    NPPhraseSpec object = nlgFactory.createNounPhrase("dentist");
+//    object.setDeterminer("a");
+//
+//    PPPhraseSpec ppPhrase = nlgFactory.createPrepositionPhrase();
+//    ppPhrase.setObject(object);
+//    ppPhrase.setPreposition("for");
+//
+//    VPPhraseSpec verb = nlgFactory.createVerbPhrase("look");
+//    NPPhraseSpec subject = nlgFactory.createNounPhrase("I");
+//
+//    SPhraseSpec p = nlgFactory.createClause();
+//    p.setVerb(verb);
+//    p.setSubject(subject);
+//    p.addModifier(ppPhrase);
+//    p.setFeature(Feature.);
+//
+//    String output = realiser.realiseSentence(p);
+//    System.out.println(output);
+//  }
 
   private static void testClassifier() {
     LogisticRegressionModel model0 = null;
@@ -815,12 +851,15 @@ public class Main {
   }
 
   public static void buildLemmaIdfWeights() {
+    final String WIKI_FILENAME = "lemma_idf_weights_wiki.txt";
+
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE, DocumentNameGenerator.DocumentType.TOPICAL);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
+//        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE, DocumentNameGenerator.DocumentType.TOPICAL);
 
     final LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
 
-    final Executor executor = Executors.newFixedThreadPool(8);
+    final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
     final Random rand = new Random();
@@ -836,11 +875,12 @@ public class Main {
               public void run() {
                 try {
                   if (lemmaIDFWeights.isDocumentValid(document)) {
-                    if (document instanceof WebsiteDocument) {
-                      lemmaIDFWeights.processDocument(document, 1.0);
-                    } else if (document instanceof TopicalDocument) {
-                      lemmaIDFWeights.processDocument(document, 0.01);
-                    }
+                    lemmaIDFWeights.processDocument(document, 1.0);
+//                    if (document instanceof WebsiteDocument) {
+//                      lemmaIDFWeights.processDocument(document, 1.0);
+//                    } else if (document instanceof TopicalDocument) {
+//                      lemmaIDFWeights.processDocument(document, 0.01);
+//                    }
                   }
                 } catch (Throwable e) {
                   return;
@@ -866,7 +906,7 @@ public class Main {
     }
 
     try {
-      lemmaIDFWeights.save();
+      lemmaIDFWeights.save(WIKI_FILENAME);
     } catch (IOException e) {
       e.printStackTrace();
     }

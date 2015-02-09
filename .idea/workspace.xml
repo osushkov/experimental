@@ -30,10 +30,12 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7535787" vertical-offset="898" max-vertical-offset="18435">
-                  <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.029652352" vertical-offset="12376" max-vertical-offset="19080">
+                  <caret line="852" column="41" selection-start-line="852" selection-start-column="21" selection-end-line="852" selection-end-column="41" />
                   <folding>
                     <element signature="imports" expanded="true" />
+                    <element signature="e#36229#36809#0" expanded="true" />
+                    <element signature="e#36808#36809#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -80,8 +82,8 @@
           <file leaf-file-name="LemmaIDFWeights.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="2790">
-                  <caret line="150" column="35" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="35" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="142" max-vertical-offset="2790">
+                  <caret line="40" column="77" selection-start-line="40" selection-start-column="60" selection-end-line="40" selection-end-column="77" />
                   <folding />
                 </state>
               </provider>
@@ -585,10 +587,10 @@
     <property name="options.lastSelected" value="configurable.group.tools" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Ads/Libraries/simplenlg-v442/simplenlg-v4.4.2.jar!/" />
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="OverrideImplement.combined" value="true" />
@@ -791,7 +793,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2397882" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2397882" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1253,18 +1255,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaIDFWeights.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="2790">
-          <caret line="150" column="35" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="142" max-vertical-offset="2790">
+          <caret line="40" column="77" selection-start-line="40" selection-start-column="60" selection-end-line="40" selection-end-column="77" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7535787" vertical-offset="898" max-vertical-offset="18435">
-          <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.029652352" vertical-offset="12376" max-vertical-offset="19080">
+          <caret line="852" column="41" selection-start-line="852" selection-start-column="21" selection-end-line="852" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#36229#36809#0" expanded="true" />
+            <element signature="e#36808#36809#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1326,6 +1330,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>
@@ -1333,7 +1338,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>edu.mit.jwi_2.3.3_jdk</last-edited>
+          <last-edited>simplenlg-v4.4.2</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
