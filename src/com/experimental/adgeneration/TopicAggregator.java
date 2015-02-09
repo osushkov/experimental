@@ -93,7 +93,7 @@ public class TopicAggregator {
       Lemma correlatedVerb = findMostCorrelatedVerb(verbs, phraseLemmas.get(phraseLemmas.size()-1));
 
       if (correlatedVerb != null) {
-        entries.add(new WeightedString(correlatedVerb + " " + entry.getKey().toString(), entry.getValue()));
+        entries.add(new WeightedString(correlatedVerb.lemma + " " + entry.getKey().toString(), entry.getValue()));
       }
     }
     entries.sort(WEIGHT_ORDER);
