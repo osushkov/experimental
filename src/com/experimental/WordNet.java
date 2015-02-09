@@ -81,6 +81,10 @@ public class WordNet {
     return max;
   }
 
+  public boolean isLemmaInDictionary(Lemma lemma) {
+    return true;
+  }
+
   private POS getPos(SimplePOSTag posTag) {
     switch(posTag) {
       case ADJECTIVE: return POS.ADJECTIVE;

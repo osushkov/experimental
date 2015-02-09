@@ -63,6 +63,18 @@ public class NounPhrase {
     return result;
   }
 
+  public NounPhrase getNounOnlyPhrase() {
+    List<Lemma> lemmas = getPhraseLemmas();
+    List<Lemma> nounOnly = new ArrayList<Lemma>();
+    for (Lemma lemma : lemmas) {
+      if (lemma.tag == SimplePOSTag.NOUN) {
+        nounOnly.add(lemma);
+      }
+    }
+
+    return new NounPhrase(nounOnly, lemmaDb);
+  }
+
   public List<LemmaDB.LemmaId> getPhraseLemmaIds() {
     return phraseLemmas;
   }

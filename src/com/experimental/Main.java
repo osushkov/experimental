@@ -1,5 +1,6 @@
 package com.experimental;
 
+import com.experimental.adgeneration.TopicAggregator;
 import com.experimental.classifier.ClassifierTrainer;
 import com.experimental.classifier.KeywordVector;
 import com.experimental.classifier.KeywordVectoriser;
@@ -31,16 +32,6 @@ import org.apache.spark.mllib.linalg.*;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.regression.GeneralizedLinearModel;
 import org.apache.spark.mllib.regression.LabeledPoint;
-//import simplenlg.features.Feature;
-//import simplenlg.features.InterrogativeType;
-//import simplenlg.framework.NLGElement;
-//import simplenlg.framework.NLGFactory;
-//import simplenlg.lexicon.Lexicon;
-//import simplenlg.phrasespec.NPPhraseSpec;
-//import simplenlg.phrasespec.PPPhraseSpec;
-//import simplenlg.phrasespec.SPhraseSpec;
-//import simplenlg.phrasespec.VPPhraseSpec;
-//import simplenlg.realiser.english.Realiser;
 
 import java.io.*;
 import java.util.*;
@@ -73,7 +64,7 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    buildLemmaIdfWeights();
+//    buildLemmaIdfWeights();
 
 //    try {
 //      URL main = new URL("http://shit.com/");
@@ -121,36 +112,39 @@ public class Main {
 //    testClassifier();
 //    testKeywordCandidateExtraction();
 
-//    testNLG();
+    testTopicAggregator();
 
     Log.out("FINISHED");
   }
 
+  private static void testTopicAggregator() {
+    WebsiteDocument testDocument =
+        new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
 
-//  private static void testNLG() {
-//    Lexicon lexicon = Lexicon.getDefaultLexicon();
-//    NLGFactory nlgFactory = new NLGFactory(lexicon);
-//    Realiser realiser = new Realiser(lexicon);
-//
-//    NPPhraseSpec object = nlgFactory.createNounPhrase("dentist");
-//    object.setDeterminer("a");
-//
-//    PPPhraseSpec ppPhrase = nlgFactory.createPrepositionPhrase();
-//    ppPhrase.setObject(object);
-//    ppPhrase.setPreposition("for");
-//
-//    VPPhraseSpec verb = nlgFactory.createVerbPhrase("look");
-//    NPPhraseSpec subject = nlgFactory.createNounPhrase("I");
-//
-//    SPhraseSpec p = nlgFactory.createClause();
-//    p.setVerb(verb);
-//    p.setSubject(subject);
-//    p.addModifier(ppPhrase);
-//    p.setFeature(Feature.);
-//
-//    String output = realiser.realiseSentence(p);
-//    System.out.println(output);
-//  }
+    DocumentVectorDB documentVectorDb = new DocumentVectorDB();
+    documentVectorDb.load();
+
+    List<DocumentVectorDB.DocumentSimilarityPair> nearest = documentVectorDb.getNearestDocuments(testDocument, 30);
+    List<Document> nearestDocuments = new ArrayList<Document>();
+
+    for (DocumentVectorDB.DocumentSimilarityPair entry : nearest) {
+      nearestDocuments.add(entry.document);
+    }
+
+    NounAssociations nounAssociations = new NounAssociations();
+    try {
+      if (!nounAssociations.tryLoad()) {
+        Log.out("could not load NounAssociations from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    TopicAggregator topicAggregator = new TopicAggregator(nounAssociations);
+    topicAggregator.aggregateDocuments(nearestDocuments);
+  }
 
   private static void testClassifier() {
     LogisticRegressionModel model0 = null;
