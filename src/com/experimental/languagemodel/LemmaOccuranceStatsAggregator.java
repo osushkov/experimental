@@ -117,8 +117,12 @@ public class LemmaOccuranceStatsAggregator {
   }
 
   public boolean tryLoadFromDisk() throws IOException {
+    return tryLoadFromDisk(VARIANCES_DATA_FILENAME);
+  }
+
+  public boolean tryLoadFromDisk(String dataFilename) throws IOException {
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String varianceFilePath = aggregateDataFile.toPath().resolve(VARIANCES_DATA_FILENAME).toString();
+    String varianceFilePath = aggregateDataFile.toPath().resolve(dataFilename).toString();
 
     File varianceFile = new File(varianceFilePath);
     if (!varianceFile.exists()) {
@@ -149,12 +153,16 @@ public class LemmaOccuranceStatsAggregator {
   }
 
   public void save() throws IOException {
+    save(VARIANCES_DATA_FILENAME);
+  }
+
+  public void save(String dataFilename) throws IOException {
     if (!haveVariance) {
       computeStats();
     }
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String varianceFilePath = aggregateDataFile.toPath().resolve(VARIANCES_DATA_FILENAME).toString();
+    String varianceFilePath = aggregateDataFile.toPath().resolve(dataFilename).toString();
 
     BufferedWriter bw = null;
     try {

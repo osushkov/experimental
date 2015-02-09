@@ -44,7 +44,7 @@ public class Main {
 //    parseWikipediaDocuments();
 //    parseWebbaseDocuments();
 
-//    aggregateLemmaQuality();
+    aggregateLemmaQuality();
 //    outputConcatenatedLemmatisedDocuments();
 //    generateNounAssociations();
 
@@ -106,7 +106,7 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    trainClassifier();
+//    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
@@ -1044,9 +1044,11 @@ public class Main {
   private static void aggregateLemmaQuality() {
     Log.out("aggregateLemmaQuality running...");
 
+    final String WIKI_FILENAME = "lemma_quality_wiki.txt";
+
     final LemmaQuality lemmaQualityAggregator = new LemmaQuality();
     try {
-      if (lemmaQualityAggregator.tryLoadFromDisk()) {
+      if (lemmaQualityAggregator.tryLoadFromDisk(WIKI_FILENAME)) {
         Log.out("loaded LemmaQualityAggregator from disk");
         return;
       }
@@ -1060,7 +1062,7 @@ public class Main {
     final Random rand = new Random();
 
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
 
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
@@ -1097,7 +1099,7 @@ public class Main {
     }
 
     try {
-      lemmaQualityAggregator.save();
+      lemmaQualityAggregator.save(WIKI_FILENAME);
     } catch (IOException e) {
       e.printStackTrace();
     }

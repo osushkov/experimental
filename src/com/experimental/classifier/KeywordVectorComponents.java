@@ -162,6 +162,7 @@ public class KeywordVectorComponents {
     return keyAssociations.getKeyAssociationStrength(phraseLemma);
   }
 
+
   public double getGlobalIdfWeight() {
     if (globalStats == null) {
       return 0.0;

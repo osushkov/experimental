@@ -101,12 +101,16 @@ public class LemmaIDFWeights {
   }
 
   public boolean tryLoad() throws IOException {
+    return tryLoad(LEMMA_IDF_WEIGHTS_FILENAME);
+  }
+
+  public boolean tryLoad(String dataFilename) throws IOException {
     if (isLoaded) {
       return true;
     }
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String lemmaIdfWeightsFilePath = aggregateDataFile.toPath().resolve(LEMMA_IDF_WEIGHTS_FILENAME).toString();
+    String lemmaIdfWeightsFilePath = aggregateDataFile.toPath().resolve(dataFilename).toString();
 
     File lemmaIdfWeightsFile = new File(lemmaIdfWeightsFilePath);
     if (!lemmaIdfWeightsFile.exists()) {
@@ -144,11 +148,15 @@ public class LemmaIDFWeights {
   }
 
   public void save() throws IOException {
+    save(LEMMA_IDF_WEIGHTS_FILENAME);
+  }
+
+  public void save(String dataFilename) throws IOException {
     Log.out("LemmaIDFWeights saving");
     processWeightInfo();
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String lemmaIdfWeightsFilePath = aggregateDataFile.toPath().resolve(LEMMA_IDF_WEIGHTS_FILENAME).toString();
+    String lemmaIdfWeightsFilePath = aggregateDataFile.toPath().resolve(dataFilename).toString();
 
     BufferedWriter bw = null;
     try {

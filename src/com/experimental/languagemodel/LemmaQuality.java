@@ -129,8 +129,12 @@ public class LemmaQuality {
   }
 
   public boolean tryLoadFromDisk() throws IOException {
+    return tryLoadFromDisk(QUALITY_DATA_FILENAME);
+  }
+
+  public boolean tryLoadFromDisk(String dataFilename) throws IOException {
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String qualityFilePath = aggregateDataFile.toPath().resolve(QUALITY_DATA_FILENAME).toString();
+    String qualityFilePath = aggregateDataFile.toPath().resolve(dataFilename).toString();
 
     File qualityFile = new File(qualityFilePath);
     if (!qualityFile.exists()) {
@@ -161,12 +165,16 @@ public class LemmaQuality {
   }
 
   public void save() throws IOException {
+    save(QUALITY_DATA_FILENAME);
+  }
+
+  public void save(String dataFilename) throws IOException {
     if (!haveQuality) {
       computeQuality();
     }
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
-    String qualityFilePath = aggregateDataFile.toPath().resolve(QUALITY_DATA_FILENAME).toString();
+    String qualityFilePath = aggregateDataFile.toPath().resolve(dataFilename).toString();
 
     BufferedWriter bw = null;
     try {
