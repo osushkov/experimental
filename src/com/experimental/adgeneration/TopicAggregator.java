@@ -92,7 +92,9 @@ public class TopicAggregator {
       List<Lemma> phraseLemmas = entry.getKey().getPhraseLemmas();
       Lemma correlatedVerb = findMostCorrelatedVerb(verbs, phraseLemmas.get(phraseLemmas.size()-1));
 
-      entries.add(new WeightedString(correlatedVerb + " " + entry.getKey().toString(), entry.getValue()));
+      if (correlatedVerb != null) {
+        entries.add(new WeightedString(correlatedVerb + " " + entry.getKey().toString(), entry.getValue()));
+      }
     }
     entries.sort(WEIGHT_ORDER);
 
@@ -153,6 +155,10 @@ public class TopicAggregator {
     Lemma mostCorrelatedLemma = null;
 
     NounAssociation associations = nounAssociations.getAssociations(noun);
+    if (associations == null) {
+      return null;
+    }
+
     for (NounAssociation.Association association : associations.getVerbAssociations()) {
       Lemma lemma = lemmaDb.getLemma(association.associatedLemma);
       if (verbs.contains(lemma) && association.weight > mostCorrelatedWeight && !isStopVerb(lemma)) {
