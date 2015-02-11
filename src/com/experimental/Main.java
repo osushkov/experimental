@@ -1090,7 +1090,7 @@ public class Main {
     final Random rand = new Random();
 
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
 
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
