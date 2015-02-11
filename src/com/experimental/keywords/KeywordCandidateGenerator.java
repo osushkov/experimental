@@ -98,7 +98,14 @@ public class KeywordCandidateGenerator {
     result.addAll(getCandidatesFromHeader(document));
     result.addAll(getCandidatesFromSimilarDocuments(document));
 
-    return result;
+    Set<KeywordCandidate> filteredResult = new HashSet<KeywordCandidate>();
+    for (KeywordCandidate candidate : result) {
+      if (keywordSanityChecker.isSane(candidate)) {
+        filteredResult.add(candidate);
+      }
+    }
+
+    return filteredResult;
   }
 
   private List<KeywordCandidate> getCandidatesFromNounPhrases(WebsiteDocument document) {
