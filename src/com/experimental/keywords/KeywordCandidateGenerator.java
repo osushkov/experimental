@@ -95,6 +95,7 @@ public class KeywordCandidateGenerator {
     result.addAll(getCandidatesFromNounPhrases(document));
     result.addAll(getCandidatesFromCompositedPhrases(document));
 //    result.addAll(getCandidatesFromHeader(document));
+//    result.addAll(getCandidatesFromSimilarDocuments(document));
 
     return result;
   }
@@ -201,6 +202,12 @@ public class KeywordCandidateGenerator {
         result.add(new KeywordCandidate(phrase.getPhraseLemmas()));
       }
     }
+
+    return result;
+  }
+
+  private List<KeywordCandidate> getCandidatesFromSimilarDocuments(WebsiteDocument document) {
+    List<KeywordCandidate> result = new ArrayList<KeywordCandidate>();
 
     return result;
   }

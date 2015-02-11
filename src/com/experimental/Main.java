@@ -262,7 +262,7 @@ public class Main {
   private static void trainClassifier() {
     final String LEMMA_QUALITY_WIKI_FILENAME = "lemma_quality_wiki.txt";
     final String LEMMA_IDF_WIKI_FILENAME = "lemma_idf_weights_wiki.txt";
-
+    final String VARIANCES_DATA_FILENAME = "global_lemma_occurance_statistics_wiki.txt";
     try {
       if (!LemmaMorphologies.instance.tryLoad()) {
         Log.out("could not load LemmaMorphologies");
@@ -283,7 +283,7 @@ public class Main {
 
     LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
     try {
-      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+      if (!lemmaStatsAggregator.tryLoadFromDisk(VARIANCES_DATA_FILENAME)) {
         Log.out("could not load LemmaOccuranceStatsAggregator from disk");
         return;
       }
@@ -294,7 +294,7 @@ public class Main {
 
     LemmaQuality lemmaQuality = new LemmaQuality();
     try {
-      if (!lemmaQuality.tryLoadFromDisk()) {
+      if (!lemmaQuality.tryLoadFromDisk(LEMMA_QUALITY_WIKI_FILENAME)) {
         Log.out("could not load LemmaQuality from disk");
         return;
       }
@@ -305,7 +305,7 @@ public class Main {
 
     LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
     try {
-      if (!lemmaIDFWeights.tryLoad()) {
+      if (!lemmaIDFWeights.tryLoad(LEMMA_IDF_WIKI_FILENAME)) {
         Log.out("could not load lemma idf weights");
         return;
       }
