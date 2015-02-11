@@ -1,7 +1,5 @@
 package com.experimental.classifier;
 
-import com.experimental.documentmodel.BagOfWeightedLemmas;
-import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.keywords.KeyAssociations;
@@ -76,7 +74,11 @@ public class KeywordVectoriser {
     resultVector.add(components.lemmaWeight());
     resultVector.add(components.lemmaWeightRatio());
     resultVector.add(components.lemmaQuality());
-    resultVector.add(components.lemmaIdfWeight());
+    resultVector.add(components.lemmaEntropyWeight());
+    resultVector.add(components.headerTitleWeight());
+    resultVector.add(components.headerDescriptionWeight());
+    resultVector.add(components.headerKeywordWeight());
+    resultVector.add(components.linksWeight());
 
     resultVector.add(components.weightToGobalRatio()); // 3
     resultVector.add(components.globalAverageWeightPerDocument());
@@ -97,9 +99,8 @@ public class KeywordVectoriser {
     resultVector.add(components.localToGlobalStandardDeviationRatio());
     resultVector.add(components.localToGlobalDocumentsOccuredRatio());
     resultVector.add(components.getKeyAssociationsWeight());
-    resultVector.add(components.getGlobalIdfWeight());
+    resultVector.add(components.globalIdfWeight());
 
-    resultVector = generateLoggedVector(resultVector);
     resultVector = generateSquaredVector(resultVector);
 
     return new KeywordVector(candidate, resultVector);
@@ -124,7 +125,11 @@ public class KeywordVectoriser {
     resultVector.add(c0.lemmaWeight());       resultVector.add(c1.lemmaWeight());
     resultVector.add(c0.lemmaWeightRatio());  resultVector.add(c1.lemmaWeightRatio());
     resultVector.add(c0.lemmaQuality());      resultVector.add(c1.lemmaQuality());
-    resultVector.add(c0.lemmaIdfWeight());    resultVector.add(c1.lemmaIdfWeight());
+    resultVector.add(c0.lemmaEntropyWeight());    resultVector.add(c1.lemmaEntropyWeight());
+    resultVector.add(c0.headerTitleWeight()); resultVector.add(c1.headerTitleWeight());
+    resultVector.add(c0.headerDescriptionWeight()); resultVector.add(c1.headerDescriptionWeight());
+    resultVector.add(c0.headerKeywordWeight()); resultVector.add(c1.headerKeywordWeight());
+    resultVector.add(c0.linksWeight());         resultVector.add(c1.linksWeight());
 
     resultVector.add(c0.weightToGobalRatio());                    resultVector.add(c1.weightToGobalRatio());
     resultVector.add(c0.globalAverageWeightPerDocument());        resultVector.add(c1.globalAverageWeightPerDocument());
@@ -145,14 +150,14 @@ public class KeywordVectoriser {
     resultVector.add(c0.localToGlobalStandardDeviationRatio());    resultVector.add(c1.localToGlobalStandardDeviationRatio());
     resultVector.add(c0.localToGlobalDocumentsOccuredRatio());     resultVector.add(c1.localToGlobalDocumentsOccuredRatio());
     resultVector.add(c0.getKeyAssociationsWeight());               resultVector.add(c1.getKeyAssociationsWeight());
-    resultVector.add(c0.getGlobalIdfWeight());                     resultVector.add(c1.getGlobalIdfWeight());
+    resultVector.add(c0.globalIdfWeight());                        resultVector.add(c1.globalIdfWeight());
 
 
 
 //    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
 //    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio())));
 //    resultVector.add(logSum(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality())));
-//    resultVector.add(logSum(Lists.newArrayList(c0.lemmaIdfWeight(), c1.lemmaIdfWeight())));
+//    resultVector.add(logSum(Lists.newArrayList(c0.lemmaEntropyWeight(), c1.lemmaEntropyWeight())));
 //
 //    resultVector.add(logSum(Lists.newArrayList(c0.weightToGobalRatio(), c1.weightToGobalRatio())));
 //    resultVector.add(logSum(Lists.newArrayList(c0.globalAverageWeightPerDocument(), c1.globalAverageWeightPerDocument())));
@@ -175,7 +180,6 @@ public class KeywordVectoriser {
 //    resultVector.add(logSum(Lists.newArrayList(c0.getKeyAssociationsWeight(), c1.getKeyAssociationsWeight())));
 //    resultVector.add(logSum(Lists.newArrayList(c0.getGlobalIdfWeight(), c1.getGlobalIdfWeight())));
 
-    resultVector = generateLoggedVector(resultVector);
     resultVector = generateSquaredVector(resultVector);
 
     return new KeywordVector(candidate, resultVector);
@@ -205,7 +209,16 @@ public class KeywordVectoriser {
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight(), c2.lemmaWeight())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio(), c2.lemmaWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality(), c2.lemmaQuality())));
-    resultVector.add(logSum(Lists.newArrayList(c0.lemmaIdfWeight(), c1.lemmaIdfWeight(), c2.lemmaIdfWeight())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaEntropyWeight(), c1.lemmaEntropyWeight(), c2.lemmaEntropyWeight())));
+
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.headerTitleWeight(), c1.headerTitleWeight(), c2.headerTitleWeight())));
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.headerDescriptionWeight(), c1.headerDescriptionWeight(), c2.headerDescriptionWeight())));
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.headerKeywordWeight(), c1.headerKeywordWeight(), c2.headerKeywordWeight())));
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.linksWeight(), c1.linksWeight(), c2.linksWeight())));
 
     resultVector.add(logSum(Lists.newArrayList(
         c0.weightToGobalRatio(), c1.weightToGobalRatio(), c2.weightToGobalRatio())));
@@ -244,9 +257,8 @@ public class KeywordVectoriser {
     resultVector.add(logSum(Lists.newArrayList(
         c0.getKeyAssociationsWeight(), c1.getKeyAssociationsWeight(), c2.getKeyAssociationsWeight())));
     resultVector.add(logSum(Lists.newArrayList(
-        c0.getGlobalIdfWeight(), c1.getGlobalIdfWeight(), c2.getGlobalIdfWeight())));
+        c0.globalIdfWeight(), c1.globalIdfWeight(), c2.globalIdfWeight())));
 
-    resultVector = generateLoggedVector(resultVector);
     resultVector = generateSquaredVector(resultVector);
 
     return new KeywordVector(candidate, resultVector);
@@ -278,16 +290,6 @@ public class KeywordVectoriser {
       sum += Math.log(1.0 + val);
     }
     return sum;
-  }
-
-  private List<Double> generateLoggedVector(List<Double> vector) {
-    return vector;
-//    List<Double> result = new ArrayList();
-//    result.addAll(vector);
-//    for (double val : vector) {
-//      result.add(Math.log(1.0 + val));
-//    }
-//    return result;
   }
 
   private List<Double> generateSquaredVector(List<Double> vector) {

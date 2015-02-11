@@ -7,6 +7,7 @@ import com.experimental.languagemodel.Lemma;
 import com.experimental.languagemodel.LemmaIDFWeights;
 import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
 import com.experimental.languagemodel.LemmaQuality;
+import com.experimental.sitepage.SitePage;
 import com.google.common.base.Preconditions;
 
 /**
@@ -50,7 +51,7 @@ public class KeywordVectorComponents {
     return lemmaQuality.getLemmaQuality(phraseLemma);
   }
 
-  public double lemmaIdfWeight() {
+  public double lemmaEntropyWeight() {
     return lemmaIdfWeights.getLemmaWeight(phraseLemma);
   }
 
@@ -163,13 +164,75 @@ public class KeywordVectorComponents {
   }
 
 
-  public double getGlobalIdfWeight() {
+  public double globalIdfWeight() {
     if (globalStats == null) {
       return 0.0;
     } else {
       double totalDocs = globalStats.sum / globalStats.averageWeightPerDocument;
       Preconditions.checkState(totalDocs >= globalStats.totalDocsOccuredIn);
       return Math.log(totalDocs / globalStats.totalDocsOccuredIn);
+    }
+  }
+
+  public double headerTitleWeight() {
+    BagOfWeightedLemmas titleBag = new BagOfWeightedLemmas();
+
+    for (SitePage page : document.getSitePages()) {
+      BagOfWeightedLemmas pageBag = new BagOfWeightedLemmas(page.header.title);
+      titleBag.addBag(pageBag);
+    }
+
+    if (titleBag.getBag().containsKey(phraseLemma)) {
+      return titleBag.getBag().get(phraseLemma).weight;
+    } else {
+      return 0.0;
+    }
+  }
+
+  public double headerDescriptionWeight() {
+    BagOfWeightedLemmas descriptionBag = new BagOfWeightedLemmas();
+
+    for (SitePage page : document.getSitePages()) {
+      BagOfWeightedLemmas pageBag = new BagOfWeightedLemmas(page.header.description);
+      descriptionBag.addBag(pageBag);
+    }
+
+    if (descriptionBag.getBag().containsKey(phraseLemma)) {
+      return descriptionBag.getBag().get(phraseLemma).weight;
+    } else {
+      return 0.0;
+    }
+  }
+
+  public double headerKeywordWeight() {
+    BagOfWeightedLemmas keywordsBag = new BagOfWeightedLemmas();
+
+    for (SitePage page : document.getSitePages()) {
+      BagOfWeightedLemmas pageBag = new BagOfWeightedLemmas(page.header.keywords);
+      keywordsBag.addBag(pageBag);
+    }
+
+    if (keywordsBag.getBag().containsKey(phraseLemma)) {
+      return keywordsBag.getBag().get(phraseLemma).weight;
+    } else {
+      return 0.0;
+    }
+  }
+
+  public double linksWeight() {
+    BagOfWeightedLemmas linksBag = new BagOfWeightedLemmas();
+
+    for (SitePage page : document.getSitePages()) {
+      for (SitePage.Link outgoing : page.outgoingLinks) {
+        BagOfWeightedLemmas outgoingBag = new BagOfWeightedLemmas(outgoing.linkText);
+        linksBag.addBag(outgoingBag);
+      }
+    }
+
+    if (linksBag.getBag().containsKey(phraseLemma)) {
+      return linksBag.getBag().get(phraseLemma).weight;
+    } else {
+      return 0.0;
     }
   }
 

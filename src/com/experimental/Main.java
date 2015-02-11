@@ -99,7 +99,7 @@ public class Main {
 
 //    testNounPhraseDB();
 
-    aggregateLemmaVariance();
+//    aggregateLemmaVariance();
 //    testKeywordVectoriser();
 
 //    try {
@@ -108,7 +108,7 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-//    trainClassifier();
+    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
