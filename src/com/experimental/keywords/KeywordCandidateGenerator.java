@@ -3,10 +3,12 @@ package com.experimental.keywords;
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.WebsiteDocument;
+import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.NounPhrase;
 import com.experimental.nlp.NounPhraseExtractor;
 import com.experimental.nlp.SimplePOSTag;
+import com.experimental.sitepage.SitePage;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -35,6 +37,23 @@ public class KeywordCandidateGenerator {
       }
       return buffer.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      KeywordCandidate candidate = (KeywordCandidate) o;
+
+      if (!phraseLemmas.equals(candidate.phraseLemmas)) return false;
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return phraseLemmas.hashCode();
+    }
   }
 
   private static class WeightedNounPhrase {
@@ -59,17 +78,23 @@ public class KeywordCandidateGenerator {
   private final NounPhraseExtractor nounPhraseExtractor = new NounPhraseExtractor(LemmaDB.instance);
   private final NounPhrasesDB nounPhraseDb;
   private final LemmaOccuranceStatsAggregator lemmaStats;
+  private final KeywordSanityChecker keywordSanityChecker;
+  private final DocumentVectorDB documentVectorDb;
 
-  public KeywordCandidateGenerator(NounPhrasesDB nounPhraseDb, LemmaOccuranceStatsAggregator lemmaStats) {
+  public KeywordCandidateGenerator(NounPhrasesDB nounPhraseDb, LemmaOccuranceStatsAggregator lemmaStats,
+                                   KeywordSanityChecker keywordSanityChecker, DocumentVectorDB documentVectorDb) {
     this.nounPhraseDb = Preconditions.checkNotNull(nounPhraseDb);
     this.lemmaStats = Preconditions.checkNotNull(lemmaStats);
+    this.keywordSanityChecker = Preconditions.checkNotNull(keywordSanityChecker);
+    this.documentVectorDb = Preconditions.checkNotNull(documentVectorDb);
   }
 
-  public List<KeywordCandidate> generateCandidates(WebsiteDocument document) {
-    List<KeywordCandidate> result = new ArrayList<KeywordCandidate>();
+  public Set<KeywordCandidate> generateCandidates(WebsiteDocument document) {
+    Set<KeywordCandidate> result = new HashSet<KeywordCandidate>();
 
     result.addAll(getCandidatesFromNounPhrases(document));
     result.addAll(getCandidatesFromCompositedPhrases(document));
+//    result.addAll(getCandidatesFromHeader(document));
 
     return result;
   }
@@ -155,6 +180,25 @@ public class KeywordCandidateGenerator {
         } else if (isBackwardValid) {
           result.add(new KeywordCandidate(backwardPhrase));
         }
+      }
+    }
+
+    return result;
+  }
+
+  private List<KeywordCandidate> getCandidatesFromHeader(WebsiteDocument document) {
+    List<KeywordCandidate> result = new ArrayList<KeywordCandidate>();
+
+    List<SitePage> pages = document.getSitePages();
+    if (pages.size() == 0) {
+      return result;
+    }
+
+    SitePage frontPage = pages.get(0);
+    for (Sentence sentence : frontPage.header.keywords) {
+      List<NounPhrase> phrases = nounPhraseExtractor.extractNounPhrases(sentence);
+      for (NounPhrase phrase : phrases) {
+        result.add(new KeywordCandidate(phrase.getPhraseLemmas()));
       }
     }
 

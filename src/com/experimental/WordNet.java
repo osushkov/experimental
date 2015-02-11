@@ -82,7 +82,15 @@ public class WordNet {
   }
 
   public boolean isLemmaInDictionary(Lemma lemma) {
-    return true;
+    POS pos = getPos(lemma.tag);
+    String stemmed = stemWord(lemma.lemma, pos);
+
+    if (stemmed == null) {
+      return false;
+    }
+
+    List<ISynsetID> synsets = getSynsetsFor(stemmed, pos);
+    return synsets != null && synsets.size() > 0;
   }
 
   private POS getPos(SimplePOSTag posTag) {

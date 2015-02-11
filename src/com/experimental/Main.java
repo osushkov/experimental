@@ -14,6 +14,7 @@ import com.experimental.documentvector.DocumentVectoriser;
 import com.experimental.documentvector.Word2VecDB;
 import com.experimental.keywords.KeyAssociations;
 import com.experimental.keywords.KeywordCandidateGenerator;
+import com.experimental.keywords.KeywordSanityChecker;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.Demo;
 import com.experimental.nlp.SimplePOSTag;
@@ -98,7 +99,7 @@ public class Main {
 
 //    testNounPhraseDB();
 
-    //aggregateLemmaVariance();
+    aggregateLemmaVariance();
 //    testKeywordVectoriser();
 
 //    try {
@@ -112,7 +113,7 @@ public class Main {
 //    testClassifier();
 //    testKeywordCandidateExtraction();
 
-    testTopicAggregator();
+//    testKeywordCandidateExtraction();
 
     Log.out("FINISHED");
   }
@@ -229,25 +230,23 @@ public class Main {
     WebsiteDocument testDocument =
         new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
 
-    List<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
+    Set<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
     List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
 
-    for (int i = 0; i < vectors.size(); i++) {
-      KeywordVector vector = vectors.get(i);
-      KeywordCandidateGenerator.KeywordCandidate candidate = candidates.get(i);
+    for (KeywordVector vector : vectors) {
       double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
 
-      if (candidate.phraseLemmas.size() == 1) {
+      if (vector.keyword.phraseLemmas.size() == 1) {
         if (model0.predict(Vectors.dense(doubleVec)) >= 0.5) {
-          Log.out("** " + candidate.toString());
+          Log.out("** " + vector.keyword.toString());
         }
-      } else if (candidate.phraseLemmas.size() == 2) {
+      } else if (vector.keyword.phraseLemmas.size() == 2) {
         if (model1.predict(Vectors.dense(doubleVec)) >= 0.5) {
-          Log.out("** " + candidate.toString());
+          Log.out("** " + vector.keyword.toString());
         }
-      } else if (candidate.phraseLemmas.size() == 3) {
+      } else if (vector.keyword.phraseLemmas.size() == 3) {
         if (model2.predict(Vectors.dense(doubleVec)) >= 0.85) {
-          Log.out("** " + candidate.toString());
+          Log.out("** " + vector.keyword.toString());
         }
       }
     }
@@ -261,6 +260,9 @@ public class Main {
 
 
   private static void trainClassifier() {
+    final String LEMMA_QUALITY_WIKI_FILENAME = "lemma_quality_wiki.txt";
+    final String LEMMA_IDF_WIKI_FILENAME = "lemma_idf_weights_wiki.txt";
+
     try {
       if (!LemmaMorphologies.instance.tryLoad()) {
         Log.out("could not load LemmaMorphologies");
@@ -493,7 +495,7 @@ public class Main {
     WebsiteDocument testDocument =
         new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
 
-    List<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
+    Set<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
     List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
 
     for (KeywordVector vector : vectors) {
@@ -501,7 +503,7 @@ public class Main {
     }
   }
 
-  private static List<KeywordCandidateGenerator.KeywordCandidate> getCandidateKeywords(WebsiteDocument document) {
+  private static Set<KeywordCandidateGenerator.KeywordCandidate> getCandidateKeywords(WebsiteDocument document) {
     NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
     try {
       Log.out("loading NounPhrasesDB...");
@@ -522,7 +524,19 @@ public class Main {
       return null;
     }
 
-    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator);
+    WordNet wordnet = new WordNet();
+    if (!wordnet.loadWordNet()) {
+      Log.out("could not load WordNet");
+      return null;
+    }
+
+    DocumentVectorDB documentVectorDB = new DocumentVectorDB();
+    documentVectorDB.load();
+
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+
+    KeywordCandidateGenerator candidateGenerator =
+        new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);
     return candidateGenerator.generateCandidates(document);
   }
 
@@ -572,12 +586,24 @@ public class Main {
       return;
     }
 
-    KeywordCandidateGenerator candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator);
+    WordNet wordnet = new WordNet();
+    if (!wordnet.loadWordNet()) {
+      Log.out("could not load WordNet");
+      return;
+    }
+
+    DocumentVectorDB documentVectorDB = new DocumentVectorDB();
+    documentVectorDB.load();
+
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+
+    KeywordCandidateGenerator candidateGenerator =
+        new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
 
-    List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(testDocument);
+    Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(testDocument);
     for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {
       for (Lemma lemma : candidate.phraseLemmas) {
         System.out.print(lemma.lemma + " ");
@@ -1012,11 +1038,13 @@ public class Main {
   }
 
   private static void aggregateLemmaVariance() {
+    final String WIKI_FILENAME = "global_lemma_occurance_statistics_wiki.txt";
+
     Log.out("aggregateLemmaVariance running...");
 
     final LemmaOccuranceStatsAggregator lemmaVarianceAggregator = new LemmaOccuranceStatsAggregator();
     try {
-      if (lemmaVarianceAggregator.tryLoadFromDisk()) {
+      if (lemmaVarianceAggregator.tryLoadFromDisk(WIKI_FILENAME)) {
         Log.out("loaded LemmaVariances from disk");
         return;
       }
@@ -1024,7 +1052,7 @@ public class Main {
       e.printStackTrace();
     }
 
-    final Executor executor = Executors.newFixedThreadPool(8);
+    final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
     final Random rand = new Random();
@@ -1067,7 +1095,7 @@ public class Main {
     }
 
     try {
-      lemmaVarianceAggregator.save();
+      lemmaVarianceAggregator.save(WIKI_FILENAME);
     } catch (IOException e) {
       e.printStackTrace();
     }

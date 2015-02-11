@@ -14,6 +14,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public class KeywordVectoriser {
     this.keyAssociations = Preconditions.checkNotNull(keyAssociations);
   }
 
-  public List<KeywordVector> vectoriseKeywordCandidates(List<KeywordCandidateGenerator.KeywordCandidate> candidates,
+  public List<KeywordVector> vectoriseKeywordCandidates(Collection<KeywordCandidateGenerator.KeywordCandidate> candidates,
                                                         WebsiteDocument document) {
     Preconditions.checkNotNull(candidates);
     Preconditions.checkNotNull(document);

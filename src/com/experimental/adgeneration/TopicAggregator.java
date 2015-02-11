@@ -74,11 +74,13 @@ public class TopicAggregator {
         addNounPhraseTo(entry.getKey(), Math.log(1.0 + entry.getValue()), nounWeights);
       }
     }
-
-    outputResults();
   }
 
-  private void outputResults() {
+  public Map<NounPhrase, Double> getNounPhrases() {
+    return nounWeights;
+  }
+
+  public void outputResults() {
     List<Lemma> bestVerbs = outputBestVerb();
     outputBestNounPhrase(bestVerbs);
 //    outputBestAdjective();
