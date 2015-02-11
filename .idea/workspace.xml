@@ -30,8 +30,8 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.35173824" vertical-offset="1231" max-vertical-offset="19845">
-                  <caret line="105" column="29" selection-start-line="105" selection-start-column="6" selection-end-line="105" selection-end-column="29" />
+                <state vertical-scroll-proportion="0.68916154" vertical-offset="5806" max-vertical-offset="19860">
+                  <caret line="434" column="19" selection-start-line="434" selection-start-column="19" selection-end-line="434" selection-end-column="19" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -200,8 +200,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeywordCandidateGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeywordSanityChecker.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
       </list>
     </option>
   </component>
@@ -1264,8 +1264,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35173824" vertical-offset="1231" max-vertical-offset="19845">
-          <caret line="105" column="29" selection-start-line="105" selection-start-column="6" selection-end-line="105" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.68916154" vertical-offset="5806" max-vertical-offset="19860">
+          <caret line="434" column="19" selection-start-line="434" selection-start-column="19" selection-end-line="434" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
