@@ -325,6 +325,12 @@ public class Main {
       return;
     }
 
+    WordNet wordnet = new WordNet();
+    if (!wordnet.loadWordNet()) {
+      Log.out("could not load WordNet");
+      return;
+    }
+
     KeyAssociations keyAssociations = new KeyAssociations(nounAssociations);
 
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
@@ -333,7 +339,12 @@ public class Main {
     KeywordVectoriser keywordVectoriser =
         new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, keyAssociations);
 
-    ClassifierTrainer trainer = new ClassifierTrainer(nounPhraseDb, keywordVectoriser, lemmaStatsAggregator);
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+
+    KeywordCandidateGenerator candidateGenerator =
+        new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDb);
+
+    ClassifierTrainer trainer = new ClassifierTrainer(candidateGenerator, keywordVectoriser);
     final ClassifierTrainer.LearnedModel learnedModel = trainer.train();
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
@@ -362,6 +373,13 @@ public class Main {
     final String TRAINING_DATA_FILENAME = "keyword_training_data.txt";
 
     NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      Log.out("loading NounPhrasesDB...");
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading NounPhrasesDB");
 
     LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
     try {
@@ -374,7 +392,21 @@ public class Main {
       return;
     }
 
-    final TrainingDataGenerator trainingDataGenerator = new TrainingDataGenerator(nounPhraseDb, lemmaStatsAggregator);
+    WordNet wordnet = new WordNet();
+    if (!wordnet.loadWordNet()) {
+      Log.out("could not load WordNet");
+      return;
+    }
+
+    DocumentVectorDB documentVectorDB = new DocumentVectorDB();
+    documentVectorDB.load();
+
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+
+    KeywordCandidateGenerator candidateGenerator =
+        new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);
+
+    final TrainingDataGenerator trainingDataGenerator = new TrainingDataGenerator(candidateGenerator);
 
     File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
     String trainingDataFilePath = aggregateDataFile.toPath().resolve(TRAINING_DATA_FILENAME).toString();

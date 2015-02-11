@@ -20,10 +20,7 @@ import org.apache.spark.mllib.regression.GeneralizedLinearModel;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
@@ -56,18 +53,14 @@ public class ClassifierTrainer {
   private final KeywordVectoriser keywordVectoriser;
   private final KeywordCandidateGenerator candidateGenerator;
 
-  public ClassifierTrainer(NounPhrasesDB nounPhraseDb, KeywordVectoriser keywordVectoriser,
-                           LemmaOccuranceStatsAggregator lemmaStats) {
-    Preconditions.checkNotNull(nounPhraseDb);
-    Preconditions.checkNotNull(lemmaStats);
-
+  public ClassifierTrainer(KeywordCandidateGenerator candidateGenerator, KeywordVectoriser keywordVectoriser) {
     SparkConf conf = new SparkConf().setAppName("myApp").setMaster("local");
     this.sc = new JavaSparkContext(conf);
     Logger.getLogger("org").setLevel(Level.ERROR);
     Logger.getLogger("akka").setLevel(Level.ERROR);
 
     this.keywordVectoriser = Preconditions.checkNotNull(keywordVectoriser);
-    this.candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStats);
+    this.candidateGenerator = Preconditions.checkNotNull(candidateGenerator);
   }
 
   public LearnedModel train() {
@@ -96,32 +89,27 @@ public class ClassifierTrainer {
     for (DocumentKeywordTrainingBundle bundle : documentKeywords) {
       WebsiteDocument document = new WebsiteDocument(bundle.documentRootPath);
       Log.out(document.getSitePages().get(0).url);
-      List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
+      Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
       List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, document);
 
-
-
-      for (int i = 0; i < vectors.size(); i++) {
-        KeywordVector vector = vectors.get(i);
+      for (KeywordVector vector : vectors) {
         double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
-
-        KeywordCandidateGenerator.KeywordCandidate candidate = candidates.get(i);
 
         boolean isGood = false;
         double certainty = 0.0;
-        if (candidate.phraseLemmas.size() == 1) {
+        if (vector.keyword.phraseLemmas.size() == 1) {
           certainty = learnedModel.oneKeywordClassifier.predict(Vectors.dense(doubleVec));
           isGood = certainty >= 0.5;
-        } else if (candidate.phraseLemmas.size() == 2) {
+        } else if (vector.keyword.phraseLemmas.size() == 2) {
           certainty = learnedModel.twoKeywordClassifier.predict(Vectors.dense(doubleVec));
           isGood = certainty >= 0.5;
-        } else if (candidate.phraseLemmas.size() >= 3) {
+        } else if (vector.keyword.phraseLemmas.size() >= 3) {
           certainty = learnedModel.threeOrModeKeywordClassifier.predict(Vectors.dense(doubleVec));
           isGood = certainty >= 0.5;
         }
 
         if (isGood) {
-          Log.out("= " + candidate.toString() + " \t" + Double.toString(certainty));
+          Log.out("= " + vector.keyword.toString() + " \t" + Double.toString(certainty));
         }
       }
     }
@@ -195,7 +183,7 @@ public class ClassifierTrainer {
 
   private TrainingData trainingDataFromBundle(DocumentKeywordTrainingBundle bundle) {
     WebsiteDocument document = new WebsiteDocument(bundle.documentRootPath);
-    List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
+    Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
     List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, document);
 
     TrainingData result = new TrainingData();

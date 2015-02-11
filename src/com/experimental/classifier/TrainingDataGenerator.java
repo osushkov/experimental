@@ -13,32 +13,24 @@ import com.google.common.base.Preconditions;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by sushkov on 31/01/15.
  */
 public class TrainingDataGenerator {
 
-  private final NounPhrasesDB nounPhraseDb;
   private final KeywordCandidateGenerator candidateGenerator;
 
-  public TrainingDataGenerator(NounPhrasesDB nounPhraseDb, LemmaOccuranceStatsAggregator lemmaStats) {
-    this.nounPhraseDb = Preconditions.checkNotNull(nounPhraseDb);
-    this.candidateGenerator = new KeywordCandidateGenerator(nounPhraseDb, lemmaStats);
+  public TrainingDataGenerator(KeywordCandidateGenerator candidateGenerator) {
+    this.candidateGenerator = Preconditions.checkNotNull(candidateGenerator);
   }
 
   public void outputTrainingData(WebsiteDocument document, BufferedWriter out) throws IOException {
     Preconditions.checkNotNull(document);
     Preconditions.checkNotNull(out);
 
-    try {
-      nounPhraseDb.tryLoad();
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
-    List<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
+    Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
     if (candidates.size() == 0) {
       return;
     }
