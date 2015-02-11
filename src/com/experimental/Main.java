@@ -421,6 +421,7 @@ public class Main {
     }
 
     final BufferedWriter out = bw;
+    final Random rand = new Random();
 
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
@@ -434,7 +435,9 @@ public class Main {
           } catch (Exception e) {
             return;
           }
-          System.gc();
+          if (rand.nextInt()%500 == 0) {
+            System.gc();
+          }
         }
       }
     });

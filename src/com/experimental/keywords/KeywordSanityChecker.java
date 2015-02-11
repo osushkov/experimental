@@ -28,6 +28,9 @@ public class KeywordSanityChecker {
       if (STOP_WORDS.contains(lemma.lemma)) {
         return false;
       }
+      if (!wordnet.isLemmaInDictionary(lemma)) {
+        return false;
+      }
     }
 
     return true;
