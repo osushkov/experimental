@@ -1,6 +1,7 @@
 package com.experimental.keywords;
 
 import com.experimental.documentmodel.BagOfWeightedLemmas;
+import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.documentvector.DocumentVectorDB;
@@ -94,8 +95,8 @@ public class KeywordCandidateGenerator {
 
     result.addAll(getCandidatesFromNounPhrases(document));
     result.addAll(getCandidatesFromCompositedPhrases(document));
-//    result.addAll(getCandidatesFromHeader(document));
-//    result.addAll(getCandidatesFromSimilarDocuments(document));
+    result.addAll(getCandidatesFromHeader(document));
+    result.addAll(getCandidatesFromSimilarDocuments(document));
 
     return result;
   }
@@ -207,9 +208,52 @@ public class KeywordCandidateGenerator {
   }
 
   private List<KeywordCandidate> getCandidatesFromSimilarDocuments(WebsiteDocument document) {
-    List<KeywordCandidate> result = new ArrayList<KeywordCandidate>();
+    List<DocumentVectorDB.DocumentSimilarityPair> similarDocs = documentVectorDb.getNearestDocuments(document, 30);
+    Map<NounPhrase, Double> nounWeights = new HashMap<NounPhrase, Double>();
 
+    for (DocumentVectorDB.DocumentSimilarityPair similarity : similarDocs) {
+      Map<NounPhrase, Double> documentNounWeights = new HashMap<NounPhrase, Double>();
+      for (Sentence sentence : document.getSentences()) {
+        List<NounPhrase> phrases = nounPhraseExtractor.extractNounPhrases(sentence);
+        for (NounPhrase phrase : phrases) {
+          NounPhrase nounOnly = phrase.getNounOnlyPhrase();
+          addNounPhraseTo(nounOnly, sentence.emphasis, documentNounWeights);
+        }
+      }
+
+      for (Map.Entry<NounPhrase, Double> entry : documentNounWeights.entrySet()) {
+        addNounPhraseTo(entry.getKey(), Math.log(1.0 + entry.getValue()) * similarity.similarity, nounWeights);
+      }
+    }
+
+    List<WeightedNounPhrase> weightedNounPhrases = new ArrayList<WeightedNounPhrase>();
+    for (Map.Entry<NounPhrase, Double> entry : nounWeights.entrySet()) {
+      weightedNounPhrases.add(new WeightedNounPhrase(entry.getKey(), entry.getValue()));
+    }
+
+    Comparator<WeightedNounPhrase> weightOrder =
+        new Comparator<WeightedNounPhrase>() {
+          public int compare(WeightedNounPhrase e1, WeightedNounPhrase e2) {
+            return Double.compare(e2.weight, e1.weight);
+          }
+        };
+
+    weightedNounPhrases.sort(weightOrder);
+
+    List<KeywordCandidate> result = new ArrayList<KeywordCandidate>();
+    for (int i = 0; i < Math.min(15, weightedNounPhrases.size()); i++) {
+      result.add(new KeywordCandidate(weightedNounPhrases.get(i).phrase.getPhraseLemmas()));
+    }
     return result;
+  }
+
+  private void addNounPhraseTo(NounPhrase phrase, double weight, Map<NounPhrase, Double> occurances) {
+    Double existing = occurances.get(phrase);
+    if (existing != null) {
+      occurances.put(phrase, existing + weight);
+    } else {
+      occurances.put(phrase, weight);
+    }
   }
 
   private boolean isValidPhrase(List<Lemma> phrase) {

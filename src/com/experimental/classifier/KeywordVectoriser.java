@@ -4,10 +4,7 @@ import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.keywords.KeyAssociations;
 import com.experimental.keywords.KeywordCandidateGenerator;
-import com.experimental.languagemodel.Lemma;
-import com.experimental.languagemodel.LemmaIDFWeights;
-import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
-import com.experimental.languagemodel.LemmaQuality;
+import com.experimental.languagemodel.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 

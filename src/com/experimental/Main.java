@@ -102,13 +102,13 @@ public class Main {
 //    aggregateLemmaVariance();
 //    testKeywordVectoriser();
 
-//    try {
-//      outputKeywordCandidates();
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
+    try {
+      outputKeywordCandidates();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-    trainClassifier();
+//    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
@@ -283,7 +283,7 @@ public class Main {
 
     LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
     try {
-      if (!lemmaStatsAggregator.tryLoadFromDisk(VARIANCES_DATA_FILENAME)) {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
         Log.out("could not load LemmaOccuranceStatsAggregator from disk");
         return;
       }
@@ -294,7 +294,7 @@ public class Main {
 
     LemmaQuality lemmaQuality = new LemmaQuality();
     try {
-      if (!lemmaQuality.tryLoadFromDisk(LEMMA_QUALITY_WIKI_FILENAME)) {
+      if (!lemmaQuality.tryLoadFromDisk()) {
         Log.out("could not load LemmaQuality from disk");
         return;
       }
@@ -305,7 +305,7 @@ public class Main {
 
     LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
     try {
-      if (!lemmaIDFWeights.tryLoad(LEMMA_IDF_WIKI_FILENAME)) {
+      if (!lemmaIDFWeights.tryLoad()) {
         Log.out("could not load lemma idf weights");
         return;
       }
