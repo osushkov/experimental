@@ -69,6 +69,7 @@ public class KeywordVectoriser {
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(components.lemmaWeight());
+    resultVector.add(components.lemmaMaxWeight());
     resultVector.add(components.lemmaWeightRatio());
     resultVector.add(components.lemmaQuality());
     resultVector.add(components.lemmaEntropyWeight());
@@ -120,6 +121,7 @@ public class KeywordVectoriser {
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(c0.lemmaWeight());       resultVector.add(c1.lemmaWeight());
+    resultVector.add(c0.lemmaMaxWeight());    resultVector.add(c1.lemmaMaxWeight());
     resultVector.add(c0.lemmaWeightRatio());  resultVector.add(c1.lemmaWeightRatio());
     resultVector.add(c0.lemmaQuality());      resultVector.add(c1.lemmaQuality());
     resultVector.add(c0.lemmaEntropyWeight());    resultVector.add(c1.lemmaEntropyWeight());
@@ -204,6 +206,7 @@ public class KeywordVectoriser {
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight(), c2.lemmaWeight())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaMaxWeight(), c1.lemmaMaxWeight(), c2.lemmaMaxWeight())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio(), c2.lemmaWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality(), c2.lemmaQuality())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaEntropyWeight(), c1.lemmaEntropyWeight(), c2.lemmaEntropyWeight())));

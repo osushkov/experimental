@@ -1,6 +1,8 @@
 package com.experimental.classifier;
 
 import com.experimental.documentmodel.BagOfWeightedLemmas;
+import com.experimental.documentmodel.Sentence;
+import com.experimental.documentmodel.Token;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.keywords.KeyAssociations;
 import com.experimental.languagemodel.Lemma;
@@ -41,6 +43,19 @@ public class KeywordVectorComponents {
 
   public double lemmaWeight() {
     return Math.log(1.0 + getLemmaWeight(phraseLemma, document));
+  }
+
+  public double lemmaMaxWeight() {
+    double maxWeight = 0.0;
+    for (Sentence sentence : document.getSentences()) {
+      for (Token token : sentence.tokens) {
+        Lemma lemma = Lemma.fromToken(token);
+        if (lemma.equals(phraseLemma) && sentence.emphasis > maxWeight) {
+          maxWeight = sentence.emphasis;
+        }
+      }
+    }
+    return maxWeight;
   }
 
   public double lemmaWeightRatio() {
