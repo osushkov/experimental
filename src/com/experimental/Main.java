@@ -102,13 +102,13 @@ public class Main {
 //    aggregateLemmaVariance();
 //    testKeywordVectoriser();
 
-    try {
-      outputKeywordCandidates();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+//    try {
+//      outputKeywordCandidates();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
 
-//    trainClassifier();
+    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
