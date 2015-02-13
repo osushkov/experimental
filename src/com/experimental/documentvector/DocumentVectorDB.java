@@ -125,7 +125,7 @@ public class DocumentVectorDB {
         double similarity = dbDocument.vector.dotProduct(document.getConceptVector());
 
         sumWeight += entry.weight;
-        similaritySum += entry.weight * similarity * similarity;
+        similaritySum += entry.weight * similarity;
       }
     }
 

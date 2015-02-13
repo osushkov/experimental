@@ -1,5 +1,6 @@
 package com.experimental.classifier;
 
+import com.experimental.WordNet;
 import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.Token;
@@ -29,6 +30,7 @@ public class KeywordVectorComponents {
   private final LemmaOccuranceStatsAggregator.LemmaStats localStats;
   private final LemmaOccuranceStatsAggregator.LemmaStats globalStats;
   private final DocumentVectorDB documentVectorDB;
+  private final WordNet wordnet;
 
   public KeywordVectorComponents(Lemma phraseLemma,
                                  WebsiteDocument document,
@@ -36,7 +38,8 @@ public class KeywordVectorComponents {
                                  LemmaIDFWeights lemmaIdfWeights,
                                  LemmaOccuranceStatsAggregator.LemmaStats localStats,
                                  LemmaOccuranceStatsAggregator.LemmaStats globalStats,
-                                 DocumentVectorDB documentVectorDB) {
+                                 DocumentVectorDB documentVectorDB,
+                                 WordNet wordnet) {
 
     this.phraseLemma = Preconditions.checkNotNull(phraseLemma);
     this.document = Preconditions.checkNotNull(document);
@@ -46,6 +49,7 @@ public class KeywordVectorComponents {
     this.localStats = localStats;
     this.globalStats = globalStats;
     this.documentVectorDB = Preconditions.checkNotNull(documentVectorDB);
+    this.wordnet = Preconditions.checkNotNull(wordnet);
   }
 
   public double lemmaWeight() {
@@ -93,6 +97,10 @@ public class KeywordVectorComponents {
 
   public double lemmaEntropyWeight() {
     return lemmaIdfWeights.getLemmaWeight(phraseLemma);
+  }
+
+  public double lemmaDictionaryWord() {
+    return wordnet.isLemmaInDictionary(phraseLemma) ? 1.0 : 0.0;
   }
 
   public double weightToGobalRatio() {
