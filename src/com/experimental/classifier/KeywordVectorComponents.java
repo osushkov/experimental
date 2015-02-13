@@ -54,30 +54,30 @@ public class KeywordVectorComponents {
   }
 
   public double lemmaTopWeights() {
-    return 0.0;
-//    List<Double> weights = new ArrayList<Double>();
-//    for (Sentence sentence : document.getSentences()) {
-//      for (Token token : sentence.tokens) {
-//        Lemma lemma = Lemma.fromToken(token);
-//
-//        if (lemma.equals(phraseLemma)) {
-//          weights.add(sentence.emphasis);
-//        }
-//      }
-//    }
-//
-//    weights.sort(new Comparator<Double>() {
-//      @Override
-//      public int compare(Double o1, Double o2) {
-//        return Double.compare(o2, o1);
-//      }
-//    });
-//
-//    double topSum = 0.0;
-//    for (int i = 0; i < Math.min(5, weights.size()); i++) {
-//      topSum += weights.get(i);
-//    }
-//    return topSum / (double) Math.min(5, weights.size());
+//    return 0.0;
+    List<Double> weights = new ArrayList<Double>();
+    for (Sentence sentence : document.getSentences()) {
+      for (Token token : sentence.tokens) {
+        Lemma lemma = Lemma.fromToken(token);
+
+        if (lemma.equals(phraseLemma)) {
+          weights.add(sentence.emphasis);
+        }
+      }
+    }
+
+    weights.sort(new Comparator<Double>() {
+      @Override
+      public int compare(Double o1, Double o2) {
+        return Double.compare(o2, o1);
+      }
+    });
+
+    double topSum = 0.0;
+    for (int i = 0; i < Math.min(5, weights.size()); i++) {
+      topSum += weights.get(i);
+    }
+    return topSum / (double) Math.min(5, weights.size());
   }
 
   public double lemmaTopicDiscrimination() {
