@@ -1,6 +1,7 @@
 package com.experimental.classifier;
 
 import com.experimental.Constants;
+import com.experimental.documentmodel.DocumentDB;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.keywords.KeywordCandidateGenerator;
 import com.experimental.languagemodel.Lemma;
@@ -133,7 +134,7 @@ public class ClassifierTrainer {
     }
 
     for (DocumentKeywordTrainingBundle bundle : documentKeywords) {
-      WebsiteDocument document = new WebsiteDocument(bundle.documentRootPath);
+      WebsiteDocument document = DocumentDB.instance.createWebsiteDocument(bundle.documentRootPath);
       Log.out(document.getSitePages().get(0).url);
       Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
       List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, document);
@@ -237,7 +238,7 @@ public class ClassifierTrainer {
   }
 
   private TrainingData trainingDataFromBundle(DocumentKeywordTrainingBundle bundle) {
-    WebsiteDocument document = new WebsiteDocument(bundle.documentRootPath);
+    WebsiteDocument document = DocumentDB.instance.createWebsiteDocument(bundle.documentRootPath);
     Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
     List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, document);
 

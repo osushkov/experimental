@@ -1,9 +1,6 @@
 package com.experimental.documentmodel.thirdparty;
 
-import com.experimental.documentmodel.DocumentNameGenerator;
-import com.experimental.documentmodel.Sentence;
-import com.experimental.documentmodel.SentenceProcessor;
-import com.experimental.documentmodel.TextCollectionDocument;
+import com.experimental.documentmodel.*;
 import com.experimental.documentmodel.thirdparty.ThirdPartyDocumentParser;
 import com.google.common.base.Preconditions;
 
@@ -102,7 +99,7 @@ public class WebbaseDocumentParser implements ThirdPartyDocumentParser {
         DocumentNameGenerator.DocumentType.UNRELATED_COLLECTION, documentName))
         .toPath().toAbsolutePath().resolve(documentName);
 
-    return new TextCollectionDocument(documentPath.toString());
+    return DocumentDB.instance.createTextCollectionDocument(documentPath.toString());
   }
 
   private boolean isParagraphBreakingLine(String line) {

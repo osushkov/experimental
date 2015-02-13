@@ -124,7 +124,7 @@ public class WikipediaDocumentParser implements ThirdPartyDocumentParser {
         new File(documentNameGenerator.getAbsoluteRootPath(DocumentNameGenerator.DocumentType.TOPICAL, documentName))
             .toPath().toAbsolutePath().resolve(documentName);
 
-    return new TopicalDocument(documentPath.toString());
+    return DocumentDB.instance.createTopicalDocument(documentPath.toString());
   }
 
   private boolean isLineWeighted(String line) {

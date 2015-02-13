@@ -17,7 +17,7 @@ public class TopicalDocument extends Document {
   public static TopicalDocument readFrom(String rootDirectoryPath) throws IOException {
     Preconditions.checkNotNull(rootDirectoryPath);
 
-    return new TopicalDocument(rootDirectoryPath);
+    return DocumentDB.instance.createTopicalDocument(rootDirectoryPath);
   }
 
   @Override

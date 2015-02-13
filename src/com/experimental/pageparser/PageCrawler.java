@@ -1,6 +1,7 @@
 package com.experimental.pageparser;
 
 import com.experimental.Constants;
+import com.experimental.documentmodel.DocumentDB;
 import com.experimental.documentmodel.DocumentNameGenerator;
 import com.experimental.documentmodel.SentenceProcessor;
 import com.experimental.documentmodel.WebsiteDocument;
@@ -105,7 +106,7 @@ public class PageCrawler {
         new File(documentNameGenerator.getAbsoluteRootPath(DocumentNameGenerator.DocumentType.WEBSITE, documentName))
             .toPath().toAbsolutePath().resolve(documentName);
 
-    WebsiteDocument parentDocument = new WebsiteDocument(documentPath.toString());
+    WebsiteDocument parentDocument = DocumentDB.instance.createWebsiteDocument(documentPath.toString());
 
     SitePage frontPage = null;
     try {

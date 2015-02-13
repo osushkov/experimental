@@ -120,7 +120,7 @@ public class Main {
 
   private static void testTopicAggregator() {
     WebsiteDocument testDocument =
-        new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
+        DocumentDB.instance.createWebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
 
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
@@ -214,8 +214,8 @@ public class Main {
     KeywordVectoriser keywordVectoriser =
         new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
-    WebsiteDocument testDocument =
-        new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
+    WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/499/49988AA");
 
     Set<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
     List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
@@ -489,8 +489,8 @@ public class Main {
     KeywordVectoriser keywordVectoriser =
         new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
-    WebsiteDocument testDocument =
-        new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
+    WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
 
     Set<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
     List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
@@ -597,8 +597,8 @@ public class Main {
     KeywordCandidateGenerator candidateGenerator =
         new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);
 
-    WebsiteDocument testDocument =
-        new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
+    WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
 
     Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(testDocument);
     for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {

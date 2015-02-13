@@ -47,13 +47,13 @@ public class DocumentStream {
     if (Document.isExistingDocumentDirectory(dir)) {
       switch (type)  {
         case TOPICAL:
-          streamOutput.processDocument(new TopicalDocument(dir.getAbsolutePath()));
+          streamOutput.processDocument(DocumentDB.instance.createTopicalDocument(dir.getAbsolutePath()));
           break;
         case UNRELATED_COLLECTION:
-          streamOutput.processDocument(new TextCollectionDocument(dir.getAbsolutePath()));
+          streamOutput.processDocument(DocumentDB.instance.createTextCollectionDocument(dir.getAbsolutePath()));
           break;
         case WEBSITE:
-          streamOutput.processDocument(new WebsiteDocument(dir.getAbsolutePath()));
+          streamOutput.processDocument(DocumentDB.instance.createWebsiteDocument(dir.getAbsolutePath()));
           break;
       }
       numDocumentsProcessed++;

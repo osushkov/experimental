@@ -17,7 +17,7 @@ public class TextCollectionDocument extends Document {
   public static TextCollectionDocument readFrom(String rootDirectoryPath) throws IOException {
     Preconditions.checkNotNull(rootDirectoryPath);
 
-    return new TextCollectionDocument(rootDirectoryPath);
+    return DocumentDB.instance.createTextCollectionDocument(rootDirectoryPath);
   }
 
   @Override
