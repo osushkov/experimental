@@ -229,6 +229,8 @@ public class KeywordVectoriser {
         c0.headerKeywordWeight(), c1.headerKeywordWeight(), c2.headerKeywordWeight())));
     resultVector.add(logSum(Lists.newArrayList(
         c0.linksWeight(), c1.linksWeight(), c2.linksWeight())));
+    resultVector.add(logSum(Lists.newArrayList(
+        c0.lemmaTopicDiscrimination(), c1.lemmaTopicDiscrimination(), c2.lemmaTopicDiscrimination())));
 
     resultVector.add(logSum(Lists.newArrayList(
         c0.weightToGobalRatio(), c1.weightToGobalRatio(), c2.weightToGobalRatio())));
