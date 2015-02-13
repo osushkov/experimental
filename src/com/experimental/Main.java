@@ -250,14 +250,14 @@ public class Main {
     final String LEMMA_QUALITY_WIKI_FILENAME = "lemma_quality_wiki.txt";
     final String LEMMA_IDF_WIKI_FILENAME = "lemma_idf_weights_wiki.txt";
     final String VARIANCES_DATA_FILENAME = "global_lemma_occurance_statistics_wiki.txt";
-    try {
-      if (!LemmaMorphologies.instance.tryLoad()) {
-        Log.out("could not load LemmaMorphologies");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
+//    try {
+//      if (!LemmaMorphologies.instance.tryLoad()) {
+//        Log.out("could not load LemmaMorphologies");
+//      }
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//      return;
+//    }
 
     NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
     try {
