@@ -30,16 +30,16 @@
           <file leaf-file-name="ClassifierTrainer.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.75598085" vertical-offset="815" max-vertical-offset="4965">
-                  <caret line="107" column="33" selection-start-line="107" selection-start-column="33" selection-end-line="107" selection-end-column="33" />
+                <state vertical-scroll-proportion="0.3492823" vertical-offset="685" max-vertical-offset="4980">
+                  <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#3033#3286#0" expanded="true" />
-                    <element signature="e#3285#3286#0" expanded="true" />
-                    <element signature="e#3311#3566#0" expanded="true" />
-                    <element signature="e#3565#3566#0" expanded="true" />
-                    <element signature="e#3591#3876#0" expanded="true" />
-                    <element signature="e#3875#3876#0" expanded="true" />
+                    <element signature="e#3050#3303#0" expanded="true" />
+                    <element signature="e#3302#3303#0" expanded="true" />
+                    <element signature="e#3328#3583#0" expanded="true" />
+                    <element signature="e#3582#3583#0" expanded="true" />
+                    <element signature="e#3608#3893#0" expanded="true" />
+                    <element signature="e#3892#3893#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -112,7 +112,9 @@
                   <caret line="60" column="45" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <marker date="1423805345319" expanded="true" signature="2419:3071" placeholder="//..." />
+                    <element signature="e#2459#2467#0" expanded="true" />
+                    <element signature="e#2743#2887#0" expanded="true" />
+                    <element signature="e#2886#2887#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -174,8 +176,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectorDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponents.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
       </list>
     </option>
   </component>
@@ -1238,29 +1240,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.75598085" vertical-offset="815" max-vertical-offset="4965">
-          <caret line="107" column="33" selection-start-line="107" selection-start-column="33" selection-end-line="107" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3033#3286#0" expanded="true" />
-            <element signature="e#3285#3286#0" expanded="true" />
-            <element signature="e#3311#3566#0" expanded="true" />
-            <element signature="e#3565#3566#0" expanded="true" />
-            <element signature="e#3591#3876#0" expanded="true" />
-            <element signature="e#3875#3876#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponents.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.430622" vertical-offset="420" max-vertical-offset="4395">
           <caret line="60" column="45" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1423805345319" expanded="true" signature="2419:3071" placeholder="//..." />
+            <element signature="e#2459#2467#0" expanded="true" />
+            <element signature="e#2743#2887#0" expanded="true" />
+            <element signature="e#2886#2887#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3492823" vertical-offset="685" max-vertical-offset="4980">
+          <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3050#3303#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
+            <element signature="e#3328#3583#0" expanded="true" />
+            <element signature="e#3582#3583#0" expanded="true" />
+            <element signature="e#3608#3893#0" expanded="true" />
+            <element signature="e#3892#3893#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -68,6 +68,7 @@ public class ClassifierTrainer {
   }
 
   public LearnedModel train() {
+    System.gc();
     final TrainingData trainingData = generateTrainingData();
     System.gc();
 
