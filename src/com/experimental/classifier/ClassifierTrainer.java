@@ -69,6 +69,7 @@ public class ClassifierTrainer {
 
   public LearnedModel train() {
     System.gc();
+    Log.out("generating training data");
     final TrainingData trainingData = generateTrainingData();
     System.gc();
 
@@ -78,6 +79,7 @@ public class ClassifierTrainer {
 
     final LearnedModel learnedModel = new LearnedModel();
 
+    Log.out("training");
     executor.execute(new Runnable() {
       @Override
       public void run() {
@@ -114,6 +116,7 @@ public class ClassifierTrainer {
       }
     }
 
+    Log.out("finished training");
     System.gc();
     testModel(learnedModel);
 
