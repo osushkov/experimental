@@ -80,6 +80,10 @@ public class KeywordVectorComponents {
 //    return topSum / (double) Math.min(5, weights.size());
   }
 
+  public double lemmaTopicDiscrimination() {
+    return documentVectorDB.getTermDiscriminationValue(phraseLemma, document);
+  }
+
   public double lemmaWeightRatio() {
     return getLemmaWeightRatio(phraseLemma, document);
   }

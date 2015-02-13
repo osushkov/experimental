@@ -1,9 +1,11 @@
 package com.experimental.documentvector;
 
 import com.experimental.Constants;
+import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.DocumentNameGenerator;
 import com.experimental.documentmodel.DocumentStream;
+import com.experimental.languagemodel.Lemma;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
@@ -110,6 +112,25 @@ public class DocumentVectorDB {
     } else {
       similarDocumentsCache.put(document, result);
       return result;
+    }
+  }
+
+  public double getTermDiscriminationValue(Lemma term, Document document) {
+    double similaritySum = 0.0;
+    double sumWeight = 0.0;
+
+    for (VectoredDocument dbDocument : vectoredDocuments) {
+      BagOfWeightedLemmas.WeightedLemmaEntry entry = dbDocument.document.getBagOfLemmas().getBag().get(term);
+      if (entry != null) {
+        sumWeight += entry.weight;
+        similaritySum += entry.weight * dbDocument.vector.dotProduct(document.getConceptVector());
+      }
+    }
+
+    if (sumWeight < Double.MIN_VALUE) {
+      return 0.0;
+    } else {
+      return similaritySum / sumWeight;
     }
   }
 }

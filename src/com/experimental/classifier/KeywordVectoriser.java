@@ -79,6 +79,7 @@ public class KeywordVectoriser {
     resultVector.add(components.headerDescriptionWeight());
     resultVector.add(components.headerKeywordWeight());
     resultVector.add(components.linksWeight());
+    resultVector.add(components.lemmaTopicDiscrimination());
 
     resultVector.add(components.weightToGobalRatio()); // 3
     resultVector.add(components.globalAverageWeightPerDocument());
@@ -133,6 +134,7 @@ public class KeywordVectoriser {
     resultVector.add(c0.headerDescriptionWeight()); resultVector.add(c1.headerDescriptionWeight());
     resultVector.add(c0.headerKeywordWeight()); resultVector.add(c1.headerKeywordWeight());
     resultVector.add(c0.linksWeight());         resultVector.add(c1.linksWeight());
+    resultVector.add(c0.lemmaTopicDiscrimination()); resultVector.add(c1.lemmaTopicDiscrimination());
 
     resultVector.add(c0.weightToGobalRatio());                    resultVector.add(c1.weightToGobalRatio());
     resultVector.add(c0.globalAverageWeightPerDocument());        resultVector.add(c1.globalAverageWeightPerDocument());
