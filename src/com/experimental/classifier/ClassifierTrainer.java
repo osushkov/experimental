@@ -59,7 +59,11 @@ public class ClassifierTrainer {
   private final KeywordCandidateGenerator candidateGenerator;
 
   public ClassifierTrainer(KeywordCandidateGenerator candidateGenerator, KeywordVectoriser keywordVectoriser) {
-    SparkConf conf = new SparkConf().setAppName("myApp").setMaster("local[4]");
+    SparkConf conf = new SparkConf()
+        .setAppName("myApp")
+        .setMaster("local[4]")
+        .set("spark.cores.max", "4")
+        .set("spark.task.cpus", "4");
     this.sc = new JavaSparkContext(conf);
     Logger.getLogger("org").setLevel(Level.ERROR);
     Logger.getLogger("akka").setLevel(Level.ERROR);
