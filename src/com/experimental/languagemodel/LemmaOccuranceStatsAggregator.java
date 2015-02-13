@@ -67,21 +67,21 @@ public class LemmaOccuranceStatsAggregator {
       return;
     }
 
-    try {
-      if (!lemmaMorphologies.tryLoad()) {
-        Log.out("Could not load lemma morphologies, exiting");
-        return;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
+//    try {
+//      if (!lemmaMorphologies.tryLoad()) {
+//        Log.out("Could not load lemma morphologies, exiting");
+//        return;
+//      }
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//      return;
+//    }
 
     for (BagOfWeightedLemmas.WeightedLemmaEntry entry : documentBag.getEntries()) {
       if (entry.lemma.tag == SimplePOSTag.OTHER ||
           entry.lemma.lemma.length() < 2 ||
-          StopWords.instance().isStopWord(entry.lemma.lemma) ||
-          lemmaMorphologies.numLemmaOccurances(entry.lemma) < 10) {
+          StopWords.instance().isStopWord(entry.lemma.lemma)) {
+          //lemmaMorphologies.numLemmaOccurances(entry.lemma) < 10) {
         continue;
       }
 
