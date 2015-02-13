@@ -1,5 +1,6 @@
 package com.experimental.documentmodel;
 
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.Map;
  */
 public class DocumentDB {
 
-  private Map<String, Document> documentMap = new HashMap<String, Document>();
+  private final Map<String, Document> documentMap = new HashMap<String, Document>();
 
   public static DocumentDB instance = new DocumentDB();
 
@@ -18,6 +19,7 @@ public class DocumentDB {
 
   public WebsiteDocument createWebsiteDocument(String path) {
     if (documentMap.containsKey(path)) {
+      Log.out("reusing doc");
       Document doc = documentMap.get(path);
       Preconditions.checkState(doc instanceof WebsiteDocument);
       return (WebsiteDocument) doc;
@@ -30,6 +32,7 @@ public class DocumentDB {
 
   public TopicalDocument createTopicalDocument(String path) {
     if (documentMap.containsKey(path)) {
+      Log.out("reusing doc");
       Document doc = documentMap.get(path);
       Preconditions.checkState(doc instanceof TopicalDocument);
       return (TopicalDocument) doc;
@@ -42,6 +45,7 @@ public class DocumentDB {
 
   public TextCollectionDocument createTextCollectionDocument(String path) {
     if (documentMap.containsKey(path)) {
+      Log.out("reusing doc");
       Document doc = documentMap.get(path);
       Preconditions.checkState(doc instanceof TextCollectionDocument);
       return (TextCollectionDocument) doc;
