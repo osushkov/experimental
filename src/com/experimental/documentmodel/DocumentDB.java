@@ -19,7 +19,6 @@ public class DocumentDB {
 
   public WebsiteDocument createWebsiteDocument(String path) {
     if (documentMap.containsKey(path)) {
-      Log.out("reusing doc");
       Document doc = documentMap.get(path);
       Preconditions.checkState(doc instanceof WebsiteDocument);
       return (WebsiteDocument) doc;
@@ -32,7 +31,6 @@ public class DocumentDB {
 
   public TopicalDocument createTopicalDocument(String path) {
     if (documentMap.containsKey(path)) {
-      Log.out("reusing doc");
       Document doc = documentMap.get(path);
       Preconditions.checkState(doc instanceof TopicalDocument);
       return (TopicalDocument) doc;
@@ -45,7 +43,6 @@ public class DocumentDB {
 
   public TextCollectionDocument createTextCollectionDocument(String path) {
     if (documentMap.containsKey(path)) {
-      Log.out("reusing doc");
       Document doc = documentMap.get(path);
       Preconditions.checkState(doc instanceof TextCollectionDocument);
       return (TextCollectionDocument) doc;

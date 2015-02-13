@@ -122,8 +122,10 @@ public class DocumentVectorDB {
     for (VectoredDocument dbDocument : vectoredDocuments) {
       BagOfWeightedLemmas.WeightedLemmaEntry entry = dbDocument.document.getBagOfLemmas().getBag().get(term);
       if (entry != null) {
+        double similarity = dbDocument.vector.dotProduct(document.getConceptVector());
+
         sumWeight += entry.weight;
-        similaritySum += entry.weight * dbDocument.vector.dotProduct(document.getConceptVector());
+        similaritySum += entry.weight * similarity * similarity;
       }
     }
 
