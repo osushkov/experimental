@@ -4,6 +4,7 @@ import com.experimental.documentmodel.BagOfWeightedLemmas;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.Token;
 import com.experimental.documentmodel.WebsiteDocument;
+import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.keywords.KeyAssociations;
 import com.experimental.languagemodel.Lemma;
 import com.experimental.languagemodel.LemmaIDFWeights;
@@ -11,6 +12,10 @@ import com.experimental.languagemodel.LemmaOccuranceStatsAggregator;
 import com.experimental.languagemodel.LemmaQuality;
 import com.experimental.sitepage.SitePage;
 import com.google.common.base.Preconditions;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by sushkov on 30/01/15.
@@ -23,6 +28,7 @@ public class KeywordVectorComponents {
   private final KeyAssociations keyAssociations;
   private final LemmaOccuranceStatsAggregator.LemmaStats localStats;
   private final LemmaOccuranceStatsAggregator.LemmaStats globalStats;
+  private final DocumentVectorDB documentVectorDB;
 
   public KeywordVectorComponents(Lemma phraseLemma,
                                  WebsiteDocument document,
@@ -30,7 +36,8 @@ public class KeywordVectorComponents {
                                  LemmaIDFWeights lemmaIdfWeights,
                                  KeyAssociations keyAssociations,
                                  LemmaOccuranceStatsAggregator.LemmaStats localStats,
-                                 LemmaOccuranceStatsAggregator.LemmaStats globalStats) {
+                                 LemmaOccuranceStatsAggregator.LemmaStats globalStats,
+                                 DocumentVectorDB documentVectorDB) {
 
     this.phraseLemma = Preconditions.checkNotNull(phraseLemma);
     this.document = Preconditions.checkNotNull(document);
@@ -39,23 +46,37 @@ public class KeywordVectorComponents {
     this.keyAssociations = Preconditions.checkNotNull(keyAssociations);
     this.localStats = localStats;
     this.globalStats = globalStats;
+    this.documentVectorDB = Preconditions.checkNotNull(documentVectorDB);
   }
 
   public double lemmaWeight() {
     return Math.log(1.0 + getLemmaWeight(phraseLemma, document));
   }
 
-  public double lemmaMaxWeight() {
-    double maxWeight = 0.0;
+  public double lemmaTopWeights() {
+    List<Double> weights = new ArrayList<Double>();
     for (Sentence sentence : document.getSentences()) {
       for (Token token : sentence.tokens) {
         Lemma lemma = Lemma.fromToken(token);
-        if (lemma.equals(phraseLemma) && sentence.emphasis > maxWeight) {
-          maxWeight = sentence.emphasis;
+
+        if (lemma.equals(phraseLemma)) {
+          weights.add(sentence.emphasis);
         }
       }
     }
-    return maxWeight;
+
+    weights.sort(new Comparator<Double>() {
+      @Override
+      public int compare(Double o1, Double o2) {
+        return Double.compare(o2, o1);
+      }
+    });
+
+    double topSum = 0.0;
+    for (int i = 0; i < Math.min(5, weights.size()); i++) {
+      topSum += weights.get(i);
+    }
+    return topSum / (double) Math.min(5, weights.size());
   }
 
   public double lemmaWeightRatio() {

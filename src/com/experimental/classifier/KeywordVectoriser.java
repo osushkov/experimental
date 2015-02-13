@@ -1,5 +1,7 @@
 package com.experimental.classifier;
 
+import com.experimental.documentmodel.Sentence;
+import com.experimental.documentmodel.Token;
 import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.keywords.KeyAssociations;
@@ -65,11 +67,11 @@ public class KeywordVectoriser {
     LemmaOccuranceStatsAggregator.LemmaStats globalStats = globalLemmaStats.getLemmaStats(phraseLemma);
 
     KeywordVectorComponents components = new KeywordVectorComponents(
-        phraseLemma, document, lemmaQuality, lemmaIdfWeights, keyAssociations, localStats, globalStats);
+        phraseLemma, document, lemmaQuality, lemmaIdfWeights, keyAssociations, localStats, globalStats, documentVectorDb);
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(components.lemmaWeight());
-    resultVector.add(components.lemmaMaxWeight());
+    resultVector.add(components.lemmaTopWeights());
     resultVector.add(components.lemmaWeightRatio());
     resultVector.add(components.lemmaQuality());
     resultVector.add(components.lemmaEntropyWeight());
@@ -112,16 +114,18 @@ public class KeywordVectoriser {
     KeywordVectorComponents c0 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights, keyAssociations,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)));
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        documentVectorDb);
 
     KeywordVectorComponents c1 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights, keyAssociations,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)));
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        documentVectorDb);
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(c0.lemmaWeight());       resultVector.add(c1.lemmaWeight());
-    resultVector.add(c0.lemmaMaxWeight());    resultVector.add(c1.lemmaMaxWeight());
+    resultVector.add(c0.lemmaTopWeights());    resultVector.add(c1.lemmaTopWeights());
     resultVector.add(c0.lemmaWeightRatio());  resultVector.add(c1.lemmaWeightRatio());
     resultVector.add(c0.lemmaQuality());      resultVector.add(c1.lemmaQuality());
     resultVector.add(c0.lemmaEntropyWeight());    resultVector.add(c1.lemmaEntropyWeight());
@@ -151,6 +155,7 @@ public class KeywordVectoriser {
     resultVector.add(c0.getKeyAssociationsWeight());               resultVector.add(c1.getKeyAssociationsWeight());
     resultVector.add(c0.globalIdfWeight());                        resultVector.add(c1.globalIdfWeight());
 
+    resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
 
 
 //    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
@@ -192,21 +197,24 @@ public class KeywordVectoriser {
     KeywordVectorComponents c0 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights, keyAssociations,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)));
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        documentVectorDb);
 
     KeywordVectorComponents c1 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights, keyAssociations,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)));
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        documentVectorDb);
 
     KeywordVectorComponents c2 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(2), document, lemmaQuality, lemmaIdfWeights, keyAssociations,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(2)),
-        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(2)));
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(2)),
+        documentVectorDb);
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight(), c2.lemmaWeight())));
-    resultVector.add(logSum(Lists.newArrayList(c0.lemmaMaxWeight(), c1.lemmaMaxWeight(), c2.lemmaMaxWeight())));
+    resultVector.add(logSum(Lists.newArrayList(c0.lemmaTopWeights(), c1.lemmaTopWeights(), c2.lemmaTopWeights())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeightRatio(), c1.lemmaWeightRatio(), c2.lemmaWeightRatio())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaQuality(), c1.lemmaQuality(), c2.lemmaQuality())));
     resultVector.add(logSum(Lists.newArrayList(c0.lemmaEntropyWeight(), c1.lemmaEntropyWeight(), c2.lemmaEntropyWeight())));
@@ -259,6 +267,13 @@ public class KeywordVectoriser {
     resultVector.add(logSum(Lists.newArrayList(
         c0.globalIdfWeight(), c1.globalIdfWeight(), c2.globalIdfWeight())));
 
+    int size = candidate.phraseLemmas.size();
+    List<Lemma> pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-2), candidate.phraseLemmas.get(size-1));
+    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
+
+    pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-3), candidate.phraseLemmas.get(size-2));
+    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
+
     resultVector = generateSquaredVector(resultVector);
 
     return new KeywordVector(candidate, resultVector);
@@ -298,6 +313,41 @@ public class KeywordVectoriser {
     for (int i = 0; i < vector.size(); i++) {
       for (int j = i; j < vector.size(); j++) {
         result.add(vector.get(i) * vector.get(j));
+      }
+    }
+    return result;
+  }
+
+  private double getCandidateSimilarCorpusWeight(
+      List<Lemma> candidate, WebsiteDocument document) {
+
+    double sum = 0.0;
+    List<DocumentVectorDB.DocumentSimilarityPair> similarDocs = documentVectorDb.getNearestDocuments(document, 30);
+    for (DocumentVectorDB.DocumentSimilarityPair similarityPair : similarDocs) {
+      for (Sentence sentence : similarityPair.document.getSentences()) {
+        int occurances = countOccurancesOf(candidate, sentence);
+        sum += occurances * sentence.emphasis * similarityPair.similarity;
+      }
+    }
+
+    return Math.log(1.0 + sum);
+  }
+
+  private int countOccurancesOf(List<Lemma> candidate, Sentence sentence) {
+    int result = 0;
+    int curIndex = 0;
+
+    for (Token token : sentence.tokens) {
+      Lemma lemma = Lemma.fromToken(token);
+      if (lemma.equals(candidate.get(curIndex))) {
+        curIndex++;
+      } else {
+        curIndex = 0;
+      }
+
+      if (curIndex == candidate.size()) {
+        result++;
+        curIndex = 0;
       }
     }
     return result;
