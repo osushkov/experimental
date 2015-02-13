@@ -21,6 +21,10 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
@@ -64,14 +68,52 @@ public class ClassifierTrainer {
   }
 
   public LearnedModel train() {
-    TrainingData trainingData = generateTrainingData();
+    final TrainingData trainingData = generateTrainingData();
+    System.gc();
 
-    LearnedModel learnedModel = new LearnedModel();
-    learnedModel.oneKeywordClassifier = trainClassifier(trainingData.oneKeyword, "one_keyword_classifier.txt", 0.5);
-    learnedModel.twoKeywordClassifier = trainClassifier(trainingData.twoKeywords, "two_keywords_classifier.txt", 0.5);
-    learnedModel.threeOrModeKeywordClassifier =
-        trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.7);
+    final Executor executor = Executors.newFixedThreadPool(12);
+    final AtomicInteger numModels = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
 
+    final LearnedModel learnedModel = new LearnedModel();
+
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+        numModels.incrementAndGet();
+        learnedModel.oneKeywordClassifier = trainClassifier(trainingData.oneKeyword, "one_keyword_classifier.txt", 0.5);
+        sem.release();
+      }
+    });
+
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+        numModels.incrementAndGet();
+        learnedModel.twoKeywordClassifier = trainClassifier(trainingData.twoKeywords, "two_keywords_classifier.txt", 0.5);
+        sem.release();
+      }
+    });
+
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+        numModels.incrementAndGet();
+        learnedModel.threeOrModeKeywordClassifier =
+            trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.7);
+        sem.release();
+      }
+    });
+
+    for (int i = 0; i < numModels.get(); i++) {
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    System.gc();
     testModel(learnedModel);
 
     return learnedModel;
