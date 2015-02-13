@@ -25,7 +25,7 @@ public class KeywordVectorComponents {
   private final WebsiteDocument document;
   private final LemmaQuality lemmaQuality;
   private final LemmaIDFWeights lemmaIdfWeights;
-  private final KeyAssociations keyAssociations;
+//  private final KeyAssociations keyAssociations;
   private final LemmaOccuranceStatsAggregator.LemmaStats localStats;
   private final LemmaOccuranceStatsAggregator.LemmaStats globalStats;
   private final DocumentVectorDB documentVectorDB;
@@ -34,7 +34,6 @@ public class KeywordVectorComponents {
                                  WebsiteDocument document,
                                  LemmaQuality lemmaQuality,
                                  LemmaIDFWeights lemmaIdfWeights,
-                                 KeyAssociations keyAssociations,
                                  LemmaOccuranceStatsAggregator.LemmaStats localStats,
                                  LemmaOccuranceStatsAggregator.LemmaStats globalStats,
                                  DocumentVectorDB documentVectorDB) {
@@ -43,7 +42,7 @@ public class KeywordVectorComponents {
     this.document = Preconditions.checkNotNull(document);
     this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
     this.lemmaIdfWeights = Preconditions.checkNotNull(lemmaIdfWeights);
-    this.keyAssociations = Preconditions.checkNotNull(keyAssociations);
+//    this.keyAssociations = Preconditions.checkNotNull(keyAssociations);
     this.localStats = localStats;
     this.globalStats = globalStats;
     this.documentVectorDB = Preconditions.checkNotNull(documentVectorDB);
@@ -200,9 +199,9 @@ public class KeywordVectorComponents {
     }
   }
 
-  public double getKeyAssociationsWeight() {
-    return keyAssociations.getKeyAssociationStrength(phraseLemma);
-  }
+//  public double getKeyAssociationsWeight() {
+//    return keyAssociations.getKeyAssociationStrength(phraseLemma);
+//  }
 
 
   public double globalIdfWeight() {

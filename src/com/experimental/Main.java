@@ -208,24 +208,11 @@ public class Main {
       return;
     }
 
-    NounAssociations nounAssociations = new NounAssociations();
-    try {
-      if (!nounAssociations.tryLoad()) {
-        Log.out("could not load NounAssociations from disk");
-        return;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
-    KeyAssociations keyAssociations = new KeyAssociations(nounAssociations);
-
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, keyAssociations);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/mnt/fastdisk3/documents/website/499/49988AA");
@@ -314,30 +301,17 @@ public class Main {
       return;
     }
 
-    NounAssociations nounAssociations = new NounAssociations();
-    try {
-      if (!nounAssociations.tryLoad()) {
-        Log.out("could not load NounAssociations from disk");
-        return;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
     WordNet wordnet = new WordNet();
     if (!wordnet.loadWordNet()) {
       Log.out("could not load WordNet");
       return;
     }
 
-    KeyAssociations keyAssociations = new KeyAssociations(nounAssociations);
-
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, keyAssociations);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
     KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
 
@@ -509,24 +483,11 @@ public class Main {
       return;
     }
 
-    NounAssociations nounAssociations = new NounAssociations();
-    try {
-      if (!nounAssociations.tryLoad()) {
-        Log.out("could not load NounAssociations from disk");
-        return;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
-    KeyAssociations keyAssociations = new KeyAssociations(nounAssociations);
-
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, keyAssociations);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights);
 
     WebsiteDocument testDocument =
         new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
