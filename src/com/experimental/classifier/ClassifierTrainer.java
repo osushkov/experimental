@@ -216,12 +216,21 @@ public class ClassifierTrainer {
       return null;
     }
 
+    int numProcessed = 0;
+
     TrainingData result = new TrainingData();
     for (DocumentKeywordTrainingBundle bundle : documentKeywords) {
       TrainingData bundleResults = trainingDataFromBundle(bundle);
       result.oneKeyword.addAll(bundleResults.oneKeyword);
       result.twoKeywords.addAll(bundleResults.twoKeywords);
       result.threeOrMoreKeywords.addAll(bundleResults.threeOrMoreKeywords);
+
+      numProcessed++;
+
+      if (numProcessed % 10 == 0) {
+        Log.out("runnning gc");
+        System.gc();
+      }
     }
 
     return result;
