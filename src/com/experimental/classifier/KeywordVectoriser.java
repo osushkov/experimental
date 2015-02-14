@@ -567,9 +567,9 @@ public class KeywordVectoriser {
     }
 
     if (total == 0) {
-      return 1.0;
+      return 0.0;
     } else {
-      return Math.log(cooccurances) / Math.log(total);
+      return Math.log(1.0 + cooccurances) / Math.log(1.0 + total);
     }
   }
 
