@@ -49,9 +49,9 @@ public class ClassifierTrainer {
   }
 
   public static class LearnedModel {
-    public ClassificationModel oneKeywordClassifier = null;
-    public ClassificationModel twoKeywordClassifier = null;
-    public ClassificationModel threeOrModeKeywordClassifier = null;
+    public GeneralizedLinearModel oneKeywordClassifier = null;
+    public GeneralizedLinearModel twoKeywordClassifier = null;
+    public GeneralizedLinearModel threeOrModeKeywordClassifier = null;
   }
 
   private final JavaSparkContext sc;
@@ -165,9 +165,14 @@ public class ClassifierTrainer {
       }
     }
 
+    double[] weights = learnedModel.oneKeywordClassifier.weights().toArray();
+    for (int i = 0; i < weights.length; i++) {
+      Log.out("weight[" + i + "] = " + weights[i]);
+    }
+
   }
 
-  private ClassificationModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
+  private GeneralizedLinearModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
                                               double positiveThreshold) {
     if (trainingPoints.size() == 0) {
       return null;
@@ -203,9 +208,9 @@ public class ClassifierTrainer {
       }
     }
 
-    Log.out("positive: " + numPositiveCorrect + "/" + numPositive);
-    Log.out("negative: " + numNegativeCorrect + "/" + numNegative);
-    Log.out("training error: " +
+    Log.out(outputFileName + " positive: " + numPositiveCorrect + "/" + numPositive);
+    Log.out(outputFileName + " negative: " + numNegativeCorrect + "/" + numNegative);
+    Log.out(outputFileName + " training error: " +
         Double.toString(numPositiveCorrect / (double) numPositive) + " " +
         Double.toString(numNegativeCorrect / (double) numNegative));
 

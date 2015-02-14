@@ -214,11 +214,20 @@ public class Main {
       return;
     }
 
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      Log.out("loading NounPhrasesDB...");
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading NounPhrasesDB");
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, nounPhraseDb);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/mnt/fastdisk3/documents/website/499/49988AA");
@@ -317,7 +326,7 @@ public class Main {
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, nounPhraseDb);
 
     KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
 
@@ -495,11 +504,20 @@ public class Main {
       return;
     }
 
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      Log.out("loading NounPhrasesDB...");
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading NounPhrasesDB");
+
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, nounPhraseDb);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");

@@ -8,12 +8,14 @@ import com.experimental.documentvector.DocumentVectorDB;
 import com.experimental.keywords.KeyAssociations;
 import com.experimental.keywords.KeywordCandidateGenerator;
 import com.experimental.languagemodel.*;
+import com.experimental.nlp.NounPhrase;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by sushkov on 29/01/15.
@@ -25,19 +27,21 @@ public class KeywordVectoriser {
   private final DocumentVectorDB documentVectorDb;
   private final LemmaIDFWeights lemmaIdfWeights;
   private final WordNet wordnet;
+  private final NounPhrasesDB nounPhrasesDB;
 //  private final KeyAssociations keyAssociations;
 
   public KeywordVectoriser(LemmaOccuranceStatsAggregator globalLemmaStats,
                            LemmaQuality lemmaQuality,
                            DocumentVectorDB documentVectorDb,
                            LemmaIDFWeights lemmaIdfWeights,
-                           WordNet wordnet) {
+                           WordNet wordnet,
+                           NounPhrasesDB nounPhrasesDB) {
     this.globalLemmaStats = Preconditions.checkNotNull(globalLemmaStats);
     this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
     this.documentVectorDb = Preconditions.checkNotNull(documentVectorDb);
     this.lemmaIdfWeights = Preconditions.checkNotNull(lemmaIdfWeights);
     this.wordnet = Preconditions.checkNotNull(wordnet);
-//    this.keyAssociations = Preconditions.checkNotNull(keyAssociations);
+    this.nounPhrasesDB = Preconditions.checkNotNull(nounPhrasesDB);
   }
 
   public List<KeywordVector> vectoriseKeywordCandidates(Collection<KeywordCandidateGenerator.KeywordCandidate> candidates,
@@ -218,6 +222,7 @@ public class KeywordVectoriser {
     resultVector.add(c1.globalIdfWeight());
 
     resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
+    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
 
 
 //    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
@@ -459,6 +464,8 @@ public class KeywordVectoriser {
     pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-3), candidate.phraseLemmas.get(size-2));
     resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
 
+    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
+
     resultVector = generateSquaredVector(resultVector);
 
     return new KeywordVector(candidate, resultVector);
@@ -537,4 +544,34 @@ public class KeywordVectoriser {
     }
     return result;
   }
+
+  private double getPhraseAffinity(List<Lemma> phraseLemmas) {
+    int total = 0;
+    int cooccurances = 0;
+
+    for (Lemma lemma : phraseLemmas) {
+      List<Lemma> otherLemmas = new ArrayList<Lemma>(phraseLemmas);
+      otherLemmas.remove(lemma);
+
+      Set<NounPhrasesDB.NounPhraseEntry> entries = nounPhrasesDB.getLemmaPhrases(lemma);
+      for (NounPhrasesDB.NounPhraseEntry entry : entries) {
+        total += entry.numOccurances.get();
+        if (phraseContainsAnyOf(entry.phrase, otherLemmas)) {
+          cooccurances += entry.numOccurances.get();
+        }
+      }
+    }
+
+    return Math.log(total) / Math.log(cooccurances);
+  }
+
+  private boolean phraseContainsAnyOf(NounPhrase phrase, List<Lemma> lemmas) {
+    for (Lemma lemma : lemmas) {
+      if (phrase.getPhraseLemmas().contains(lemma)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
