@@ -554,6 +554,10 @@ public class KeywordVectoriser {
       otherLemmas.remove(lemma);
 
       Set<NounPhrasesDB.NounPhraseEntry> entries = nounPhrasesDB.getLemmaPhrases(lemma);
+      if (entries == null) {
+        continue;
+      }
+
       for (NounPhrasesDB.NounPhraseEntry entry : entries) {
         total += entry.numOccurances.get();
         if (phraseContainsAnyOf(entry.phrase, otherLemmas)) {
@@ -562,7 +566,11 @@ public class KeywordVectoriser {
       }
     }
 
-    return Math.log(total) / Math.log(cooccurances);
+    if (total == 0) {
+      return 1.0;
+    } else {
+      return Math.log(cooccurances) / Math.log(total);
+    }
   }
 
   private boolean phraseContainsAnyOf(NounPhrase phrase, List<Lemma> lemmas) {
