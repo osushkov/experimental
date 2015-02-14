@@ -83,6 +83,7 @@ public class KeywordVectoriser {
     resultVector.add(components.headerKeywordWeight());
     resultVector.add(components.linksWeight());
     resultVector.add(components.lemmaTopicDiscrimination());
+    resultVector.add(components.lemmaTopicDiscriminationSd());
     resultVector.add(components.lemmaDictionaryWord());
 
     resultVector.add(components.weightToGobalRatio()); // 3
@@ -159,6 +160,9 @@ public class KeywordVectoriser {
     resultVector.add(c0.lemmaTopicDiscrimination());
     resultVector.add(c1.lemmaTopicDiscrimination());
 
+    resultVector.add(c0.lemmaTopicDiscriminationSd());
+    resultVector.add(c1.lemmaTopicDiscriminationSd());
+
     resultVector.add(c0.lemmaDictionaryWord());
     resultVector.add(c1.lemmaDictionaryWord());
 
@@ -209,7 +213,7 @@ public class KeywordVectoriser {
 
     resultVector.add(c0.localToGlobalDocumentsOccuredRatio());
     resultVector.add(c1.localToGlobalDocumentsOccuredRatio());
-    
+
     resultVector.add(c0.globalIdfWeight());
     resultVector.add(c1.globalIdfWeight());
 
@@ -311,6 +315,10 @@ public class KeywordVectoriser {
     resultVector.add(c0.lemmaTopicDiscrimination());
     resultVector.add(c1.lemmaTopicDiscrimination());
     resultVector.add(c2.lemmaTopicDiscrimination());
+
+    resultVector.add(c0.lemmaTopicDiscriminationSd());
+    resultVector.add(c1.lemmaTopicDiscriminationSd());
+    resultVector.add(c2.lemmaTopicDiscriminationSd());
 
     resultVector.add(c0.lemmaDictionaryWord());
     resultVector.add(c1.lemmaDictionaryWord());

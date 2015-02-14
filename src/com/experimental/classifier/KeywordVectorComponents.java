@@ -87,6 +87,10 @@ public class KeywordVectorComponents {
     return documentVectorDB.getTermDiscriminationValue(phraseLemma, document);
   }
 
+  public double lemmaTopicDiscriminationSd() {
+    return documentVectorDB.getTermDiscriminationValue(phraseLemma, document);
+  }
+
   public double lemmaWeightRatio() {
     return getLemmaWeightRatio(phraseLemma, document);
   }
