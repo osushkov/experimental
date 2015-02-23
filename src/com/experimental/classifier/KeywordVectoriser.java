@@ -533,7 +533,9 @@ public class KeywordVectoriser {
     }
 
     combinedDistribution = Common.getClampedProbabilityDistribution(combinedDistribution);
-    return Common.computeKLDivergence(combinedDistribution, uniformDistribution);
+    double result = Common.computeKLDivergence(combinedDistribution, uniformDistribution);
+    Preconditions.checkState(Double.isFinite(result));
+    return result;
   }
 
 //  private double getCandidateSimilarCorpusWeight(
