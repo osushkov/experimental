@@ -64,4 +64,32 @@ public class Common {
 
     return result;
   }
+
+  public static List<Double> uniformProbabilityDistribution(int dim) {
+    Preconditions.checkArgument(dim > 0);
+
+    List<Double> result = new ArrayList<Double>();
+    for (int i = 0; i < dim; i++) {
+      result.add(1.0 / (double) dim);
+    }
+    return result;
+  }
+
+  public static List<Double> getClampedProbabilityDistribution(List<Double> raw) {
+    List<Double> result = new ArrayList<Double>();
+    double floor = 0.01 / raw.size();
+
+    double sum = 0.0;
+    for (int i = 0; i < raw.size(); i++) {
+      double val = raw.get(i) + floor;
+      sum += val;
+      result.add(val);
+    }
+
+    for (int i = 0; i < result.size(); i++) {
+      result.set(i, result.get(i) / sum);
+    }
+
+    return result;
+  }
 }

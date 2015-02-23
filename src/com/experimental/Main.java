@@ -110,8 +110,9 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    clusterDocuments();
-//    trainClassifier();
+//    clusterDocuments();
+//    testKLDivergence();
+    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
@@ -119,6 +120,40 @@ public class Main {
 //    testKeywordCandidateExtraction();
 
     Log.out("FINISHED");
+  }
+
+
+  private static void testKLDivergence() {
+    DocumentClusters documentClusters = new DocumentClusters();
+    try {
+      if (!documentClusters.tryLoad()) {
+        Log.out("could not load document clusters.");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    Lemma lemma0 = new Lemma("lawyer", SimplePOSTag.NOUN);
+    Lemma lemma1 = new Lemma("good", SimplePOSTag.ADJECTIVE);
+    Lemma lemma2 = new Lemma("lawyer", SimplePOSTag.NOUN);
+
+    List<Double> uniformDistribution = Common.uniformProbabilityDistribution(documentClusters.getNumClusters());
+    List<Double> p0Distribution =
+        Common.getClampedProbabilityDistribution(documentClusters.getRawTermProbabilities(lemma0));
+    List<Double> p1Distribution =
+        Common.getClampedProbabilityDistribution(documentClusters.getRawTermProbabilities(lemma1));
+
+    List<Double> p2Distribution = Common.getClampedProbabilityDistribution(
+        Common.combinedProbability(documentClusters.getRawTermProbabilities(lemma1),
+            documentClusters.getRawTermProbabilities(lemma2)));
+
+    double d0 = Common.computeKLDivergence(p0Distribution, uniformDistribution);
+    double d1 = Common.computeKLDivergence(p1Distribution, uniformDistribution);
+    double d2 = Common.computeKLDivergence(p2Distribution, uniformDistribution);
+
+    Log.out("distance: " + d0 + " " + d1 + " " + d2);
   }
 
   private static void clusterDocuments() {
@@ -241,20 +276,20 @@ public class Main {
       return;
     }
 
-    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
-    try {
-      Log.out("loading NounPhrasesDB...");
-      nounPhraseDb.tryLoad();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    Log.out("finished loading NounPhrasesDB");
+//    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+//    try {
+//      Log.out("loading NounPhrasesDB...");
+//      nounPhraseDb.tryLoad();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//    Log.out("finished loading NounPhrasesDB");
 
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, nounPhraseDb);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/mnt/fastdisk3/documents/website/499/49988AA");
@@ -353,7 +388,7 @@ public class Main {
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, nounPhraseDb);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
 
     KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
 
@@ -531,20 +566,20 @@ public class Main {
       return;
     }
 
-    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
-    try {
-      Log.out("loading NounPhrasesDB...");
-      nounPhraseDb.tryLoad();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    Log.out("finished loading NounPhrasesDB");
+//    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+//    try {
+//      Log.out("loading NounPhrasesDB...");
+//      nounPhraseDb.tryLoad();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//    Log.out("finished loading NounPhrasesDB");
 
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, nounPhraseDb);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");

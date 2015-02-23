@@ -26,7 +26,7 @@ public class KeywordVectorComponents {
 //  private final KeyAssociations keyAssociations;
   private final LemmaOccuranceStatsAggregator.LemmaStats localStats;
   private final LemmaOccuranceStatsAggregator.LemmaStats globalStats;
-  private final DocumentVectorDB documentVectorDB;
+//  private final DocumentVectorDB documentVectorDB;
   private final WordNet wordnet;
 
   public KeywordVectorComponents(Lemma phraseLemma,
@@ -35,7 +35,6 @@ public class KeywordVectorComponents {
                                  LemmaIDFWeights lemmaIdfWeights,
                                  LemmaOccuranceStatsAggregator.LemmaStats localStats,
                                  LemmaOccuranceStatsAggregator.LemmaStats globalStats,
-                                 DocumentVectorDB documentVectorDB,
                                  WordNet wordnet) {
 
     this.phraseLemma = Preconditions.checkNotNull(phraseLemma);
@@ -45,7 +44,7 @@ public class KeywordVectorComponents {
 //    this.keyAssociations = Preconditions.checkNotNull(keyAssociations);
     this.localStats = localStats;
     this.globalStats = globalStats;
-    this.documentVectorDB = Preconditions.checkNotNull(documentVectorDB);
+//    this.documentVectorDB = Preconditions.checkNotNull(documentVectorDB);
     this.wordnet = Preconditions.checkNotNull(wordnet);
   }
 
@@ -80,13 +79,13 @@ public class KeywordVectorComponents {
     return topSum / (double) Math.min(5, weights.size());
   }
 
-  public double lemmaTopicDiscrimination() {
-    return documentVectorDB.getTermDiscriminationValue(phraseLemma, document);
-  }
-
-  public double lemmaTopicDiscriminationSd() {
-    return documentVectorDB.getTermDiscriminationValue(phraseLemma, document);
-  }
+//  public double lemmaTopicDiscrimination() {
+//    return documentVectorDB.getTermDiscriminationValue(phraseLemma, document);
+//  }
+//
+//  public double lemmaTopicDiscriminationSd() {
+//    return documentVectorDB.getTermDiscriminationValue(phraseLemma, document);
+//  }
 
   public double lemmaWeightRatio() {
     return getLemmaWeightRatio(phraseLemma, document);

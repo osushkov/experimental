@@ -27,21 +27,20 @@ public class KeywordVectoriser {
   private final DocumentVectorDB documentVectorDb;
   private final LemmaIDFWeights lemmaIdfWeights;
   private final WordNet wordnet;
-  private final NounPhrasesDB nounPhrasesDB;
+//  private final NounPhrasesDB nounPhrasesDB;
 //  private final KeyAssociations keyAssociations;
 
   public KeywordVectoriser(LemmaOccuranceStatsAggregator globalLemmaStats,
                            LemmaQuality lemmaQuality,
                            DocumentVectorDB documentVectorDb,
                            LemmaIDFWeights lemmaIdfWeights,
-                           WordNet wordnet,
-                           NounPhrasesDB nounPhrasesDB) {
+                           WordNet wordnet) {
     this.globalLemmaStats = Preconditions.checkNotNull(globalLemmaStats);
     this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
     this.documentVectorDb = Preconditions.checkNotNull(documentVectorDb);
     this.lemmaIdfWeights = Preconditions.checkNotNull(lemmaIdfWeights);
     this.wordnet = Preconditions.checkNotNull(wordnet);
-    this.nounPhrasesDB = Preconditions.checkNotNull(nounPhrasesDB);
+//    this.nounPhrasesDB = Preconditions.checkNotNull(nounPhrasesDB);
   }
 
   public List<KeywordVector> vectoriseKeywordCandidates(Collection<KeywordCandidateGenerator.KeywordCandidate> candidates,
@@ -74,7 +73,7 @@ public class KeywordVectoriser {
     LemmaOccuranceStatsAggregator.LemmaStats globalStats = globalLemmaStats.getLemmaStats(phraseLemma);
 
     KeywordVectorComponents components = new KeywordVectorComponents(
-        phraseLemma, document, lemmaQuality, lemmaIdfWeights, localStats, globalStats, documentVectorDb, wordnet);
+        phraseLemma, document, lemmaQuality, lemmaIdfWeights, localStats, globalStats, wordnet);
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(components.lemmaWeight());
@@ -86,8 +85,8 @@ public class KeywordVectoriser {
     resultVector.add(components.headerDescriptionWeight());
     resultVector.add(components.headerKeywordWeight());
     resultVector.add(components.linksWeight());
-    resultVector.add(components.lemmaTopicDiscrimination());
-    resultVector.add(components.lemmaTopicDiscriminationSd());
+//    resultVector.add(components.lemmaTopicDiscrimination());
+//    resultVector.add(components.lemmaTopicDiscriminationSd());
     resultVector.add(components.lemmaDictionaryWord());
 
     resultVector.add(components.weightToGobalRatio()); // 3
@@ -108,7 +107,6 @@ public class KeywordVectoriser {
     resultVector.add(components.localToGlobalOccuredAverageWeightRatio());
     resultVector.add(components.localToGlobalStandardDeviationRatio());
     resultVector.add(components.localToGlobalDocumentsOccuredRatio());
-//    resultVector.add(components.getKeyAssociationsWeight());
     resultVector.add(components.globalIdfWeight());
 
     resultVector = generateSquaredVector(resultVector);
@@ -125,13 +123,13 @@ public class KeywordVectoriser {
         candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-        documentVectorDb, wordnet);
+        wordnet);
 
     KeywordVectorComponents c1 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-        documentVectorDb, wordnet);
+        wordnet);
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(c0.lemmaWeight());
@@ -161,11 +159,11 @@ public class KeywordVectoriser {
     resultVector.add(c0.linksWeight());
     resultVector.add(c1.linksWeight());
 
-    resultVector.add(c0.lemmaTopicDiscrimination());
-    resultVector.add(c1.lemmaTopicDiscrimination());
-
-    resultVector.add(c0.lemmaTopicDiscriminationSd());
-    resultVector.add(c1.lemmaTopicDiscriminationSd());
+//    resultVector.add(c0.lemmaTopicDiscrimination());
+//    resultVector.add(c1.lemmaTopicDiscrimination());
+//
+//    resultVector.add(c0.lemmaTopicDiscriminationSd());
+//    resultVector.add(c1.lemmaTopicDiscriminationSd());
 
     resultVector.add(c0.lemmaDictionaryWord());
     resultVector.add(c1.lemmaDictionaryWord());
@@ -221,8 +219,9 @@ public class KeywordVectoriser {
     resultVector.add(c0.globalIdfWeight());
     resultVector.add(c1.globalIdfWeight());
 
-    resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
-    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
+//    resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
+//    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
+
 
 
 //    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight())));
@@ -265,19 +264,19 @@ public class KeywordVectoriser {
         candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-        documentVectorDb, wordnet);
+        wordnet);
 
     KeywordVectorComponents c1 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-        documentVectorDb, wordnet);
+        wordnet);
 
     KeywordVectorComponents c2 = new KeywordVectorComponents(
         candidate.phraseLemmas.get(2), document, lemmaQuality, lemmaIdfWeights,
         localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(2)),
         globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(2)),
-        documentVectorDb, wordnet);
+        wordnet);
 
     List<Double> resultVector = new ArrayList<Double>();
 
@@ -317,13 +316,13 @@ public class KeywordVectoriser {
     resultVector.add(c1.linksWeight());
     resultVector.add(c2.linksWeight());
 
-    resultVector.add(c0.lemmaTopicDiscrimination());
-    resultVector.add(c1.lemmaTopicDiscrimination());
-    resultVector.add(c2.lemmaTopicDiscrimination());
-
-    resultVector.add(c0.lemmaTopicDiscriminationSd());
-    resultVector.add(c1.lemmaTopicDiscriminationSd());
-    resultVector.add(c2.lemmaTopicDiscriminationSd());
+//    resultVector.add(c0.lemmaTopicDiscrimination());
+//    resultVector.add(c1.lemmaTopicDiscrimination());
+//    resultVector.add(c2.lemmaTopicDiscrimination());
+//
+//    resultVector.add(c0.lemmaTopicDiscriminationSd());
+//    resultVector.add(c1.lemmaTopicDiscriminationSd());
+//    resultVector.add(c2.lemmaTopicDiscriminationSd());
 
     resultVector.add(c0.lemmaDictionaryWord());
     resultVector.add(c1.lemmaDictionaryWord());
@@ -397,6 +396,16 @@ public class KeywordVectoriser {
     resultVector.add(c1.globalIdfWeight());
     resultVector.add(c2.globalIdfWeight());
 
+//    int size = candidate.phraseLemmas.size();
+//    List<Lemma> pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-2), candidate.phraseLemmas.get(size-1));
+//    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
+//
+//    pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-3), candidate.phraseLemmas.get(size-2));
+//    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
+//
+//    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
+
+
 
 
 //    resultVector.add(logSum(Lists.newArrayList(c0.lemmaWeight(), c1.lemmaWeight(), c2.lemmaWeight())));
@@ -457,14 +466,7 @@ public class KeywordVectoriser {
 //    resultVector.add(logSum(Lists.newArrayList(
 //        c0.globalIdfWeight(), c1.globalIdfWeight(), c2.globalIdfWeight())));
 
-    int size = candidate.phraseLemmas.size();
-    List<Lemma> pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-2), candidate.phraseLemmas.get(size-1));
-    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
 
-    pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-3), candidate.phraseLemmas.get(size-2));
-    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
-
-    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
 
     resultVector = generateSquaredVector(resultVector);
 
@@ -510,76 +512,76 @@ public class KeywordVectoriser {
     return result;
   }
 
-  private double getCandidateSimilarCorpusWeight(
-      List<Lemma> candidate, WebsiteDocument document) {
+//  private double getCandidateSimilarCorpusWeight(
+//      List<Lemma> candidate, WebsiteDocument document) {
+//
+//    double sum = 0.0;
+//    List<DocumentVectorDB.DocumentSimilarityPair> similarDocs = documentVectorDb.getNearestDocuments(document, 30);
+//    for (DocumentVectorDB.DocumentSimilarityPair similarityPair : similarDocs) {
+//      for (Sentence sentence : similarityPair.document.getSentences()) {
+//        int occurances = countOccurancesOf(candidate, sentence);
+//        sum += occurances * sentence.emphasis * similarityPair.similarity;
+//      }
+//    }
+//
+//    return Math.log(1.0 + sum);
+//  }
 
-    double sum = 0.0;
-    List<DocumentVectorDB.DocumentSimilarityPair> similarDocs = documentVectorDb.getNearestDocuments(document, 30);
-    for (DocumentVectorDB.DocumentSimilarityPair similarityPair : similarDocs) {
-      for (Sentence sentence : similarityPair.document.getSentences()) {
-        int occurances = countOccurancesOf(candidate, sentence);
-        sum += occurances * sentence.emphasis * similarityPair.similarity;
-      }
-    }
+//  private int countOccurancesOf(List<Lemma> candidate, Sentence sentence) {
+//    int result = 0;
+//    int curIndex = 0;
+//
+//    for (Token token : sentence.tokens) {
+//      Lemma lemma = Lemma.fromToken(token);
+//      if (lemma.equals(candidate.get(curIndex))) {
+//        curIndex++;
+//      } else {
+//        curIndex = 0;
+//      }
+//
+//      if (curIndex == candidate.size()) {
+//        result++;
+//        curIndex = 0;
+//      }
+//    }
+//    return result;
+//  }
 
-    return Math.log(1.0 + sum);
-  }
-
-  private int countOccurancesOf(List<Lemma> candidate, Sentence sentence) {
-    int result = 0;
-    int curIndex = 0;
-
-    for (Token token : sentence.tokens) {
-      Lemma lemma = Lemma.fromToken(token);
-      if (lemma.equals(candidate.get(curIndex))) {
-        curIndex++;
-      } else {
-        curIndex = 0;
-      }
-
-      if (curIndex == candidate.size()) {
-        result++;
-        curIndex = 0;
-      }
-    }
-    return result;
-  }
-
-  private double getPhraseAffinity(List<Lemma> phraseLemmas) {
-    int total = 0;
-    int cooccurances = 0;
-
-    for (Lemma lemma : phraseLemmas) {
-      List<Lemma> otherLemmas = new ArrayList<Lemma>(phraseLemmas);
-      otherLemmas.remove(lemma);
-
-      Set<NounPhrasesDB.NounPhraseEntry> entries = nounPhrasesDB.getLemmaPhrases(lemma);
-      if (entries == null) {
-        continue;
-      }
-
-      for (NounPhrasesDB.NounPhraseEntry entry : entries) {
-        total += entry.numOccurances.get();
-        if (phraseContainsAnyOf(entry.phrase, otherLemmas)) {
-          cooccurances += entry.numOccurances.get();
-        }
-      }
-    }
-
-    if (total == 0) {
-      return 0.0;
-    } else {
-      return Math.log(1.0 + cooccurances) / Math.log(1.0 + total);
-    }
-  }
-
-  private boolean phraseContainsAnyOf(NounPhrase phrase, List<Lemma> lemmas) {
-    for (Lemma lemma : lemmas) {
-      if (phrase.getPhraseLemmas().contains(lemma)) {
-        return true;
-      }
-    }
-    return false;
-  }
+//  private double getPhraseAffinity(List<Lemma> phraseLemmas) {
+//    int total = 0;
+//    int cooccurances = 0;
+//
+//    for (Lemma lemma : phraseLemmas) {
+//      List<Lemma> otherLemmas = new ArrayList<Lemma>(phraseLemmas);
+//      otherLemmas.remove(lemma);
+//
+//      Set<NounPhrasesDB.NounPhraseEntry> entries = nounPhrasesDB.getLemmaPhrases(lemma);
+//      if (entries == null) {
+//        continue;
+//      }
+//
+//      for (NounPhrasesDB.NounPhraseEntry entry : entries) {
+//        total += entry.numOccurances.get();
+//        if (phraseContainsAnyOf(entry.phrase, otherLemmas)) {
+//          cooccurances += entry.numOccurances.get();
+//        }
+//      }
+//    }
+//
+//    if (total == 0) {
+//      return 0.0;
+//    } else {
+//      return Math.log(1.0 + cooccurances) / Math.log(1.0 + total);
+//    }
+//  }
+//
+//  private boolean phraseContainsAnyOf(NounPhrase phrase, List<Lemma> lemmas) {
+//    for (Lemma lemma : lemmas) {
+//      if (phrase.getPhraseLemmas().contains(lemma)) {
+//        return true;
+//      }
+//    }
+//    return false;
+//  }
 
 }

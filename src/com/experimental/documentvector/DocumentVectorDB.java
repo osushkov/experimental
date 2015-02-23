@@ -115,51 +115,51 @@ public class DocumentVectorDB {
     }
   }
 
-  public double getTermDiscriminationValue(Lemma term, Document document) {
-    double similaritySum = 0.0;
-    double sumWeight = 0.0;
-
-    for (VectoredDocument dbDocument : vectoredDocuments) {
-      BagOfWeightedLemmas.WeightedLemmaEntry entry = dbDocument.document.getBagOfLemmas().getBag().get(term);
-      if (entry != null) {
-        double similarity = dbDocument.vector.dotProduct(document.getConceptVector());
-
-        sumWeight += entry.weight;
-        similaritySum += entry.weight * similarity;
-      }
-    }
-
-    if (sumWeight < Double.MIN_VALUE) {
-      return 0.0;
-    } else {
-      return similaritySum / sumWeight;
-    }
-  }
-
-  public double getTermDiscriminationSd(Lemma term, Document document) {
-    double simSum = 0.0;
-    double simSum2 = 0.0;
-
-    double sumWeight = 0.0;
-
-    for (VectoredDocument dbDocument : vectoredDocuments) {
-      BagOfWeightedLemmas.WeightedLemmaEntry entry = dbDocument.document.getBagOfLemmas().getBag().get(term);
-      if (entry != null) {
-        double similarity = dbDocument.vector.dotProduct(document.getConceptVector());
-
-        sumWeight += entry.weight;
-
-        double val = entry.weight * similarity;
-        simSum += val;
-        simSum2 += val*val;
-      }
-    }
-
-    if (sumWeight < Double.MIN_VALUE) {
-      return 0.0;
-    } else {
-      double eSum = simSum / sumWeight;
-      return Math.sqrt(simSum2 / sumWeight - eSum * eSum);
-    }
-  }
+//  public double getTermDiscriminationValue(Lemma term, Document document) {
+//    double similaritySum = 0.0;
+//    double sumWeight = 0.0;
+//
+//    for (VectoredDocument dbDocument : vectoredDocuments) {
+//      BagOfWeightedLemmas.WeightedLemmaEntry entry = dbDocument.document.getBagOfLemmas().getBag().get(term);
+//      if (entry != null) {
+//        double similarity = dbDocument.vector.dotProduct(document.getConceptVector());
+//
+//        sumWeight += entry.weight;
+//        similaritySum += entry.weight * similarity;
+//      }
+//    }
+//
+//    if (sumWeight < Double.MIN_VALUE) {
+//      return 0.0;
+//    } else {
+//      return similaritySum / sumWeight;
+//    }
+//  }
+//
+//  public double getTermDiscriminationSd(Lemma term, Document document) {
+//    double simSum = 0.0;
+//    double simSum2 = 0.0;
+//
+//    double sumWeight = 0.0;
+//
+//    for (VectoredDocument dbDocument : vectoredDocuments) {
+//      BagOfWeightedLemmas.WeightedLemmaEntry entry = dbDocument.document.getBagOfLemmas().getBag().get(term);
+//      if (entry != null) {
+//        double similarity = dbDocument.vector.dotProduct(document.getConceptVector());
+//
+//        sumWeight += entry.weight;
+//
+//        double val = entry.weight * similarity;
+//        simSum += val;
+//        simSum2 += val*val;
+//      }
+//    }
+//
+//    if (sumWeight < Double.MIN_VALUE) {
+//      return 0.0;
+//    } else {
+//      double eSum = simSum / sumWeight;
+//      return Math.sqrt(simSum2 / sumWeight - eSum * eSum);
+//    }
+//  }
 }

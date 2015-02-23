@@ -30,6 +30,10 @@ public class DocumentClusters {
   private List<DocumentCluster> builtClusters = new ArrayList<DocumentCluster>();
   private boolean isLoaded = false;
 
+  public int getNumClusters() {
+    return builtClusters.size();
+  }
+
   public boolean tryLoad() throws IOException {
     if (isLoaded) {
       return true;
