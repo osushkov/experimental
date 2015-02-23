@@ -60,6 +60,35 @@ public class BagOfWeightedLemmas {
     }
   }
 
+  public void writeTo(BufferedWriter out) throws IOException {
+    Preconditions.checkNotNull(out);
+
+    out.write(Double.toString(sumWeight) + "\n");
+    out.write(Integer.toString(bag.size()) + "\n");
+    for (WeightedLemmaEntry entry : bag.values()) {
+      entry.lemma.writeTo(out);
+      out.write(Double.toString(entry.weight) + "\n");
+    }
+  }
+
+  public static BagOfWeightedLemmas readFrom(BufferedReader in) throws IOException {
+    Preconditions.checkNotNull(in);
+
+    BagOfWeightedLemmas result = new BagOfWeightedLemmas();
+
+    result.sumWeight = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
+
+    int bagSize = Integer.parseInt(Preconditions.checkNotNull(in.readLine()));
+    for (int i = 0; i < bagSize; i++) {
+      Lemma lemma = Lemma.readFrom(in);
+      double weight = Double.parseDouble(Preconditions.checkNotNull(in.readLine()));
+
+      result.addLemma(lemma, weight);
+    }
+
+    return result;
+  }
+
   public void addBag(BagOfWeightedLemmas otherBag) {
     for (WeightedLemmaEntry otherEntry : otherBag.bag.values()) {
       addLemma(otherEntry.lemma, otherEntry.weight);
@@ -78,7 +107,7 @@ public class BagOfWeightedLemmas {
     return sumWeight;
   }
 
-  private void addLemma(Lemma lemma, double weight) {
+  public void addLemma(Lemma lemma, double weight) {
     WeightedLemmaEntry curEntry = bag.get(lemma);
     if (curEntry == null) {
       curEntry = new WeightedLemmaEntry(lemma);

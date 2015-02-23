@@ -5,6 +5,8 @@ import com.experimental.classifier.ClassifierTrainer;
 import com.experimental.classifier.KeywordVector;
 import com.experimental.classifier.KeywordVectoriser;
 import com.experimental.classifier.TrainingDataGenerator;
+import com.experimental.documentclustering.DocumentCluster;
+import com.experimental.documentclustering.DocumentClusters;
 import com.experimental.documentmodel.*;
 import com.experimental.documentmodel.Document;
 import com.experimental.documentmodel.thirdparty.*;
@@ -108,7 +110,8 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    trainClassifier();
+    clusterDocuments();
+//    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
@@ -116,6 +119,30 @@ public class Main {
 //    testKeywordCandidateExtraction();
 
     Log.out("FINISHED");
+  }
+
+  private static void clusterDocuments() {
+    final List<Document> allDocuments = new ArrayList<Document>();
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
+      @Override
+      public void processDocument(Document document) {
+        if (document.getConceptVector() != null && document.getConceptVector().length() > Double.MIN_VALUE) {
+          allDocuments.add(document);
+        }
+      }
+    });
+
+    DocumentClusters documentClusters = new DocumentClusters();
+    documentClusters.clusterDocuments(allDocuments, 10);
+    try {
+      documentClusters.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private static void testTopicAggregator() {

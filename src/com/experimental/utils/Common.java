@@ -2,6 +2,7 @@ package com.experimental.utils;
 
 import com.google.common.base.Preconditions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,7 +10,7 @@ import java.util.Random;
  * Created by sushkov on 12/01/15.
  */
 public class Common {
-  private static final Random rnd = new Random();
+  public static final Random rnd = new Random();
 
   public static final double randInterval(double s, double e){
     return (double) rnd.nextDouble()*(e-s) + s;
@@ -22,6 +23,45 @@ public class Common {
     for (int i = 0; i < list.size(); i++) {
       result[i] = list.get(i);
     }
+    return result;
+  }
+
+  public static double computeKLDivergence(List<Double> p1, List<Double> p2) {
+    Preconditions.checkNotNull(p1);
+    Preconditions.checkNotNull(p2);
+    Preconditions.checkArgument(p1.size() == p2.size());
+
+    double result = 0.0;
+
+    for (int i = 0; i < p1.size(); i++) {
+      if (p1.get(i) > Double.MIN_VALUE) {
+        Preconditions.checkState(p2.get(i) > Double.MIN_VALUE);
+        result += p1.get(i) * Math.log(p1.get(i) / p2.get(i));
+      }
+    }
+
+    return result;
+  }
+
+  public static List<Double> combinedProbability(List<Double> p1, List<Double> p2) {
+    Preconditions.checkNotNull(p1);
+    Preconditions.checkNotNull(p2);
+    Preconditions.checkArgument(p1.size() == p2.size());
+
+    List<Double> result = new ArrayList<Double>();
+
+    double sum = 0.0;
+    for (int i = 0; i < p1.size(); i++) {
+      double x = p1.get(i) * p2.get(i);
+      sum += x;
+      result.add(x);
+    }
+
+    // normalise the resulting distribution.
+    for (int i = 0; i < result.size(); i++) {
+      result.set(i, result.get(i) / sum);
+    }
+
     return result;
   }
 }

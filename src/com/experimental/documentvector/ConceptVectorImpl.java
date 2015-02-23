@@ -136,6 +136,7 @@ public class ConceptVectorImpl implements ConceptVector {
     }
   }
 
+  @Override
   public void writeTo(BufferedWriter out) throws IOException {
     out.write(Integer.toString(dimensions) + "\n");
     for (int i = 0; i < dimensions; i++) {
