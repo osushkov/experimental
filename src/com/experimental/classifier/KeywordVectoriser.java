@@ -1,6 +1,7 @@
 package com.experimental.classifier;
 
 import com.experimental.WordNet;
+import com.experimental.documentclustering.DocumentClusters;
 import com.experimental.documentmodel.Sentence;
 import com.experimental.documentmodel.Token;
 import com.experimental.documentmodel.WebsiteDocument;
@@ -9,6 +10,7 @@ import com.experimental.keywords.KeyAssociations;
 import com.experimental.keywords.KeywordCandidateGenerator;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.NounPhrase;
+import com.experimental.utils.Common;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
@@ -27,6 +29,7 @@ public class KeywordVectoriser {
   private final DocumentVectorDB documentVectorDb;
   private final LemmaIDFWeights lemmaIdfWeights;
   private final WordNet wordnet;
+  private final DocumentClusters documentClusters;
 //  private final NounPhrasesDB nounPhrasesDB;
 //  private final KeyAssociations keyAssociations;
 
@@ -34,12 +37,14 @@ public class KeywordVectoriser {
                            LemmaQuality lemmaQuality,
                            DocumentVectorDB documentVectorDb,
                            LemmaIDFWeights lemmaIdfWeights,
-                           WordNet wordnet) {
+                           WordNet wordnet,
+                           DocumentClusters documentClusters) {
     this.globalLemmaStats = Preconditions.checkNotNull(globalLemmaStats);
     this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
     this.documentVectorDb = Preconditions.checkNotNull(documentVectorDb);
     this.lemmaIdfWeights = Preconditions.checkNotNull(lemmaIdfWeights);
     this.wordnet = Preconditions.checkNotNull(wordnet);
+    this.documentClusters = Preconditions.checkNotNull(documentClusters);
 //    this.nounPhrasesDB = Preconditions.checkNotNull(nounPhrasesDB);
   }
 
@@ -108,6 +113,8 @@ public class KeywordVectoriser {
     resultVector.add(components.localToGlobalStandardDeviationRatio());
     resultVector.add(components.localToGlobalDocumentsOccuredRatio());
     resultVector.add(components.globalIdfWeight());
+
+    resultVector.add(getKLDivergence(candidate.phraseLemmas));
 
     resultVector = generateSquaredVector(resultVector);
 
@@ -218,6 +225,8 @@ public class KeywordVectoriser {
 
     resultVector.add(c0.globalIdfWeight());
     resultVector.add(c1.globalIdfWeight());
+
+    resultVector.add(getKLDivergence(candidate.phraseLemmas));
 
 //    resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
 //    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
@@ -396,6 +405,8 @@ public class KeywordVectoriser {
     resultVector.add(c1.globalIdfWeight());
     resultVector.add(c2.globalIdfWeight());
 
+    resultVector.add(getKLDivergence(candidate.phraseLemmas));
+
 //    int size = candidate.phraseLemmas.size();
 //    List<Lemma> pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-2), candidate.phraseLemmas.get(size-1));
 //    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
@@ -510,6 +521,19 @@ public class KeywordVectoriser {
       }
     }
     return result;
+  }
+
+  private double getKLDivergence(List<Lemma> phraseLemmas) {
+    List<Double> uniformDistribution = Common.uniformProbabilityDistribution(documentClusters.getNumClusters());
+    List<Double> combinedDistribution = Common.uniformProbabilityDistribution(documentClusters.getNumClusters());
+
+    for (Lemma lemma : phraseLemmas) {
+      List<Double> lemmaDistribution = documentClusters.getRawTermProbabilities(lemma);
+      combinedDistribution = Common.combinedProbability(lemmaDistribution, combinedDistribution);
+    }
+
+    combinedDistribution = Common.getClampedProbabilityDistribution(combinedDistribution);
+    return Common.computeKLDivergence(combinedDistribution, uniformDistribution);
   }
 
 //  private double getCandidateSimilarCorpusWeight(

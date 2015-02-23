@@ -288,8 +288,19 @@ public class Main {
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
+    DocumentClusters documentClusters = new DocumentClusters();
+    try {
+      if (!documentClusters.tryLoad()) {
+        Log.out("could not load document clusters.");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, documentClusters);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/mnt/fastdisk3/documents/website/499/49988AA");
@@ -387,8 +398,19 @@ public class Main {
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
+    DocumentClusters documentClusters = new DocumentClusters();
+    try {
+      if (!documentClusters.tryLoad()) {
+        Log.out("could not load document clusters.");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, documentClusters);
 
     KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
 
@@ -578,8 +600,19 @@ public class Main {
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
 
+    DocumentClusters documentClusters = new DocumentClusters();
+    try {
+      if (!documentClusters.tryLoad()) {
+        Log.out("could not load document clusters.");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, documentClusters);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
