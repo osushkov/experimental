@@ -26,7 +26,7 @@ public class DocumentVectoriser {
 
   public DocumentVectoriser(BasisVector basisVector, LemmaSimilarityMeasure lemmaSimilarityMeasure) {
     this.basisVector = Preconditions.checkNotNull(basisVector);
-    this.lemmaSimilarityMeasure = Preconditions.checkNotNull(lemmaSimilarityMeasure);
+    this.lemmaSimilarityMeasure = lemmaSimilarityMeasure;
   }
 
   public int getDimensionality() {
@@ -65,13 +65,14 @@ public class DocumentVectoriser {
       BasisVector.BasisElement element = basisElements.get(i);
       if (entry.lemma.equals(element.lemma)) {
         result.setValue(i, posWeight * localWeight * element.weight);
-      } else {
-        double similarity = lemmaSimilarityMeasure.getLemmaSimilarity(element.lemma, entry.lemma);
-        if (similarity > 0.8) {
-          double similarityWeight = similarity * similarity * similarity;
-          result.setValue(i, similarityWeight * posWeight * localWeight * element.weight);
-        }
       }
+//      else {
+//        double similarity = lemmaSimilarityMeasure.getLemmaSimilarity(element.lemma, entry.lemma);
+//        if (similarity > 0.8) {
+//          double similarityWeight = similarity * similarity * similarity;
+//          result.setValue(i, similarityWeight * posWeight * localWeight * element.weight);
+//        }
+//      }
     }
 
     return result;

@@ -999,19 +999,19 @@ public class Main {
   }
 
   public static void vectoriseDocuments() {
-    Word2VecDB word2VecDb = Word2VecDB.tryLoad();
-    if (word2VecDb == null) {
-      Log.out("could not load Word2VecDB");
-      return;
-    }
-
-    WordNet wordnet = new WordNet();
-    if (!wordnet.loadWordNet()) {
-      Log.out("could not load WordNet");
-      return;
-    }
-
-    LemmaSimilarityMeasure lemmaSimilarityMeasure = new LemmaSimilarityMeasure(wordnet, word2VecDb);
+//    Word2VecDB word2VecDb = Word2VecDB.tryLoad();
+//    if (word2VecDb == null) {
+//      Log.out("could not load Word2VecDB");
+//      return;
+//    }
+//
+//    WordNet wordnet = new WordNet();
+//    if (!wordnet.loadWordNet()) {
+//      Log.out("could not load WordNet");
+//      return;
+//    }
+//
+//    LemmaSimilarityMeasure lemmaSimilarityMeasure = new LemmaSimilarityMeasure(wordnet, word2VecDb);
 
     BasisVector basisVector = new BasisVector();
     try {
@@ -1023,7 +1023,7 @@ public class Main {
       e.printStackTrace();
     }
 
-    final DocumentVectoriser documentVectoriser = new DocumentVectoriser(basisVector, lemmaSimilarityMeasure);
+    final DocumentVectoriser documentVectoriser = new DocumentVectoriser(basisVector, null);
 
 //    Document doc = new WebsiteDocument("/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A0A28B");
 //    ConceptVector vector = documentVectoriser.computeDocumentVector(doc);
