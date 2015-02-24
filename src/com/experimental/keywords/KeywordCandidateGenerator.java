@@ -25,7 +25,7 @@ public class KeywordCandidateGenerator {
   public static class KeywordCandidate {
     public final List<Lemma> phraseLemmas;
 
-    private KeywordCandidate(List<Lemma> phraseLemmas) {
+    public KeywordCandidate(List<Lemma> phraseLemmas) {
       this.phraseLemmas = Preconditions.checkNotNull(phraseLemmas);
       Preconditions.checkArgument(phraseLemmas.size() > 0);
     }

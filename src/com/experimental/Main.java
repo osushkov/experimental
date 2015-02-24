@@ -1,5 +1,6 @@
 package com.experimental;
 
+import com.experimental.adgeneration.AdTextGenerator;
 import com.experimental.adgeneration.TopicAggregator;
 import com.experimental.classifier.ClassifierTrainer;
 import com.experimental.classifier.KeywordVector;
@@ -82,6 +83,7 @@ public class Main {
 
 //    aggregateLemmaQuality();
 
+//    testAdTextGenerator();
 //    generateBasisVector();
     vectoriseDocuments();
 //    findDocumentNearestNeighbours();
@@ -122,6 +124,38 @@ public class Main {
     Log.out("FINISHED");
   }
 
+  private static void testAdTextGenerator() {
+    NounAssociations nounAssociations = new NounAssociations();
+    try {
+      if (!nounAssociations.tryLoad()) {
+        Log.out("could not load NounAssociations from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    System.gc();
+    Log.out("loaded noun associations");
+
+    DocumentVectorDB documentVectorDb = new DocumentVectorDB();
+    documentVectorDb.load();
+
+    Log.out("loaded all");
+    AdTextGenerator adTextGenerator = new AdTextGenerator(nounAssociations, documentVectorDb);
+
+    WebsiteDocument d0 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45CAEB2");
+
+    KeywordCandidateGenerator.KeywordCandidate candidate = new KeywordCandidateGenerator.KeywordCandidate(
+        Lists.newArrayList(new Lemma("signage", SimplePOSTag.NOUN)));
+
+    AdTextGenerator.AdText adText = adTextGenerator.generateAdText(d0, candidate);
+
+    Log.out(adText.title);
+    Log.out(adText.description);
+  }
 
   private static void testKLDivergence() {
     DocumentClusters documentClusters = new DocumentClusters();
@@ -1010,6 +1044,10 @@ public class Main {
             executor.execute(new Runnable() {
               @Override
               public void run() {
+                if (Common.rnd.nextInt(1000) == 0) {
+                  System.gc();
+                }
+
                 try {
                   ConceptVector vector = documentVectoriser.computeDocumentVector(document);
                   document.setConceptVector(vector);
@@ -1026,6 +1064,9 @@ public class Main {
         });
 
     for (int i = 0; i < numDocuments.get(); i++) {
+      if (i%1000 == 0) {
+        Log.out("left: " + Integer.toString(numDocuments.get() - i));
+      }
       try {
         sem.acquire();
       } catch (InterruptedException e) {
