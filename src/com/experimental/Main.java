@@ -110,9 +110,9 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-//    clusterDocuments();
+    clusterDocuments();
 //    testKLDivergence();
-    trainClassifier();
+//    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
@@ -160,7 +160,7 @@ public class Main {
     final List<Document> allDocuments = new ArrayList<Document>();
 
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
       @Override
@@ -172,7 +172,7 @@ public class Main {
     });
 
     DocumentClusters documentClusters = new DocumentClusters();
-    documentClusters.clusterDocuments(allDocuments, 10);
+    documentClusters.clusterDocuments(allDocuments, 5);
     try {
       documentClusters.save();
     } catch (IOException e) {

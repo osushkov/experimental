@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by sushkov on 23/02/15.
@@ -24,7 +29,7 @@ public class DocumentClusters {
 
   private static final String DOCUMENT_CLUSTERS_FILENAME = "document_clusters.txt";
 
-  private static final int NUM_CLUSTERS = 100;
+  private static final int NUM_CLUSTERS = 1000;
   private static final int DIM = 1200;
 
   private List<DocumentCluster> builtClusters = new ArrayList<DocumentCluster>();
@@ -118,6 +123,11 @@ public class DocumentClusters {
     for (Document document : documents) {
       DocumentCluster matchingCluster = findMatchingCluster(document, builtClusters);
       matchingCluster.addDocumentToLemmaBag(document);
+      document.freeSentences();
+
+      if (Common.rnd.nextInt(1000) == 0) {
+        System.gc();
+      }
     }
   }
 
@@ -162,23 +172,44 @@ public class DocumentClusters {
   }
 
   private List<DocumentCluster> generateClusters(List<Document> documents) {
-    List<DocumentCluster> clusters = createInitialClusters(documents);
+    final List<DocumentCluster> clusters = createInitialClusters(documents);
     Preconditions.checkState(clusters.size() > 0);
 
-    Map<Document, DocumentCluster> documentToClusterMap = new HashMap<Document, DocumentCluster>();
+    final Map<Document, DocumentCluster> documentToClusterMap = new ConcurrentHashMap<Document, DocumentCluster>();
 
-    int numMismatches = 1;
-    while (numMismatches != 0) {
-      numMismatches = 0;
+    final Executor executor = Executors.newFixedThreadPool(12);
 
-      for (Document document : documents) {
-        DocumentCluster matchedCluster = findMatchingCluster(document, clusters);
-        if (!documentToClusterMap.containsKey(document) || documentToClusterMap.get(document) != matchedCluster) {
-          numMismatches++;
+    final AtomicInteger numMismatches = new AtomicInteger(1);
+    while (numMismatches.get() != 0) {
+      numMismatches.set(0);
+
+      final AtomicInteger numDocuments = new AtomicInteger(0);
+      final Semaphore sem = new Semaphore(0);
+
+      for (final Document document : documents) {
+        numDocuments.incrementAndGet();
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            DocumentCluster matchedCluster = findMatchingCluster(document, clusters);
+            if (!documentToClusterMap.containsKey(document) || documentToClusterMap.get(document) != matchedCluster) {
+              numMismatches.incrementAndGet();
+            }
+
+            documentToClusterMap.put(document, matchedCluster);
+            matchedCluster.addMappedVector(document.getConceptVector());
+
+            sem.release();
+          }
+        });
+      }
+
+      for (int i = 0; i < numDocuments.get(); i++) {
+        try {
+          sem.acquire();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
         }
-
-        documentToClusterMap.put(document, matchedCluster);
-        matchedCluster.addMappedVector(document.getConceptVector());
       }
 
       for (DocumentCluster cluster : clusters) {
