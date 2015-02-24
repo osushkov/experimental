@@ -66,7 +66,7 @@ public class DocumentVectorDB {
           public void processDocument(final Document document) {
             ConceptVector documentVector = document.getConceptVector();
             if (documentVector != null && !Double.isNaN(documentVector.length()) &&
-                Double.isFinite(documentVector.length()) && document.getSentences().size() > 50) {
+                Double.isFinite(documentVector.length())) {
               vectoredDocuments.add(new VectoredDocument(documentVector, document));
             }
           }
