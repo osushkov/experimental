@@ -300,7 +300,7 @@ public class Main {
     }
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, documentClusters);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/mnt/fastdisk3/documents/website/499/49988AA");
