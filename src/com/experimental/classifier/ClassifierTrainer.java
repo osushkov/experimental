@@ -61,9 +61,7 @@ public class ClassifierTrainer {
   public ClassifierTrainer(KeywordCandidateGenerator candidateGenerator, KeywordVectoriser keywordVectoriser) {
     SparkConf conf = new SparkConf()
         .setAppName("myApp")
-        .setMaster("local[4]")
-        .set("spark.cores.max", "4")
-        .set("spark.task.cpus", "4");
+        .setMaster("local[");
     this.sc = new JavaSparkContext(conf);
     Logger.getLogger("org").setLevel(Level.ERROR);
     Logger.getLogger("akka").setLevel(Level.ERROR);
@@ -78,7 +76,7 @@ public class ClassifierTrainer {
     final TrainingData trainingData = generateTrainingData();
     System.gc();
 
-    final Executor executor = Executors.newFixedThreadPool(12);
+    final Executor executor = Executors.newFixedThreadPool(4);
     final AtomicInteger numModels = new AtomicInteger(0);
     final Semaphore sem = new Semaphore(0);
 
