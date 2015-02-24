@@ -409,6 +409,7 @@ public class Main {
       return;
     }
 
+    System.gc();
     KeywordVectoriser keywordVectoriser =
         new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, documentClusters);
 
