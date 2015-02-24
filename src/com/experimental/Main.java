@@ -1052,6 +1052,7 @@ public class Main {
                   ConceptVector vector = documentVectoriser.computeDocumentVector(document);
                   document.setConceptVector(vector);
                   document.save();
+                  document.freeSentences();
                 } catch (Throwable e) {
                   e.printStackTrace();
                   return;

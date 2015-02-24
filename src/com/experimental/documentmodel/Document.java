@@ -57,6 +57,7 @@ public abstract class Document {
 
   public void freeSentences() {
     this.sentences = null;
+    this.bagOfLemmas = null;
   }
 
   public BagOfWeightedLemmas getBagOfLemmas() {
