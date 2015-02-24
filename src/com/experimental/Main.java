@@ -389,11 +389,11 @@ public class Main {
       return;
     }
 
-    WordNet wordnet = new WordNet();
-    if (!wordnet.loadWordNet()) {
-      Log.out("could not load WordNet");
-      return;
-    }
+//    WordNet wordnet = new WordNet();
+//    if (!wordnet.loadWordNet()) {
+//      Log.out("could not load WordNet");
+//      return;
+//    }
 
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
@@ -411,9 +411,9 @@ public class Main {
 
     System.gc();
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, documentClusters);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters);
 
-    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
 
     KeywordCandidateGenerator candidateGenerator =
         new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDb);
@@ -475,7 +475,7 @@ public class Main {
     DocumentVectorDB documentVectorDB = new DocumentVectorDB();
     documentVectorDB.load();
 
-    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
 
     KeywordCandidateGenerator candidateGenerator =
         new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);
@@ -613,7 +613,7 @@ public class Main {
     }
 
     KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, wordnet, documentClusters);
+        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
@@ -656,7 +656,7 @@ public class Main {
     DocumentVectorDB documentVectorDB = new DocumentVectorDB();
     documentVectorDB.load();
 
-    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
 
     KeywordCandidateGenerator candidateGenerator =
         new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);
@@ -718,7 +718,7 @@ public class Main {
     DocumentVectorDB documentVectorDB = new DocumentVectorDB();
     documentVectorDB.load();
 
-    KeywordSanityChecker sanityChecker = new KeywordSanityChecker(wordnet);
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
 
     KeywordCandidateGenerator candidateGenerator =
         new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);

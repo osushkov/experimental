@@ -16,10 +16,10 @@ import java.util.Set;
 public class KeywordSanityChecker {
 
   private static final Set<String> STOP_WORDS = new HashSet<String>(buildStopWords());
-  private final WordNet wordnet;
+//  private final WordNet wordnet;
 
-  public KeywordSanityChecker(WordNet wordnet) {
-    this.wordnet = Preconditions.checkNotNull(wordnet);
+  public KeywordSanityChecker() {
+//    this.wordnet = Preconditions.checkNotNull(wordnet);
   }
 
   public boolean isSane(KeywordCandidateGenerator.KeywordCandidate candidate) {
@@ -28,9 +28,9 @@ public class KeywordSanityChecker {
       if (STOP_WORDS.contains(lemma.lemma)) {
         return false;
       }
-      if (!wordnet.isLemmaInDictionary(lemma)) {
-        return false;
-      }
+//      if (!wordnet.isLemmaInDictionary(lemma)) {
+//        return false;
+//      }
     }
 
     return true;

@@ -27,15 +27,14 @@ public class KeywordVectorComponents {
   private final LemmaOccuranceStatsAggregator.LemmaStats localStats;
   private final LemmaOccuranceStatsAggregator.LemmaStats globalStats;
 //  private final DocumentVectorDB documentVectorDB;
-  private final WordNet wordnet;
+//  private final WordNet wordnet;
 
   public KeywordVectorComponents(Lemma phraseLemma,
                                  WebsiteDocument document,
                                  LemmaQuality lemmaQuality,
                                  LemmaIDFWeights lemmaIdfWeights,
                                  LemmaOccuranceStatsAggregator.LemmaStats localStats,
-                                 LemmaOccuranceStatsAggregator.LemmaStats globalStats,
-                                 WordNet wordnet) {
+                                 LemmaOccuranceStatsAggregator.LemmaStats globalStats) {
 
     this.phraseLemma = Preconditions.checkNotNull(phraseLemma);
     this.document = Preconditions.checkNotNull(document);
@@ -45,7 +44,7 @@ public class KeywordVectorComponents {
     this.localStats = localStats;
     this.globalStats = globalStats;
 //    this.documentVectorDB = Preconditions.checkNotNull(documentVectorDB);
-    this.wordnet = Preconditions.checkNotNull(wordnet);
+//    this.wordnet = Preconditions.checkNotNull(wordnet);
   }
 
   public double lemmaWeight() {
@@ -99,9 +98,9 @@ public class KeywordVectorComponents {
     return lemmaIdfWeights.getLemmaWeight(phraseLemma);
   }
 
-  public double lemmaDictionaryWord() {
-    return wordnet.isLemmaInDictionary(phraseLemma) ? 1.0 : 0.0;
-  }
+//  public double lemmaDictionaryWord() {
+//    return wordnet.isLemmaInDictionary(phraseLemma) ? 1.0 : 0.0;
+//  }
 
   public double weightToGobalRatio() {
     if (globalStats == null) {
