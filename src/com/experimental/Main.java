@@ -83,7 +83,7 @@ public class Main {
 //    aggregateLemmaQuality();
 
 //    generateBasisVector();
-//    vectoriseDocuments();
+    vectoriseDocuments();
 //    findDocumentNearestNeighbours();
 
 //    generateNounPhrases();
@@ -110,7 +110,7 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    clusterDocuments();
+//    clusterDocuments();
 //    testKLDivergence();
 //    trainClassifier();
 
@@ -709,31 +709,74 @@ public class Main {
       return;
     }
 
-    WordNet wordnet = new WordNet();
-    if (!wordnet.loadWordNet()) {
-      Log.out("could not load WordNet");
-      return;
-    }
-
     DocumentVectorDB documentVectorDB = new DocumentVectorDB();
     documentVectorDB.load();
+
+    DocumentClusters documentClusters = new DocumentClusters();
+    try {
+      if (!documentClusters.tryLoad()) {
+        Log.out("could not load document clusters.");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
 
     KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
 
     KeywordCandidateGenerator candidateGenerator =
         new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDB);
 
-    WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
-        "/home/sushkov/Programming/experimental/experimental/data/documents/website/1A0/1A02F1F");
+    List<WebsiteDocument> testDocuments = getKeywordTestDocuments();
 
-    Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(testDocument);
-    for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {
-      for (Lemma lemma : candidate.phraseLemmas) {
-        System.out.print(lemma.lemma + " ");
+    for (WebsiteDocument document : testDocuments) {
+      Set<KeywordCandidateGenerator.KeywordCandidate> candidates = candidateGenerator.generateCandidates(document);
+      for (KeywordCandidateGenerator.KeywordCandidate candidate : candidates) {
+        Log.out(candidate.toString());
+        Log.out("kl divergence: " + getKLDivergence(candidate.phraseLemmas, documentClusters));
       }
-      System.out.print("\n");
+    }
+  }
+
+  private static double getKLDivergence(List<Lemma> phraseLemmas, DocumentClusters documentClusters) {
+    List<Double> uniformDistribution = Common.uniformProbabilityDistribution(documentClusters.getNumClusters());
+    List<Double> combinedDistribution = Common.uniformProbabilityDistribution(documentClusters.getNumClusters());
+
+    for (Lemma lemma : phraseLemmas) {
+      List<Double> lemmaDistribution = documentClusters.getRawTermProbabilities(lemma);
+      combinedDistribution = Common.combinedProbability(lemmaDistribution, combinedDistribution);
     }
 
+    combinedDistribution = Common.getClampedProbabilityDistribution(combinedDistribution);
+    double result = Common.computeKLDivergence(combinedDistribution, uniformDistribution);
+    Preconditions.checkState(Double.isFinite(result));
+    return result;
+  }
+
+  private static List<WebsiteDocument> getKeywordTestDocuments() {
+    WebsiteDocument d0 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C012B");
+    WebsiteDocument d1 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45CFD71");
+    WebsiteDocument d2 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45CAEB2");
+    WebsiteDocument d3 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C19DC");
+    WebsiteDocument d4 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C1C20");
+    WebsiteDocument d5 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45CF14A");
+    WebsiteDocument d6 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C8C2C");
+    WebsiteDocument d7 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45CB1F0");
+    WebsiteDocument d8 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C2489");
+    WebsiteDocument d9 = DocumentDB.instance.createWebsiteDocument(
+        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C3C97");
+
+    return Lists.newArrayList(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9);
   }
 
   private static void generateNounPhrases() {
@@ -952,7 +995,7 @@ public class Main {
 //    ConceptVector vector = documentVectoriser.computeDocumentVector(doc);
 
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
-        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
 
     final Executor executor = Executors.newFixedThreadPool(12);
     final AtomicInteger numDocuments = new AtomicInteger(0);
