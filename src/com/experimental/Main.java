@@ -249,7 +249,7 @@ public class Main {
     System.gc();
     Log.out("clustering documents: " + allDocuments.size());
     DocumentClusters documentClusters = new DocumentClusters();
-    documentClusters.clusterDocuments(allDocuments, 5);
+    documentClusters.clusterDocuments(allDocuments, 1);
     try {
       documentClusters.save();
     } catch (IOException e) {

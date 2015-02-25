@@ -30,8 +30,8 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="2697" max-vertical-offset="23175">
-                  <caret line="226" column="26" selection-start-line="226" selection-start-column="26" selection-end-line="226" selection-end-column="26" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="2832" max-vertical-offset="23175">
+                  <caret line="251" column="32" selection-start-line="251" selection-start-column="32" selection-end-line="251" selection-end-column="32" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#6338#6348#0" expanded="true" />
@@ -56,20 +56,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DocumentClusters.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="DocumentClusters.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentClusters.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="2274" max-vertical-offset="3630">
-                  <caret line="199" column="40" selection-start-line="199" selection-start-column="40" selection-end-line="199" selection-end-column="40" />
+                <state vertical-scroll-proportion="0.33333334" vertical-offset="894" max-vertical-offset="3630">
+                  <caret line="105" column="74" selection-start-line="105" selection-start-column="61" selection-end-line="105" selection-end-column="74" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DocumentCluster.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="DocumentCluster.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentCluster.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.52991456" vertical-offset="297" max-vertical-offset="1350">
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1350">
                   <caret line="68" column="22" selection-start-line="68" selection-start-column="22" selection-end-line="68" selection-end-column="22" />
                   <folding />
                 </state>
@@ -214,9 +214,9 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/ConceptVector.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentStream.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/ConceptVectorImpl.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentClusters.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentCluster.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
       </list>
     </option>
   </component>
@@ -1283,10 +1283,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentCluster.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1350">
+          <caret line="68" column="22" selection-start-line="68" selection-start-column="22" selection-end-line="68" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2697" max-vertical-offset="23175">
-          <caret line="226" column="26" selection-start-line="226" selection-start-column="26" selection-end-line="226" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2832" max-vertical-offset="23175">
+          <caret line="251" column="32" selection-start-line="251" selection-start-column="32" selection-end-line="251" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#6338#6348#0" expanded="true" />
@@ -1302,16 +1310,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentClusters.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2274" max-vertical-offset="3630">
-          <caret line="199" column="40" selection-start-line="199" selection-start-column="40" selection-end-line="199" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentCluster.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52991456" vertical-offset="297" max-vertical-offset="1350">
-          <caret line="68" column="22" selection-start-line="68" selection-start-column="22" selection-end-line="68" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="894" max-vertical-offset="3630">
+          <caret line="105" column="74" selection-start-line="105" selection-start-column="61" selection-end-line="105" selection-end-column="74" />
           <folding />
         </state>
       </provider>
