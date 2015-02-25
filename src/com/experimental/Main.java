@@ -207,10 +207,18 @@ public class Main {
         executor.execute(new Runnable() {
           @Override
           public void run() {
-            if (allDocuments.size() < 1000000 &&
+            int numDocuments;
+            synchronized (allDocuments) {
+              numDocuments = allDocuments.size();
+            }
+
+            if (numDocuments < 1000000 &&
                 document.getConceptVector() != null &&
                 document.getConceptVector().haveMinElements(10)) {
-              allDocuments.add(document);
+
+              synchronized (allDocuments) {
+                allDocuments.add(document);
+              }
             }
 
             document.freeSentences();

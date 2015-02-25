@@ -27,41 +27,21 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf>
-          <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="2652" max-vertical-offset="23040">
-                  <caret line="242" column="33" selection-start-line="242" selection-start-column="33" selection-end-line="242" selection-end-column="33" />
+                <state vertical-scroll-proportion="0.52991456" vertical-offset="2652" max-vertical-offset="23160">
+                  <caret line="214" column="28" selection-start-line="214" selection-start-column="28" selection-end-line="214" selection-end-column="28" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#6338#6348#0" expanded="true" />
-                    <element signature="e#6803#7477#0" expanded="true" />
-                    <element signature="e#6989#7461#0" expanded="true" />
-                    <element signature="e#7460#7461#0" expanded="true" />
-                    <element signature="e#7476#7477#0" expanded="true" />
-                    <element signature="e#36552#37416#0" expanded="true" />
-                    <element signature="e#37415#37416#0" expanded="true" />
+                    <element signature="e#6803#7670#0" expanded="true" />
+                    <element signature="e#6989#7654#0" expanded="true" />
+                    <element signature="e#7653#7654#0" expanded="true" />
+                    <element signature="e#7669#7670#0" expanded="true" />
+                    <element signature="e#36745#37609#0" expanded="true" />
+                    <element signature="e#37608#37609#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ConceptVector.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/ConceptVector.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-                  <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ConceptVectorImpl.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/ConceptVectorImpl.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1377" max-vertical-offset="2550">
-                  <caret line="158" column="0" selection-start-line="158" selection-start-column="0" selection-end-line="158" selection-end-column="0" />
-                  <folding />
                 </state>
               </provider>
             </entry>
@@ -92,21 +72,6 @@
                 <state vertical-scroll-proportion="0.0" vertical-offset="264" max-vertical-offset="2625">
                   <caret line="55" column="25" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="25" />
                   <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="DocumentClusters.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentClusters.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.15669516" vertical-offset="0" max-vertical-offset="3705">
-                  <caret line="31" column="44" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
-                  <folding>
-                    <element signature="e#1241#1242#0" expanded="true" />
-                    <element signature="e#1278#1279#0" expanded="true" />
-                    <element signature="e#5834#6354#0" expanded="true" />
-                    <element signature="e#6353#6354#0" expanded="true" />
-                  </folding>
                 </state>
               </provider>
             </entry>
@@ -217,8 +182,8 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/Document.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/ConceptVector.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/ConceptVectorImpl.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentClusters.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
       </list>
     </option>
   </component>
@@ -1209,14 +1174,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/adgeneration/AdTextGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="264" max-vertical-offset="2625">
-          <caret line="55" column="25" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="9195">
@@ -1299,32 +1256,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2652" max-vertical-offset="23040">
-          <caret line="242" column="33" selection-start-line="242" selection-start-column="33" selection-end-line="242" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#6338#6348#0" expanded="true" />
-            <element signature="e#6803#7477#0" expanded="true" />
-            <element signature="e#6989#7461#0" expanded="true" />
-            <element signature="e#7460#7461#0" expanded="true" />
-            <element signature="e#7476#7477#0" expanded="true" />
-            <element signature="e#36552#37416#0" expanded="true" />
-            <element signature="e#37415#37416#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentClusters.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15669516" vertical-offset="0" max-vertical-offset="3705">
-          <caret line="31" column="44" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.7407407" vertical-offset="0" max-vertical-offset="3705">
+          <caret line="72" column="19" selection-start-line="72" selection-start-column="19" selection-end-line="72" selection-end-column="19" />
           <folding>
             <element signature="e#1241#1242#0" expanded="true" />
             <element signature="e#1278#1279#0" expanded="true" />
             <element signature="e#5834#6354#0" expanded="true" />
             <element signature="e#6353#6354#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/adgeneration/AdTextGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="264" max-vertical-offset="2625">
+          <caret line="55" column="25" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52991456" vertical-offset="2652" max-vertical-offset="23160">
+          <caret line="214" column="28" selection-start-line="214" selection-start-column="28" selection-end-line="214" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6338#6348#0" expanded="true" />
+            <element signature="e#6803#7670#0" expanded="true" />
+            <element signature="e#6989#7654#0" expanded="true" />
+            <element signature="e#7653#7654#0" expanded="true" />
+            <element signature="e#7669#7670#0" expanded="true" />
+            <element signature="e#36745#37609#0" expanded="true" />
+            <element signature="e#37608#37609#0" expanded="true" />
           </folding>
         </state>
       </provider>
