@@ -199,7 +199,9 @@ public class Main {
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
       @Override
       public void processDocument(Document document) {
-        if (document.getConceptVector() != null && document.getConceptVector().length() > Double.MIN_VALUE) {
+        if (document.getConceptVector() != null &&
+            document.getConceptVector().getNumElements() > 10 &&
+            document.getConceptVector().length() > Double.MIN_VALUE) {
           allDocuments.add(document);
         }
       }

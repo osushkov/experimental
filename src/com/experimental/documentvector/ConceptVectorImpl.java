@@ -144,6 +144,17 @@ public class ConceptVectorImpl implements ConceptVector {
     }
   }
 
+  @Override
+  public int getNumElements() {
+    int result = 0;
+    for (int i = 0; i < dimensions; i++) {
+      if (values[i] > Double.MAX_VALUE) {
+        result++;
+      }
+    }
+    return result;
+  }
+
   public static ConceptVectorImpl readFrom(BufferedReader in) throws IOException {
     int dim = Integer.parseInt(in.readLine());
     ConceptVectorImpl result = new ConceptVectorImpl(dim);

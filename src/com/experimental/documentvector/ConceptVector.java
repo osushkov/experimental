@@ -27,4 +27,6 @@ public interface ConceptVector {
   double distanceTo(ConceptVector other);
 
   void writeTo(BufferedWriter out) throws IOException;
+
+  int getNumElements();
 }
