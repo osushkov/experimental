@@ -107,18 +107,21 @@ public class DocumentClusters {
     Preconditions.checkNotNull(documents);
     Preconditions.checkArgument(numIterations > 0);
 
-    double bestQuality = 0.0;
+//    double bestQuality = 0.0;
 
-    for (int i = 0; i < numIterations; i++) {
-      Log.out("cluster iteration: " + i);
-      Log.out("best quality: " + bestQuality);
-      List<DocumentCluster> clusters = generateClusters(documents);
-      double quality = evaluateClusterQuality(documents, clusters);
-      if (quality > bestQuality) {
-        bestQuality = quality;
-        this.builtClusters = clusters;
-      }
-    }
+    this.builtClusters = generateClusters(documents);
+    Log.out("finished generating clusters");
+
+//    for (int i = 0; i < numIterations; i++) {
+//      Log.out("cluster iteration: " + i);
+//      Log.out("best quality: " + bestQuality);
+//      List<DocumentCluster> clusters = generateClusters(documents);
+//      double quality = evaluateClusterQuality(documents, clusters);
+//      if (quality > bestQuality) {
+//        bestQuality = quality;
+//        this.builtClusters = clusters;
+//      }
+//    }
 
     for (Document document : documents) {
       DocumentCluster matchingCluster = findMatchingCluster(document, builtClusters);
@@ -215,6 +218,8 @@ public class DocumentClusters {
       for (DocumentCluster cluster : clusters) {
         cluster.endOfIteration();
       }
+
+      Log.out("num mismatches: " + numMismatches.get());
     }
 
     return clusters;
