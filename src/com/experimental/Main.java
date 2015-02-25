@@ -211,7 +211,6 @@ public class Main {
             int allDocumentsSize;
             synchronized (allDocuments) {
               allDocumentsSize = allDocuments.size();
-              Log.out("all documents size: " + allDocumentsSize);
             }
 
             if (allDocumentsSize < 1000000 &&
