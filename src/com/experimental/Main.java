@@ -204,9 +204,17 @@ public class Main {
             document.getConceptVector().length() > Double.MIN_VALUE) {
           allDocuments.add(document);
         }
+
+        document.freeSentences();
+        document = null;
+        
+        if (Common.rnd.nextInt(1000) == 0) {
+          System.gc();
+        }
       }
     });
 
+    System.gc();
     Log.out("clustering documents: " + allDocuments.size());
     DocumentClusters documentClusters = new DocumentClusters();
     documentClusters.clusterDocuments(allDocuments, 5);
