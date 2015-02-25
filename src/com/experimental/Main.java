@@ -208,12 +208,13 @@ public class Main {
         executor.execute(new Runnable() {
           @Override
           public void run() {
-            int numDocuments;
+            int allDocumentsSize;
             synchronized (allDocuments) {
-              numDocuments = allDocuments.size();
+              allDocumentsSize = allDocuments.size();
+              Log.out("all documents size: " + allDocumentsSize);
             }
 
-            if (numDocuments < 1000000 &&
+            if (allDocumentsSize < 1000000 &&
                 document.getConceptVector() != null &&
                 document.getConceptVector().haveMinElements(10)) {
 
