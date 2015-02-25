@@ -193,26 +193,49 @@ public class Main {
   private static void clusterDocuments() {
     final List<Document> allDocuments = new ArrayList<Document>();
 
+    final Executor executor = Executors.newFixedThreadPool(12);
+    final AtomicInteger numDocuments = new AtomicInteger(0);
+    final Semaphore sem = new Semaphore(0);
+
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
       @Override
-      public void processDocument(Document document) {
-        if (document.getConceptVector() != null &&
-            document.getConceptVector().getNumElements() > 10 &&
-            document.getConceptVector().length() > Double.MIN_VALUE) {
-          allDocuments.add(document);
-        }
+      public void processDocument(final Document document) {
+        numDocuments.incrementAndGet();
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            if (allDocuments.size() < 1000000 &&
+                document.getConceptVector() != null &&
+                document.getConceptVector().haveMinElements(10)) {
+              allDocuments.add(document);
+            }
 
-        document.freeSentences();
-        document = null;
-        
-        if (Common.rnd.nextInt(1000) == 0) {
-          System.gc();
-        }
+            document.freeSentences();
+            if (Common.rnd.nextInt(1000) == 0) {
+              System.gc();
+            }
+
+            sem.release();
+          }
+        });
       }
     });
+
+
+    for (int i = 0; i < numDocuments.get(); i++) {
+      int remaining = numDocuments.get() - i;
+      if (remaining%1000 == 0) {
+        Log.out("remaining: " + remaining);
+      }
+      try {
+        sem.acquire();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
 
     System.gc();
     Log.out("clustering documents: " + allDocuments.size());

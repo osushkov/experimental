@@ -28,5 +28,5 @@ public interface ConceptVector {
 
   void writeTo(BufferedWriter out) throws IOException;
 
-  int getNumElements();
+  boolean haveMinElements(int num);
 }

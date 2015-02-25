@@ -29,7 +29,7 @@ public class DocumentClusters {
 
   private static final String DOCUMENT_CLUSTERS_FILENAME = "document_clusters.txt";
 
-  private static final int NUM_CLUSTERS = 1000;
+  private static final int NUM_CLUSTERS = 10000;
   private static final int DIM = 1200;
 
   private List<DocumentCluster> builtClusters = new ArrayList<DocumentCluster>();

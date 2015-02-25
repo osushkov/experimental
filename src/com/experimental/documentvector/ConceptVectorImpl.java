@@ -145,14 +145,19 @@ public class ConceptVectorImpl implements ConceptVector {
   }
 
   @Override
-  public int getNumElements() {
+  public boolean haveMinElements(int num) {
     int result = 0;
     for (int i = 0; i < dimensions; i++) {
       if (values[i] > Double.MAX_VALUE) {
         result++;
       }
+
+      if (result >= num) {
+        return true;
+      }
     }
-    return result;
+
+    return false;
   }
 
   public static ConceptVectorImpl readFrom(BufferedReader in) throws IOException {
