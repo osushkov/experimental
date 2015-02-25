@@ -207,6 +207,7 @@ public class Main {
       }
     });
 
+    Log.out("clustering documents: " + allDocuments.size());
     DocumentClusters documentClusters = new DocumentClusters();
     documentClusters.clusterDocuments(allDocuments, 5);
     try {
