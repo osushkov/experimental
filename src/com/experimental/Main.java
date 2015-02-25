@@ -85,7 +85,7 @@ public class Main {
 
 //    testAdTextGenerator();
 //    generateBasisVector();
-    vectoriseDocuments();
+//    vectoriseDocuments();
 //    findDocumentNearestNeighbours();
 
 //    generateNounPhrases();
@@ -112,7 +112,7 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-//    clusterDocuments();
+    clusterDocuments();
 //    testKLDivergence();
 //    trainClassifier();
 
