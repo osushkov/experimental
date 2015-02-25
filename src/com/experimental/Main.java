@@ -214,6 +214,8 @@ public class Main {
               Log.out("all documents size: " + allDocumentsSize);
             }
 
+            Log.out("we: " + (document.getConceptVector() != null) + " " + document.getConceptVector().haveMinElements(10));
+
             if (allDocumentsSize < 1000000 &&
                 document.getConceptVector() != null &&
                 document.getConceptVector().haveMinElements(10)) {

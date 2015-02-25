@@ -30,18 +30,28 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.47293448" vertical-offset="2697" max-vertical-offset="23190">
-                  <caret line="213" column="65" selection-start-line="213" selection-start-column="65" selection-end-line="213" selection-end-column="65" />
+                <state vertical-scroll-proportion="0.5156695" vertical-offset="2697" max-vertical-offset="23220">
+                  <caret line="216" column="124" selection-start-line="216" selection-start-column="124" selection-end-line="216" selection-end-column="124" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#6338#6348#0" expanded="true" />
-                    <element signature="e#6849#7794#0" expanded="true" />
-                    <element signature="e#7035#7778#0" expanded="true" />
-                    <element signature="e#7777#7778#0" expanded="true" />
-                    <element signature="e#7793#7794#0" expanded="true" />
-                    <element signature="e#36869#37733#0" expanded="true" />
-                    <element signature="e#37732#37733#0" expanded="true" />
+                    <element signature="e#6849#7920#0" expanded="true" />
+                    <element signature="e#7035#7904#0" expanded="true" />
+                    <element signature="e#7903#7904#0" expanded="true" />
+                    <element signature="e#7919#7920#0" expanded="true" />
+                    <element signature="e#36995#37859#0" expanded="true" />
+                    <element signature="e#37858#37859#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Document.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/Document.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0" vertical-offset="534" max-vertical-offset="3840">
+                  <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -1221,14 +1231,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/Document.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="534" max-vertical-offset="3840">
-          <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentvector/ConceptVector.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
@@ -1288,19 +1290,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/Document.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="534" max-vertical-offset="3840">
+          <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47293448" vertical-offset="2697" max-vertical-offset="23190">
-          <caret line="213" column="65" selection-start-line="213" selection-start-column="65" selection-end-line="213" selection-end-column="65" />
+        <state vertical-scroll-proportion="0.5156695" vertical-offset="2697" max-vertical-offset="23220">
+          <caret line="216" column="124" selection-start-line="216" selection-start-column="124" selection-end-line="216" selection-end-column="124" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#6338#6348#0" expanded="true" />
-            <element signature="e#6849#7794#0" expanded="true" />
-            <element signature="e#7035#7778#0" expanded="true" />
-            <element signature="e#7777#7778#0" expanded="true" />
-            <element signature="e#7793#7794#0" expanded="true" />
-            <element signature="e#36869#37733#0" expanded="true" />
-            <element signature="e#37732#37733#0" expanded="true" />
+            <element signature="e#6849#7920#0" expanded="true" />
+            <element signature="e#7035#7904#0" expanded="true" />
+            <element signature="e#7903#7904#0" expanded="true" />
+            <element signature="e#7919#7920#0" expanded="true" />
+            <element signature="e#36995#37859#0" expanded="true" />
+            <element signature="e#37858#37859#0" expanded="true" />
           </folding>
         </state>
       </provider>
