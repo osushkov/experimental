@@ -66,7 +66,7 @@ public class DocumentCluster {
     }
   }
 
-  public void addMappedVector(ConceptVector vector) {
+  public synchronized void addMappedVector(ConceptVector vector) {
     mappedVectors.add(Preconditions.checkNotNull(vector));
   }
 
