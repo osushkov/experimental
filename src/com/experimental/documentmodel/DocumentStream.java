@@ -18,6 +18,7 @@ public class DocumentStream {
 
   private final String rootPath;
   private int numDocumentsProcessed = 0;
+  private int documentLimit = -1;
 
   public DocumentStream(String rootPath) {
     this.rootPath = Preconditions.checkNotNull(rootPath);
@@ -26,6 +27,10 @@ public class DocumentStream {
   public void streamDocuments(DocumentStreamOutput streamOutput) {
     List<DocumentNameGenerator.DocumentType> types = Lists.newArrayList(DocumentNameGenerator.DocumentType.values());
     streamDocuments(types, streamOutput);
+  }
+
+  public void setDocumentLimit(int limit) {
+    this.documentLimit = limit;
   }
 
   public void streamDocuments(Iterable<DocumentNameGenerator.DocumentType> types, DocumentStreamOutput streamOutput) {
@@ -40,10 +45,18 @@ public class DocumentStream {
       if (typeDir.exists()) {
         streamDocumentsIn(typeDir, type, streamOutput);
       }
+
+      if (documentLimit > 0 && numDocumentsProcessed >= documentLimit) {
+        return;
+      }
     }
   }
 
   private void streamDocumentsIn(File dir, DocumentNameGenerator.DocumentType type, DocumentStreamOutput streamOutput) {
+    if (documentLimit > 0 && numDocumentsProcessed >= documentLimit) {
+      return;
+    }
+
     if (Document.isExistingDocumentDirectory(dir)) {
       switch (type)  {
         case TOPICAL:
@@ -73,6 +86,10 @@ public class DocumentStream {
     for (File child : children) {
       if (child.isDirectory()) {
         streamDocumentsIn(child, type, streamOutput);
+      }
+
+      if (documentLimit > 0 && numDocumentsProcessed >= documentLimit) {
+        return;
       }
     }
   }
