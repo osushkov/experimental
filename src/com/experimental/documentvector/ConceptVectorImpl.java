@@ -1,6 +1,7 @@
 package com.experimental.documentvector;
 
 import com.experimental.utils.Common;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.BufferedReader;
@@ -148,7 +149,7 @@ public class ConceptVectorImpl implements ConceptVector {
   public boolean haveMinElements(int num) {
     int result = 0;
     for (int i = 0; i < dimensions; i++) {
-      if (values[i] > Double.MAX_VALUE) {
+      if (values[i] > Double.MIN_VALUE) {
         result++;
       }
 
