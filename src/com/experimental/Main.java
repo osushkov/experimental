@@ -112,9 +112,9 @@ public class Main {
 //      e.printStackTrace();
 //    }
 
-    clusterDocuments();
+//    clusterDocuments();
 //    testKLDivergence();
-//    trainClassifier();
+    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
