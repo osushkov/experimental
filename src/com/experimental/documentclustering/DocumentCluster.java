@@ -86,7 +86,7 @@ public class DocumentCluster {
 
   public double getSimilarityWith(ConceptVector documentVector) {
     Preconditions.checkNotNull(documentVector);
-    return centroid.dotProduct(documentVector);
+    return documentVector.dotProduct(centroid);
   }
 
   public void setCentroid(ConceptVector vec) {

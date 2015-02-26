@@ -2,6 +2,7 @@ package com.experimental.documentmodel;
 
 import com.experimental.documentvector.ConceptVector;
 import com.experimental.documentvector.ConceptVectorImpl;
+import com.experimental.documentvector.SparseConceptVectorImpl;
 import com.experimental.nlp.POSTag;
 import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
@@ -153,10 +154,7 @@ public abstract class Document {
         return;
       }
 
-      bw.write(Integer.toString(conceptVector.dimensions()) + "\n");
-      for (int i = 0; i < conceptVector.dimensions(); i++) {
-        bw.write(Double.toString(conceptVector.getValue(i)) + "\n");
-      }
+      conceptVector.writeTo(bw);
     } finally {
       if (bw != null) {
         bw.close();
@@ -244,15 +242,7 @@ public abstract class Document {
     BufferedReader br = null;
     try {
       br = new BufferedReader(new FileReader(file.getAbsolutePath()));
-
-      Integer numDims = Integer.parseInt(Preconditions.checkNotNull(br.readLine()));
-      Preconditions.checkState(numDims > 0);
-
-      conceptVector = new ConceptVectorImpl(numDims);
-      for (int i = 0; i < numDims; i++) {
-        double val = Double.parseDouble(Preconditions.checkNotNull(br.readLine()));
-        conceptVector.setValue(i, val);
-      }
+      conceptVector = SparseConceptVectorImpl.readFrom(br);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       return;

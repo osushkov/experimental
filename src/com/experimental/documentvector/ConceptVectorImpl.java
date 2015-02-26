@@ -95,6 +95,10 @@ public class ConceptVectorImpl implements ConceptVector {
 
   @Override
   public double dotProduct(ConceptVector other) {
+    if (other instanceof SparseConceptVectorImpl) {
+      return other.dotProduct(this);
+    }
+
     Preconditions.checkArgument(dimensions == other.dimensions());
     double sum = 0.0;
     for (int i = 0; i < dimensions; i++) {
