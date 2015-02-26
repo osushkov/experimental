@@ -225,6 +225,9 @@ public class KeywordVectoriser {
 
     resultVector.add(getKLDivergence(candidate.phraseLemmas));
 
+    resultVector.add(getKLDivergence(candidate.phraseLemmas.get(0)));
+    resultVector.add(getKLDivergence(candidate.phraseLemmas.get(1)));
+
 //    resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
 //    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
 
@@ -401,6 +404,10 @@ public class KeywordVectoriser {
 
     resultVector.add(getKLDivergence(candidate.phraseLemmas));
 
+    resultVector.add(getKLDivergence(candidate.phraseLemmas.get(0)));
+    resultVector.add(getKLDivergence(candidate.phraseLemmas.get(1)));
+    resultVector.add(getKLDivergence(candidate.phraseLemmas.get(2)));
+
 //    int size = candidate.phraseLemmas.size();
 //    List<Lemma> pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-2), candidate.phraseLemmas.get(size-1));
 //    resultVector.add(getCandidateSimilarCorpusWeight(pairLemmas, document));
@@ -528,6 +535,16 @@ public class KeywordVectoriser {
 
     combinedDistribution = Common.getClampedProbabilityDistribution(combinedDistribution);
     double result = Common.computeKLDivergence(combinedDistribution, uniformDistribution);
+    Preconditions.checkState(Double.isFinite(result));
+    return result;
+  }
+
+  private double getKLDivergence(Lemma lemma) {
+    List<Double> uniformDistribution = Common.uniformProbabilityDistribution(documentClusters.getNumClusters());
+    List<Double> lemmaDistribution = documentClusters.getRawTermProbabilities(lemma);
+    lemmaDistribution = Common.getClampedProbabilityDistribution(lemmaDistribution);
+
+    double result = Common.computeKLDivergence(lemmaDistribution, uniformDistribution);
     Preconditions.checkState(Double.isFinite(result));
     return result;
   }
