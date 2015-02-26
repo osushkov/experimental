@@ -200,7 +200,7 @@ public class Main {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.TOPICAL);
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
-    documentStream.setDocumentLimit(1500000);
+    documentStream.setDocumentLimit(150000);
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
       @Override
       public void processDocument(final Document document) {

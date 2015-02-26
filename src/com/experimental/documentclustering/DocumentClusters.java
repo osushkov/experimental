@@ -29,7 +29,7 @@ public class DocumentClusters {
 
   private static final String DOCUMENT_CLUSTERS_FILENAME = "document_clusters.txt";
 
-  private static final int NUM_CLUSTERS = 3000;
+  private static final int NUM_CLUSTERS = 1000;
   private static final int DIM = 1200;
 
   private List<DocumentCluster> builtClusters = new ArrayList<DocumentCluster>();
@@ -208,6 +208,9 @@ public class DocumentClusters {
       }
 
       for (int i = 0; i < numDocuments.get(); i++) {
+        if (i%1000 == 0) {
+          Log.out("left: " + (Integer.toString(numDocuments.get() - i)));
+        }
         try {
           sem.acquire();
         } catch (InterruptedException e) {
