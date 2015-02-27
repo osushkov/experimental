@@ -31,8 +31,8 @@ public class WordNet {
   public boolean loadWordNet() {
     try {
       URL url = new URL("file" , null , WORDNET_DICT_PATH);
-//      dict = new Dictionary(url);
-      dict = new RAMDictionary(url, ILoadPolicy.IMMEDIATE_LOAD);
+      dict = new Dictionary(url);
+//      dict = new RAMDictionary(url, ILoadPolicy.IMMEDIATE_LOAD);
       dict.open();
     } catch (IOException e) {
       e.printStackTrace();
