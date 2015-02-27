@@ -27,11 +27,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf>
-          <file leaf-file-name="ClassifierTrainer.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="ClassifierTrainer.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1560" max-vertical-offset="4725">
-                  <caret line="60" column="19" selection-start-line="60" selection-start-column="9" selection-end-line="60" selection-end-column="26" />
+                <state vertical-scroll-proportion="0.42707422" vertical-offset="2751" max-vertical-offset="4665">
+                  <caret line="253" column="46" selection-start-line="253" selection-start-column="46" selection-end-line="253" selection-end-column="46" />
                   <folding />
                 </state>
               </provider>
@@ -40,8 +40,8 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="6384" max-vertical-offset="23460">
-                  <caret line="479" column="19" selection-start-line="479" selection-start-column="19" selection-end-line="479" selection-end-column="19" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="7168" max-vertical-offset="23460">
+                  <caret line="533" column="22" selection-start-line="533" selection-start-column="17" selection-end-line="533" selection-end-column="22" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#6338#6348#0" expanded="true" />
@@ -88,11 +88,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="KeywordVectorComponentsNoPOS.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="KeywordVectorComponentsNoPOS.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.48995632" vertical-offset="1479" max-vertical-offset="7155">
-                  <caret line="154" column="45" selection-start-line="154" selection-start-column="45" selection-end-line="154" selection-end-column="45" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="1479" max-vertical-offset="7155">
+                  <caret line="192" column="44" selection-start-line="192" selection-start-column="44" selection-end-line="192" selection-end-column="44" />
                   <folding>
                     <element signature="e#1086#1093#0" expanded="true" />
                     <element signature="e#1150#1158#0" expanded="true" />
@@ -207,7 +207,6 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/DocumentDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentmodel/BagOfWeightedLemmas.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/utils/Common.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeywordSanityChecker.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentvector/DocumentVectorDB.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/keywords/KeywordCandidateGenerator.java" />
@@ -227,6 +226,7 @@
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/WordNet.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java" />
       </list>
     </option>
   </component>
@@ -1253,14 +1253,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1560" max-vertical-offset="4725">
-          <caret line="60" column="19" selection-start-line="60" selection-start-column="9" selection-end-line="60" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/languagemodel/LemmaMorphologies.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.09170306" vertical-offset="0" max-vertical-offset="3705">
@@ -1298,23 +1290,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6384" max-vertical-offset="23460">
-          <caret line="479" column="19" selection-start-line="479" selection-start-column="19" selection-end-line="479" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#6338#6348#0" expanded="true" />
-            <element signature="e#6849#7728#0" expanded="true" />
-            <element signature="e#7035#7712#0" expanded="true" />
-            <element signature="e#7711#7712#0" expanded="true" />
-            <element signature="e#7727#7728#0" expanded="true" />
-            <element signature="e#37289#38153#0" expanded="true" />
-            <element signature="e#38152#38153#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/WordNet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3315">
@@ -1346,14 +1321,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48995632" vertical-offset="1479" max-vertical-offset="7155">
-          <caret line="154" column="45" selection-start-line="154" selection-start-column="45" selection-end-line="154" selection-end-column="45" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1479" max-vertical-offset="7155">
+          <caret line="192" column="44" selection-start-line="192" selection-start-column="44" selection-end-line="192" selection-end-column="44" />
           <folding>
             <element signature="e#1086#1093#0" expanded="true" />
             <element signature="e#1150#1158#0" expanded="true" />
             <element signature="e#1254#1296#0" expanded="true" />
             <element signature="e#1393#1435#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="7168" max-vertical-offset="23460">
+          <caret line="533" column="22" selection-start-line="533" selection-start-column="17" selection-end-line="533" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6338#6348#0" expanded="true" />
+            <element signature="e#6849#7728#0" expanded="true" />
+            <element signature="e#7035#7712#0" expanded="true" />
+            <element signature="e#7711#7712#0" expanded="true" />
+            <element signature="e#7727#7728#0" expanded="true" />
+            <element signature="e#37289#38153#0" expanded="true" />
+            <element signature="e#38152#38153#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/ClassifierTrainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42707422" vertical-offset="2751" max-vertical-offset="4665">
+          <caret line="253" column="46" selection-start-line="253" selection-start-column="46" selection-end-line="253" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>

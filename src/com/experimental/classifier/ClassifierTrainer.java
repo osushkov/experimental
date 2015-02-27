@@ -82,7 +82,8 @@ public class ClassifierTrainer {
 
     final LearnedModel learnedModel = new LearnedModel();
 
-    Log.out("training");
+    Log.out("training: " + trainingData.oneKeyword.size() + " " + trainingData.twoKeywords.size() + " " +
+        trainingData.threeOrMoreKeywords.size());
     executor.execute(new Runnable() {
       @Override
       public void run() {
@@ -106,7 +107,7 @@ public class ClassifierTrainer {
       public void run() {
         numModels.incrementAndGet();
         learnedModel.threeOrModeKeywordClassifier =
-            trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.7);
+            trainClassifier(trainingData.threeOrMoreKeywords, "three_keywords_classifier.txt", 0.5);
         sem.release();
       }
     });
@@ -162,12 +163,6 @@ public class ClassifierTrainer {
         }
       }
     }
-
-    double[] weights = learnedModel.oneKeywordClassifier.weights().toArray();
-    for (int i = 0; i < weights.length; i++) {
-      Log.out("weight[" + i + "] = " + weights[i]);
-    }
-
   }
 
   private GeneralizedLinearModel trainClassifier(List<LabeledPoint> trainingPoints, String outputFileName,
@@ -255,6 +250,7 @@ public class ClassifierTrainer {
         addKeywordVector(1.0, vector, result);
 //          Log.out("+ " + vector.toString());
       } else {
+        addKeywordVector(0.0, vector, result);
         addKeywordVector(0.0, vector, result);
 //          Log.out("- " + vector.toString());
       }
