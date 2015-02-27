@@ -152,8 +152,7 @@ public class KeywordVectorComponentsNoPOS {
 
   public double lemmaDictionaryWord() {
     for (Lemma lemma : wordLemmas) {
-      Log.out("get for: " + lemma.lemma + " " + lemma.tag.toString());
-      if (wordnet.isLemmaInDictionary(lemma)) {
+      if (lemma.tag != SimplePOSTag.OTHER && wordnet.isLemmaInDictionary(lemma)) {
         return 1.0;
       }
     }
