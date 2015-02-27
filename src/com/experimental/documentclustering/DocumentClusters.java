@@ -103,6 +103,27 @@ public class DocumentClusters {
     }
   }
 
+  public double getLemmaStandardDeviation(Lemma lemma) {
+    double sum = 0.0;
+    double sumOfSquares = 0.0;
+
+    for (DocumentCluster cluster : builtClusters) {
+      BagOfWeightedLemmas.WeightedLemmaEntry entry = cluster.getBagOfLemmas().getBag().get(lemma);
+      if (entry == null) {
+        continue;
+      }
+
+      double freq = entry.weight / cluster.getBagOfLemmas().getSumWeight();
+      sum += freq;
+      sumOfSquares += freq * freq;
+    }
+
+    double expectedSum = sum / builtClusters.size();
+    double expectedSumOfSquares = sumOfSquares / builtClusters.size();
+
+    return Math.sqrt(expectedSumOfSquares - expectedSum * expectedSum);
+  }
+
   public void clusterDocuments(List<Document> documents, int numIterations) {
     Preconditions.checkNotNull(documents);
     Preconditions.checkArgument(numIterations > 0);

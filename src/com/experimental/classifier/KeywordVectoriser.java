@@ -114,6 +114,7 @@ public class KeywordVectoriser {
     resultVector.add(components.localToGlobalDocumentsOccuredRatio());
     resultVector.add(components.globalIdfWeight());
 
+    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(0)));
     resultVector.add(getKLDivergence(candidate.phraseLemmas));
 
     resultVector = generateSquaredVector(resultVector);
@@ -230,6 +231,9 @@ public class KeywordVectoriser {
 
     resultVector.add(getKLDivergence(candidate.phraseLemmas.get(0)));
     resultVector.add(getKLDivergence(candidate.phraseLemmas.get(1)));
+
+    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(0)));
+    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(1)));
 
 //    resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
 //    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
@@ -413,6 +417,10 @@ public class KeywordVectoriser {
     resultVector.add(getKLDivergence(candidate.phraseLemmas.get(0)));
     resultVector.add(getKLDivergence(candidate.phraseLemmas.get(1)));
     resultVector.add(getKLDivergence(candidate.phraseLemmas.get(2)));
+
+    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(0)));
+    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(1)));
+    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(2)));
 
 //    int size = candidate.phraseLemmas.size();
 //    List<Lemma> pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-2), candidate.phraseLemmas.get(size-1));
