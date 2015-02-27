@@ -56,11 +56,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="WordNet.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="WordNet.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/WordNet.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.2489083" vertical-offset="0" max-vertical-offset="3315">
-                  <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3315">
+                  <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
                   <folding />
                 </state>
               </provider>
@@ -88,16 +88,16 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="KeywordVectorComponentsNoPOS.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="KeywordVectorComponentsNoPOS.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1479" max-vertical-offset="7155">
-                  <caret line="153" column="28" selection-start-line="153" selection-start-column="28" selection-end-line="153" selection-end-column="28" />
+                <state vertical-scroll-proportion="0.48995632" vertical-offset="1479" max-vertical-offset="7170">
+                  <caret line="154" column="68" selection-start-line="154" selection-start-column="68" selection-end-line="154" selection-end-column="68" />
                   <folding>
-                    <element signature="e#1051#1058#0" expanded="true" />
-                    <element signature="e#1115#1123#0" expanded="true" />
-                    <element signature="e#1219#1261#0" expanded="true" />
-                    <element signature="e#1358#1400#0" expanded="true" />
+                    <element signature="e#1086#1093#0" expanded="true" />
+                    <element signature="e#1150#1158#0" expanded="true" />
+                    <element signature="e#1254#1296#0" expanded="true" />
+                    <element signature="e#1393#1435#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -223,10 +223,10 @@
         <option value="$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentCluster.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/documentclustering/DocumentClusters.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponents.java" />
-        <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/Main.java" />
         <option value="$PROJECT_DIR$/src/com/experimental/WordNet.java" />
+        <option value="$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java" />
       </list>
     </option>
   </component>
@@ -1038,17 +1038,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar:///opt/java/jdk1.8.0_11/src.zip!/java/lang/Object.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33263817" vertical-offset="2816" max-vertical-offset="8055">
-          <caret line="234" column="18" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
-          <folding>
-            <element signature="e#10065#10066#0" expanded="false" />
-            <element signature="e#10148#10149#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/documentmodel/TopicalDocument.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.38409704" vertical-offset="0" max-vertical-offset="742">
@@ -1309,29 +1298,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-30.0" vertical-offset="3705" max-vertical-offset="10080">
-          <caret line="303" column="36" selection-start-line="303" selection-start-column="36" selection-end-line="303" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1479" max-vertical-offset="7155">
-          <caret line="153" column="28" selection-start-line="153" selection-start-column="28" selection-end-line="153" selection-end-column="28" />
-          <folding>
-            <element signature="e#1051#1058#0" expanded="true" />
-            <element signature="e#1115#1123#0" expanded="true" />
-            <element signature="e#1219#1261#0" expanded="true" />
-            <element signature="e#1358#1400#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="6384" max-vertical-offset="23460">
@@ -1351,9 +1317,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/experimental/WordNet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2489083" vertical-offset="0" max-vertical-offset="3315">
-          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3315">
+          <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectoriser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-30.0" vertical-offset="3705" max-vertical-offset="10080">
+          <caret line="303" column="36" selection-start-line="303" selection-start-column="36" selection-end-line="303" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///opt/java/jdk1.8.0_11/src.zip!/java/lang/Object.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3327511" vertical-offset="2754" max-vertical-offset="8055">
+          <caret line="234" column="18" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
+          <folding>
+            <element signature="e#10065#10066#0" expanded="true" />
+            <element signature="e#10148#10149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/experimental/classifier/KeywordVectorComponentsNoPOS.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.48995632" vertical-offset="1479" max-vertical-offset="7170">
+          <caret line="154" column="68" selection-start-line="154" selection-start-column="68" selection-end-line="154" selection-end-column="68" />
+          <folding>
+            <element signature="e#1086#1093#0" expanded="true" />
+            <element signature="e#1150#1158#0" expanded="true" />
+            <element signature="e#1254#1296#0" expanded="true" />
+            <element signature="e#1393#1435#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -8,6 +8,7 @@ import com.experimental.documentmodel.WebsiteDocument;
 import com.experimental.languagemodel.*;
 import com.experimental.nlp.SimplePOSTag;
 import com.experimental.sitepage.SitePage;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
@@ -151,6 +152,7 @@ public class KeywordVectorComponentsNoPOS {
 
   public double lemmaDictionaryWord() {
     for (Lemma lemma : wordLemmas) {
+      Log.out("get for: " + lemma.lemma + " " + lemma.tag.toString());
       if (wordnet.isLemmaInDictionary(lemma)) {
         return 1.0;
       }
