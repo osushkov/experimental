@@ -376,8 +376,17 @@ public class Main {
       return;
     }
 
-    KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
+    try {
+      if (!LemmaMorphologies.instance.tryLoad()) {
+        Log.out("could not load LemmaMorphologies");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(LemmaMorphologies.instance, lemmaStatsAggregator,
+        lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/mnt/fastdisk3/documents/website/499/49988AA");
@@ -415,14 +424,15 @@ public class Main {
     final String LEMMA_QUALITY_WIKI_FILENAME = "lemma_quality_wiki.txt";
     final String LEMMA_IDF_WIKI_FILENAME = "lemma_idf_weights_wiki.txt";
     final String VARIANCES_DATA_FILENAME = "global_lemma_occurance_statistics_wiki.txt";
-//    try {
-//      if (!LemmaMorphologies.instance.tryLoad()) {
-//        Log.out("could not load LemmaMorphologies");
-//      }
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//      return;
-//    }
+
+    try {
+      if (!LemmaMorphologies.instance.tryLoad()) {
+        Log.out("could not load LemmaMorphologies");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
 
     NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
     try {
@@ -487,8 +497,8 @@ public class Main {
     }
 
     System.gc();
-    KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(LemmaMorphologies.instance, lemmaStatsAggregator,
+        lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
     KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
 
@@ -689,8 +699,17 @@ public class Main {
       return;
     }
 
-    KeywordVectoriser keywordVectoriser =
-        new KeywordVectoriser(lemmaStatsAggregator, lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
+    try {
+      if (!LemmaMorphologies.instance.tryLoad()) {
+        Log.out("could not load LemmaMorphologies");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(LemmaMorphologies.instance, lemmaStatsAggregator,
+        lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
         "/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");

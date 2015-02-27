@@ -49,6 +49,8 @@ public class KeywordVectorComponents {
   }
 
   public double lemmaWeight() {
+
+
     return Math.log(1.0 + getLemmaWeight(phraseLemma, document));
   }
 
