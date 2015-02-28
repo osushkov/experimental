@@ -45,7 +45,7 @@ public class AdTextGenerator {
     }
   }
 
-  private static final List<String> actionVerbs = Lists.newArrayList("buy", "hire", "rent");
+  private static final List<String> actionVerbs = Lists.newArrayList("buy", "hire", "rent", "fix");
 
   private final LemmaDB lemmaDB = LemmaDB.instance;
   private final NounAssociations nounAssociations;
@@ -79,7 +79,7 @@ public class AdTextGenerator {
 
   private String getAdDescription(WebsiteDocument document, KeywordCandidateGenerator.KeywordCandidate keyword) {
     ActionVerb keywordActionVerb = getBestActionVerb(keyword.phraseLemmas);
-    if (keywordActionVerb.associationWeight > 0.05) {
+    if (keywordActionVerb != null && keywordActionVerb.associationWeight > 0.05) {
       Log.out("using keyword action verb");
 
       return keywordActionVerb.verb.lemma + " " + keyword.toString();

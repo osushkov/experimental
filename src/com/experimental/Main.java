@@ -219,8 +219,20 @@ public class Main {
     System.gc();
     Log.out("loaded noun associations");
 
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      Log.out("loading NounPhrasesDB...");
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading NounPhrasesDB");
 
-    Log.out("loaded all");
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
+
+    KeywordCandidateGenerator candidateGenerator =
+        new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDb);
+
     AdTextGenerator adTextGenerator = new AdTextGenerator(nounAssociations, documentVectorDb);
 
     KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator,
@@ -228,11 +240,12 @@ public class Main {
 
     List<WebsiteDocument> testDocs = getKeywordTestDocumentsRemote();
 
+
     for (WebsiteDocument testDocument : testDocs) {
       System.gc();
 
       List<KeywordCandidateGenerator.KeywordCandidate> candidates =
-          new ArrayList<KeywordCandidateGenerator.KeywordCandidate>(getCandidateKeywords(testDocument));
+          new ArrayList<KeywordCandidateGenerator.KeywordCandidate>(candidateGenerator.generateCandidates(testDocument));
       List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
 
       for (int i = 0; i < vectors.size(); i++) {
