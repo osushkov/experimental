@@ -111,7 +111,7 @@ public class DocumentClusters {
         result += 1.0;
       }
     }
-    return result;
+    return Math.log(1.0 + result);
   }
 
   public double getLemmaStandardDeviation(Lemma lemma) {
