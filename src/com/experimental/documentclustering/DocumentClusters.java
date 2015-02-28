@@ -103,6 +103,17 @@ public class DocumentClusters {
     }
   }
 
+  public double getLemmaNumClusters(Lemma lemma) {
+    double result = 0.0;
+    for (DocumentCluster cluster : builtClusters) {
+      BagOfWeightedLemmas.WeightedLemmaEntry entry = cluster.getBagOfLemmas().getBag().get(lemma);
+      if (entry != null) {
+        result += 1.0;
+      }
+    }
+    return result;
+  }
+
   public double getLemmaStandardDeviation(Lemma lemma) {
     double sum = 0.0;
     double sumOfSquares = 0.0;

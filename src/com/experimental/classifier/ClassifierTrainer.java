@@ -251,7 +251,7 @@ public class ClassifierTrainer {
 //          Log.out("+ " + vector.toString());
       } else {
         addKeywordVector(0.0, vector, result);
-        addKeywordVector(0.0, vector, result);
+//        addKeywordVector(0.0, vector, result);
 //          Log.out("- " + vector.toString());
       }
     }

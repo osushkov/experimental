@@ -125,6 +125,86 @@ public class Main {
   }
 
   private static void testAdTextGenerator() {
+    LogisticRegressionModel model0 = null;
+    LogisticRegressionModel model1 = null;
+    LogisticRegressionModel model2 = null;
+
+    File aggregateDataFile = new File(Constants.AGGREGATE_DATA_PATH);
+    String learnedModelFilePath = aggregateDataFile.toPath().resolve("learned_classifier.txt").toString();
+
+    try {
+      FileInputStream fileIn = new FileInputStream(learnedModelFilePath);
+      ObjectInputStream in = new ObjectInputStream(fileIn);
+
+      model0 = readModelFrom(in);
+      model1 = readModelFrom(in);
+      model2 = readModelFrom(in);
+
+      in.close();
+      fileIn.close();
+
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+
+    LemmaOccuranceStatsAggregator lemmaStatsAggregator = new LemmaOccuranceStatsAggregator();
+    try {
+      if (!lemmaStatsAggregator.tryLoadFromDisk()) {
+        Log.out("could not load LemmaOccuranceStatsAggregator from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    LemmaQuality lemmaQuality = new LemmaQuality();
+    try {
+      if (!lemmaQuality.tryLoadFromDisk()) {
+        Log.out("could not load LemmaQuality from disk");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    LemmaIDFWeights lemmaIDFWeights = new LemmaIDFWeights(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      if (!lemmaIDFWeights.tryLoad()) {
+        Log.out("could not load lemma idf weights");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    WordNet wordnet = new WordNet();
+    if (!wordnet.loadWordNet()) {
+      Log.out("could not load WordNet");
+      return;
+    }
+
+    DocumentVectorDB documentVectorDb = new DocumentVectorDB();
+    documentVectorDb.load();
+
+    DocumentClusters documentClusters = new DocumentClusters();
+    try {
+      if (!documentClusters.tryLoad()) {
+        Log.out("could not load document clusters.");
+        return;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
     NounAssociations nounAssociations = new NounAssociations();
     try {
       if (!nounAssociations.tryLoad()) {
@@ -139,22 +219,51 @@ public class Main {
     System.gc();
     Log.out("loaded noun associations");
 
-    DocumentVectorDB documentVectorDb = new DocumentVectorDB();
-    documentVectorDb.load();
 
     Log.out("loaded all");
     AdTextGenerator adTextGenerator = new AdTextGenerator(nounAssociations, documentVectorDb);
 
-    WebsiteDocument d0 = DocumentDB.instance.createWebsiteDocument(
-        "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45CAEB2");
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator,
+        lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
-    KeywordCandidateGenerator.KeywordCandidate candidate = new KeywordCandidateGenerator.KeywordCandidate(
-        Lists.newArrayList(new Lemma("signage", SimplePOSTag.NOUN)));
+    List<WebsiteDocument> testDocs = getKeywordTestDocumentsRemote();
 
-    AdTextGenerator.AdText adText = adTextGenerator.generateAdText(d0, candidate);
+    for (WebsiteDocument testDocument : testDocs) {
+      System.gc();
 
-    Log.out(adText.title);
-    Log.out(adText.description);
+      List<KeywordCandidateGenerator.KeywordCandidate> candidates =
+          new ArrayList<KeywordCandidateGenerator.KeywordCandidate>(getCandidateKeywords(testDocument));
+      List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
+
+      for (int i = 0; i < vectors.size(); i++) {
+        KeywordVector vector = vectors.get(i);
+        double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
+
+        boolean isValid = false;
+        if (vector.keyword.phraseLemmas.size() == 1) {
+          if (model0.predict(Vectors.dense(doubleVec)) >= 0.5) {
+            isValid = true;
+            Log.out("** " + vector.keyword.toString());
+          }
+        } else if (vector.keyword.phraseLemmas.size() == 2) {
+          if (model1.predict(Vectors.dense(doubleVec)) >= 0.5) {
+            isValid = true;
+            Log.out("** " + vector.keyword.toString());
+          }
+        } else if (vector.keyword.phraseLemmas.size() == 3) {
+          if (model2.predict(Vectors.dense(doubleVec)) >= 0.5) {
+            isValid = true;
+            Log.out("** " + vector.keyword.toString());
+          }
+        }
+
+        if (isValid) {
+          AdTextGenerator.AdText adText = adTextGenerator.generateAdText(testDocument, vector.keyword);
+          Log.out(adText.title);
+          Log.out(adText.description);
+        }
+      }
+    }
   }
 
   private static void testKLDivergence() {
@@ -376,16 +485,7 @@ public class Main {
       return;
     }
 
-    try {
-      if (!LemmaMorphologies.instance.tryLoad()) {
-        Log.out("could not load LemmaMorphologies");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
-    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(LemmaMorphologies.instance, lemmaStatsAggregator,
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator,
         lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
@@ -424,15 +524,6 @@ public class Main {
     final String LEMMA_QUALITY_WIKI_FILENAME = "lemma_quality_wiki.txt";
     final String LEMMA_IDF_WIKI_FILENAME = "lemma_idf_weights_wiki.txt";
     final String VARIANCES_DATA_FILENAME = "global_lemma_occurance_statistics_wiki.txt";
-
-    try {
-      if (!LemmaMorphologies.instance.tryLoad()) {
-        Log.out("could not load LemmaMorphologies");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
 
     NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
     try {
@@ -497,7 +588,7 @@ public class Main {
     }
 
     System.gc();
-    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(LemmaMorphologies.instance, lemmaStatsAggregator,
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator,
         lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
     KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
@@ -699,16 +790,7 @@ public class Main {
       return;
     }
 
-    try {
-      if (!LemmaMorphologies.instance.tryLoad()) {
-        Log.out("could not load LemmaMorphologies");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
-    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(LemmaMorphologies.instance, lemmaStatsAggregator,
+    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator,
         lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
     WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
@@ -871,6 +953,31 @@ public class Main {
         "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C2489");
     WebsiteDocument d9 = DocumentDB.instance.createWebsiteDocument(
         "/home/sushkov/Programming/experimental/experimental/data/documents/website/45C/45C3C97");
+
+    return Lists.newArrayList(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9);
+  }
+
+  private static List<WebsiteDocument> getKeywordTestDocumentsRemote() {
+    WebsiteDocument d0 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45C012B");
+    WebsiteDocument d1 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45CFD71");
+    WebsiteDocument d2 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45CAEB2");
+    WebsiteDocument d3 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45C19DC");
+    WebsiteDocument d4 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45C1C20");
+    WebsiteDocument d5 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45CF14A");
+    WebsiteDocument d6 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45C8C2C");
+    WebsiteDocument d7 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45CB1F0");
+    WebsiteDocument d8 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45C2489");
+    WebsiteDocument d9 = DocumentDB.instance.createWebsiteDocument(
+        "/mnt/fastdisk3/documents/website/45C/45C3C97");
 
     return Lists.newArrayList(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9);
   }

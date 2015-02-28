@@ -24,7 +24,6 @@ import java.util.Set;
  */
 public class KeywordVectoriser {
 
-  private final LemmaMorphologies lemmaMorphologies;
   private final LemmaOccuranceStatsAggregator globalLemmaStats;
   private final LemmaQuality lemmaQuality;
   private final DocumentVectorDB documentVectorDb;
@@ -34,14 +33,12 @@ public class KeywordVectoriser {
 //  private final NounPhrasesDB nounPhrasesDB;
 //  private final KeyAssociations keyAssociations;
 
-  public KeywordVectoriser(LemmaMorphologies lemmaMorphologies,
-                           LemmaOccuranceStatsAggregator globalLemmaStats,
+  public KeywordVectoriser(LemmaOccuranceStatsAggregator globalLemmaStats,
                            LemmaQuality lemmaQuality,
                            DocumentVectorDB documentVectorDb,
                            LemmaIDFWeights lemmaIdfWeights,
                            DocumentClusters documentClusters,
                            WordNet wordnet) {
-    this.lemmaMorphologies = Preconditions.checkNotNull(lemmaMorphologies);
     this.globalLemmaStats = Preconditions.checkNotNull(globalLemmaStats);
     this.lemmaQuality = Preconditions.checkNotNull(lemmaQuality);
     this.documentVectorDb = Preconditions.checkNotNull(documentVectorDb);
@@ -77,14 +74,14 @@ public class KeywordVectoriser {
     Preconditions.checkArgument(candidate.phraseLemmas.size() == 1);
 
     Lemma phraseLemma = candidate.phraseLemmas.get(0);
-//    LemmaOccuranceStatsAggregator.LemmaStats localStats = localOccuranceStats.getLemmaStats(phraseLemma);
-//    LemmaOccuranceStatsAggregator.LemmaStats globalStats = globalLemmaStats.getLemmaStats(phraseLemma);
+    LemmaOccuranceStatsAggregator.LemmaStats localStats = localOccuranceStats.getLemmaStats(phraseLemma);
+    LemmaOccuranceStatsAggregator.LemmaStats globalStats = globalLemmaStats.getLemmaStats(phraseLemma);
 
-    KeywordVectorComponentsNoPOS components = new KeywordVectorComponentsNoPOS(
-        phraseLemma.lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
-        localOccuranceStats, globalLemmaStats, wordnet);
-//    KeywordVectorComponents components = new KeywordVectorComponents(
-//        phraseLemma, document, lemmaQuality, lemmaIdfWeights, localStats, globalStats, wordnet);
+//    KeywordVectorComponentsNoPOS components = new KeywordVectorComponentsNoPOS(
+//        phraseLemma.lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
+//        localOccuranceStats, globalLemmaStats, wordnet);
+    KeywordVectorComponents components = new KeywordVectorComponents(
+        phraseLemma, document, lemmaQuality, lemmaIdfWeights, localStats, globalStats, wordnet);
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(components.lemmaWeight());
@@ -120,40 +117,41 @@ public class KeywordVectoriser {
     resultVector.add(components.localToGlobalDocumentsOccuredRatio());
     resultVector.add(components.globalIdfWeight());
 
-    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(0)));
     resultVector.add(getKLDivergence(candidate.phraseLemmas));
+
+    resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(0)));
+
+    resultVector.add(documentClusters.getLemmaNumClusters(candidate.phraseLemmas.get(0)));
 
     resultVector = generateSquaredVector(resultVector);
 
     return new KeywordVector(candidate, resultVector);
   }
 
-
-
   private KeywordVector vectoriseKeywordCandidateTwoWord(KeywordCandidateGenerator.KeywordCandidate candidate,
                                                         WebsiteDocument document,
                                                         LemmaOccuranceStatsAggregator localOccuranceStats) {
     Preconditions.checkArgument(candidate.phraseLemmas.size() == 2);
 
-    KeywordVectorComponentsNoPOS c0 = new KeywordVectorComponentsNoPOS(
-        candidate.phraseLemmas.get(0).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
-        localOccuranceStats, globalLemmaStats, wordnet);
-
-    KeywordVectorComponentsNoPOS c1 = new KeywordVectorComponentsNoPOS(
-        candidate.phraseLemmas.get(1).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
-        localOccuranceStats, globalLemmaStats, wordnet);
-
-//    KeywordVectorComponents c0 = new KeywordVectorComponents(
-//        candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights,
-//        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-//        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-//        wordnet);
+//    KeywordVectorComponentsNoPOS c0 = new KeywordVectorComponentsNoPOS(
+//        candidate.phraseLemmas.get(0).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
+//        localOccuranceStats, globalLemmaStats, wordnet);
 //
-//    KeywordVectorComponents c1 = new KeywordVectorComponents(
-//        candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights,
-//        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-//        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-//        wordnet);
+//    KeywordVectorComponentsNoPOS c1 = new KeywordVectorComponentsNoPOS(
+//        candidate.phraseLemmas.get(1).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
+//        localOccuranceStats, globalLemmaStats, wordnet);
+
+    KeywordVectorComponents c0 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        wordnet);
+
+    KeywordVectorComponents c1 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        wordnet);
 
     List<Double> resultVector = new ArrayList<Double>();
     resultVector.add(c0.lemmaWeight());
@@ -251,6 +249,9 @@ public class KeywordVectoriser {
     resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(0)));
     resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(1)));
 
+    resultVector.add(documentClusters.getLemmaNumClusters(candidate.phraseLemmas.get(0)));
+    resultVector.add(documentClusters.getLemmaNumClusters(candidate.phraseLemmas.get(1)));
+
 //    resultVector.add(getCandidateSimilarCorpusWeight(candidate.phraseLemmas, document));
 //    resultVector.add(getPhraseAffinity(candidate.phraseLemmas));
 
@@ -292,35 +293,35 @@ public class KeywordVectoriser {
                                                           LemmaOccuranceStatsAggregator localOccuranceStats) {
     Preconditions.checkArgument(candidate.phraseLemmas.size() == 3);
 
-    KeywordVectorComponentsNoPOS c0 = new KeywordVectorComponentsNoPOS(
-        candidate.phraseLemmas.get(0).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
-        localOccuranceStats, globalLemmaStats, wordnet);
-
-    KeywordVectorComponentsNoPOS c1 = new KeywordVectorComponentsNoPOS(
-        candidate.phraseLemmas.get(1).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
-        localOccuranceStats, globalLemmaStats, wordnet);
-
-    KeywordVectorComponentsNoPOS c2 = new KeywordVectorComponentsNoPOS(
-        candidate.phraseLemmas.get(2).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
-        localOccuranceStats, globalLemmaStats, wordnet);
-
-//    KeywordVectorComponents c0 = new KeywordVectorComponents(
-//        candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights,
-//        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-//        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
-//        wordnet);
+//    KeywordVectorComponentsNoPOS c0 = new KeywordVectorComponentsNoPOS(
+//        candidate.phraseLemmas.get(0).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
+//        localOccuranceStats, globalLemmaStats, wordnet);
 //
-//    KeywordVectorComponents c1 = new KeywordVectorComponents(
-//        candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights,
-//        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-//        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
-//        wordnet);
+//    KeywordVectorComponentsNoPOS c1 = new KeywordVectorComponentsNoPOS(
+//        candidate.phraseLemmas.get(1).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
+//        localOccuranceStats, globalLemmaStats, wordnet);
 //
-//    KeywordVectorComponents c2 = new KeywordVectorComponents(
-//        candidate.phraseLemmas.get(2), document, lemmaQuality, lemmaIdfWeights,
-//        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(2)),
-//        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(2)),
-//        wordnet);
+//    KeywordVectorComponentsNoPOS c2 = new KeywordVectorComponentsNoPOS(
+//        candidate.phraseLemmas.get(2).lemma, lemmaMorphologies, document, lemmaQuality, lemmaIdfWeights,
+//        localOccuranceStats, globalLemmaStats, wordnet);
+
+    KeywordVectorComponents c0 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(0), document, lemmaQuality, lemmaIdfWeights,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(0)),
+        wordnet);
+
+    KeywordVectorComponents c1 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(1), document, lemmaQuality, lemmaIdfWeights,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(1)),
+        wordnet);
+
+    KeywordVectorComponents c2 = new KeywordVectorComponents(
+        candidate.phraseLemmas.get(2), document, lemmaQuality, lemmaIdfWeights,
+        localOccuranceStats.getLemmaStats(candidate.phraseLemmas.get(2)),
+        globalLemmaStats.getLemmaStats(candidate.phraseLemmas.get(2)),
+        wordnet);
 
     List<Double> resultVector = new ArrayList<Double>();
 
@@ -449,6 +450,10 @@ public class KeywordVectoriser {
     resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(0)));
     resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(1)));
     resultVector.add(documentClusters.getLemmaStandardDeviation(candidate.phraseLemmas.get(2)));
+
+    resultVector.add(documentClusters.getLemmaNumClusters(candidate.phraseLemmas.get(0)));
+    resultVector.add(documentClusters.getLemmaNumClusters(candidate.phraseLemmas.get(1)));
+    resultVector.add(documentClusters.getLemmaNumClusters(candidate.phraseLemmas.get(2)));
 
 //    int size = candidate.phraseLemmas.size();
 //    List<Lemma> pairLemmas = Lists.newArrayList(candidate.phraseLemmas.get(size-2), candidate.phraseLemmas.get(size-1));
