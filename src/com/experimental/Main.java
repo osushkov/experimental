@@ -83,7 +83,7 @@ public class Main {
 
 //    aggregateLemmaQuality();
 
-//    testAdTextGenerator();
+    testAdTextGenerator();
 //    generateBasisVector();
 //    vectoriseDocuments();
 //    findDocumentNearestNeighbours();
@@ -114,7 +114,7 @@ public class Main {
 
 //    clusterDocuments();
 //    testKLDivergence();
-    trainClassifier();
+//    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();
