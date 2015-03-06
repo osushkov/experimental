@@ -838,8 +838,10 @@ public class Main {
               }
             }
           } catch (Throwable e) {
-            
+
           }
+
+          System.gc();
         }
       }
     });
