@@ -142,11 +142,13 @@ public class AdTextGenerator {
       Lemma verbLemma = new Lemma(verb, SimplePOSTag.VERB);
       if (targetPhraseLemma.tag == SimplePOSTag.NOUN) {
         NounAssociation association = nounAssociations.getAssociations(targetPhraseLemma);
-        ActionVerb verbAssoc = findAssociationForVerb(association, verbLemma);
+        if (association != null) {
+          ActionVerb verbAssoc = findAssociationForVerb(association, verbLemma);
 
-        if (verbAssoc.associationWeight > bestWeight) {
-          bestWeight = verbAssoc.associationWeight;
-          bestVerb = verbLemma;
+          if (verbAssoc.associationWeight > bestWeight) {
+            bestWeight = verbAssoc.associationWeight;
+            bestVerb = verbLemma;
+          }
         }
       }
     }

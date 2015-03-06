@@ -49,13 +49,10 @@ public class KeywordVectorComponents {
   }
 
   public double lemmaWeight() {
-
-
     return Math.log(1.0 + getLemmaWeight(phraseLemma, document));
   }
 
   public double lemmaTopWeights() {
-//    return 0.0;
     List<Double> weights = new ArrayList<Double>();
     for (Sentence sentence : document.getSentences()) {
       for (Token token : sentence.tokens) {
@@ -136,9 +133,7 @@ public class KeywordVectorComponents {
       return 0.0;
     } else {
       double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
-      double dist =
-          Math.max(0.0, (lemmaWeight - globalStats.averageWeightPerDocument) / globalStats.weightStandardDeviation);
-      return Math.log(1.0 + dist);
+      return (lemmaWeight - globalStats.averageWeightPerDocument) / globalStats.weightStandardDeviation;
     }
   }
 
@@ -173,9 +168,7 @@ public class KeywordVectorComponents {
       return 0.0;
     } else {
       double lemmaWeight = getLemmaWeightRatio(phraseLemma, document);
-      double dist =
-          Math.max(0.0, (lemmaWeight - localStats.averageWeightPerDocument) / localStats.weightStandardDeviation);
-      return Math.log(1.0 + dist);
+      return (lemmaWeight - localStats.averageWeightPerDocument) / localStats.weightStandardDeviation;
     }
   }
 

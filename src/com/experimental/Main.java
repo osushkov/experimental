@@ -2,10 +2,7 @@ package com.experimental;
 
 import com.experimental.adgeneration.AdTextGenerator;
 import com.experimental.adgeneration.TopicAggregator;
-import com.experimental.classifier.ClassifierTrainer;
-import com.experimental.classifier.KeywordVector;
-import com.experimental.classifier.KeywordVectoriser;
-import com.experimental.classifier.TrainingDataGenerator;
+import com.experimental.classifier.*;
 import com.experimental.documentclustering.DocumentCluster;
 import com.experimental.documentclustering.DocumentClusters;
 import com.experimental.documentmodel.*;
@@ -83,7 +80,8 @@ public class Main {
 
 //    aggregateLemmaQuality();
 
-    testAdTextGenerator();
+    testKeywordVectoriser();
+//    testAdTextGenerator();
 //    generateBasisVector();
 //    vectoriseDocuments();
 //    findDocumentNearestNeighbours();
@@ -272,7 +270,7 @@ public class Main {
 
         if (isValid) {
           AdTextGenerator.AdText adText = adTextGenerator.generateAdText(testDocument, vector.keyword);
-          Log.out(adText.title);
+//          Log.out(adText.title);
           Log.out(adText.description);
         }
       }
@@ -780,14 +778,14 @@ public class Main {
       return;
     }
 
-//    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
-//    try {
-//      Log.out("loading NounPhrasesDB...");
-//      nounPhraseDb.tryLoad();
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
-//    Log.out("finished loading NounPhrasesDB");
+    NounPhrasesDB nounPhraseDb = new NounPhrasesDB(LemmaDB.instance, LemmaMorphologies.instance);
+    try {
+      Log.out("loading NounPhrasesDB...");
+      nounPhraseDb.tryLoad();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Log.out("finished loading NounPhrasesDB");
 
     DocumentVectorDB documentVectorDb = new DocumentVectorDB();
     documentVectorDb.load();
@@ -803,17 +801,56 @@ public class Main {
       return;
     }
 
-    KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator,
+    final KeywordVectoriser keywordVectoriser = new KeywordVectoriser(lemmaStatsAggregator,
         lemmaQuality, documentVectorDb, lemmaIDFWeights, documentClusters, wordnet);
 
-    WebsiteDocument testDocument = DocumentDB.instance.createWebsiteDocument(
-        "/home/sushkov/Programming/experimental/experimental/data/documents/website/1E2/1E2810A");
+    KeywordSanityChecker sanityChecker = new KeywordSanityChecker();
 
-    Set<KeywordCandidateGenerator.KeywordCandidate> candidates = getCandidateKeywords(testDocument);
-    List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, testDocument);
+    final KeywordCandidateGenerator candidateGenerator =
+        new KeywordCandidateGenerator(nounPhraseDb, lemmaStatsAggregator, sanityChecker, documentVectorDb);
 
-    for (KeywordVector vector : vectors) {
-      Log.out(vector.toString());
+    final VectorNormaliser oneWordNormaliser = new VectorNormaliser();
+    final VectorNormaliser twoWordNormaliser = new VectorNormaliser();
+    final VectorNormaliser threeWordNormaliser = new VectorNormaliser();
+
+    List<DocumentNameGenerator.DocumentType> docTypesToProcess =
+        Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
+    DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
+    documentStream.setDocumentLimit(1000);
+    documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
+      @Override
+      public void processDocument(final Document document) {
+        if (document instanceof  WebsiteDocument) {
+          Set<KeywordCandidateGenerator.KeywordCandidate> candidates =
+              candidateGenerator.generateCandidates((WebsiteDocument) document);
+
+          List<KeywordVector> vectors =
+              keywordVectoriser.vectoriseKeywordCandidates(candidates, (WebsiteDocument) document);
+
+          for (KeywordVector vector : vectors) {
+            if (vector.keyword.phraseLemmas.size() == 1) {
+              oneWordNormaliser.addVector(vector.vector);
+            } else if (vector.keyword.phraseLemmas.size() == 2) {
+              twoWordNormaliser.addVector(vector.vector);
+            } else if (vector.keyword.phraseLemmas.size() == 3) {
+              threeWordNormaliser.addVector(vector.vector);
+            }
+          }
+        }
+      }
+    });
+
+    try {
+      oneWordNormaliser.process();
+      oneWordNormaliser.save("normaliser_one.txt");
+
+      twoWordNormaliser.process();
+      twoWordNormaliser.save("normaliser_two.txt");
+
+      threeWordNormaliser.process();
+      threeWordNormaliser.save("normaliser_three.txt");
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
