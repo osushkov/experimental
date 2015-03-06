@@ -93,6 +93,12 @@ public class VectorNormaliser {
     }
 
     for (int i = 0; i < vector.size(); i++) {
+      if (!Double.isFinite(vector.get(i)) || Double.isNaN(vector.get(i))) {
+        return;
+      }
+    }
+
+    for (int i = 0; i < vector.size(); i++) {
       double v = vector.get(i);
       sum.set(i, sum.get(i) + v);
       sumOfSquares.set(i, sumOfSquares.get(i) + v*v);
@@ -104,6 +110,8 @@ public class VectorNormaliser {
   public void process() {
     means = new ArrayList<Double>();
     standardDeviations = new ArrayList<Double>();
+
+    Log.out("num samples: " + numSamples);
 
     for (int i = 0; i < sum.size(); i++) {
       double expectedSum = sum.get(i) / numSamples;
