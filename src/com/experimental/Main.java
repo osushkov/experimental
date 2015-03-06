@@ -816,7 +816,7 @@ public class Main {
     List<DocumentNameGenerator.DocumentType> docTypesToProcess =
         Lists.newArrayList(DocumentNameGenerator.DocumentType.WEBSITE);
     DocumentStream documentStream = new DocumentStream(Constants.DOCUMENTS_OUTPUT_PATH);
-    documentStream.setDocumentLimit(1000);
+    documentStream.setDocumentLimit(10);
     documentStream.streamDocuments(docTypesToProcess, new DocumentStream.DocumentStreamOutput() {
       @Override
       public void processDocument(final Document document) {

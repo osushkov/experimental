@@ -1,6 +1,7 @@
 package com.experimental.classifier;
 
 import com.experimental.Constants;
+import com.experimental.utils.Log;
 import com.google.common.base.Preconditions;
 
 import java.io.*;
@@ -107,6 +108,10 @@ public class VectorNormaliser {
     for (int i = 0; i < sum.size(); i++) {
       double expectedSum = sum.get(i) / numSamples;
       double expectedSumOfSquares = sumOfSquares.get(i) / numSamples;
+
+      if (expectedSumOfSquares - expectedSum*expectedSum < 0.0) {
+        Log.out("blah: " + expectedSum + " " + expectedSumOfSquares);
+      }
 
       means.add(expectedSum);
       standardDeviations.add(Math.sqrt(expectedSumOfSquares - expectedSum*expectedSum));
