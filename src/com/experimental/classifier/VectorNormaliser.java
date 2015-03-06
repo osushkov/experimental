@@ -94,6 +94,7 @@ public class VectorNormaliser {
 
     for (int i = 0; i < vector.size(); i++) {
       if (!Double.isFinite(vector.get(i)) || Double.isNaN(vector.get(i))) {
+        Log.out("invalid vector, skipping");
         return;
       }
     }
