@@ -821,20 +821,24 @@ public class Main {
       @Override
       public void processDocument(final Document document) {
         if (document instanceof  WebsiteDocument) {
-          Set<KeywordCandidateGenerator.KeywordCandidate> candidates =
-              candidateGenerator.generateCandidates((WebsiteDocument) document);
+          try {
+            Set<KeywordCandidateGenerator.KeywordCandidate> candidates =
+                candidateGenerator.generateCandidates((WebsiteDocument) document);
 
-          List<KeywordVector> vectors =
-              keywordVectoriser.vectoriseKeywordCandidates(candidates, (WebsiteDocument) document);
+            List<KeywordVector> vectors =
+                keywordVectoriser.vectoriseKeywordCandidates(candidates, (WebsiteDocument) document);
 
-          for (KeywordVector vector : vectors) {
-            if (vector.keyword.phraseLemmas.size() == 1) {
-              oneWordNormaliser.addVector(vector.vector);
-            } else if (vector.keyword.phraseLemmas.size() == 2) {
-              twoWordNormaliser.addVector(vector.vector);
-            } else if (vector.keyword.phraseLemmas.size() == 3) {
-              threeWordNormaliser.addVector(vector.vector);
+            for (KeywordVector vector : vectors) {
+              if (vector.keyword.phraseLemmas.size() == 1) {
+                oneWordNormaliser.addVector(vector.vector);
+              } else if (vector.keyword.phraseLemmas.size() == 2) {
+                twoWordNormaliser.addVector(vector.vector);
+              } else if (vector.keyword.phraseLemmas.size() == 3) {
+                threeWordNormaliser.addVector(vector.vector);
+              }
             }
+          } catch (Throwable e) {
+            
           }
         }
       }
