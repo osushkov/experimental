@@ -80,7 +80,7 @@ public class Main {
 
 //    aggregateLemmaQuality();
 
-    testKeywordVectoriser();
+//    testKeywordVectoriser();
 //    testAdTextGenerator();
 //    generateBasisVector();
 //    vectoriseDocuments();
@@ -112,7 +112,7 @@ public class Main {
 
 //    clusterDocuments();
 //    testKLDivergence();
-//    trainClassifier();
+    trainClassifier();
 
 //    testClassifier();
 //    testKeywordCandidateExtraction();

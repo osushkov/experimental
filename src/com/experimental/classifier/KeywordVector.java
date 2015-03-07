@@ -36,4 +36,10 @@ public class KeywordVector {
 
     return buffer.toString();
   }
+
+  public void standardise(VectorNormaliser normaliser) {
+    List<Double> normalised = normaliser.getStandardised(vector);
+    vector.clear();
+    vector.addAll(normalised);
+  }
 }

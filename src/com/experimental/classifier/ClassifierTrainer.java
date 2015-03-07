@@ -58,6 +58,11 @@ public class ClassifierTrainer {
   private final KeywordVectoriser keywordVectoriser;
   private final KeywordCandidateGenerator candidateGenerator;
 
+  private final VectorNormaliser normaliserOneKeyword;
+  private final VectorNormaliser normaliserTwoKeywords;
+  private final VectorNormaliser normaliserThreeKeywords;
+
+
   public ClassifierTrainer(KeywordCandidateGenerator candidateGenerator, KeywordVectoriser keywordVectoriser) {
     SparkConf conf = new SparkConf()
         .setAppName("myApp")
@@ -68,6 +73,18 @@ public class ClassifierTrainer {
 
     this.keywordVectoriser = Preconditions.checkNotNull(keywordVectoriser);
     this.candidateGenerator = Preconditions.checkNotNull(candidateGenerator);
+
+    this.normaliserOneKeyword = new VectorNormaliser();
+    this.normaliserTwoKeywords = new VectorNormaliser();
+    this.normaliserThreeKeywords = new VectorNormaliser();
+
+    try {
+      this.normaliserOneKeyword.tryLoad("normaliser_one.txt");
+      this.normaliserTwoKeywords.tryLoad("normaliser_two.txt");
+      this.normaliserThreeKeywords.tryLoad("normaliser_three.txt");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public LearnedModel train() {
@@ -143,6 +160,7 @@ public class ClassifierTrainer {
       List<KeywordVector> vectors = keywordVectoriser.vectoriseKeywordCandidates(candidates, document);
 
       for (KeywordVector vector : vectors) {
+        standardiseVector(vector);
         double[] doubleVec = Common.listOfDoubleToArray(vector.vector);
 
         boolean isGood = false;
@@ -246,6 +264,7 @@ public class ClassifierTrainer {
 
     TrainingData result = new TrainingData();
     for (KeywordVector vector : vectors) {
+      standardiseVector(vector);
       if (isKeywordPositive(vector.keyword, bundle)) {
         addKeywordVector(1.0, vector, result);
 //          Log.out("+ " + vector.toString());
@@ -257,6 +276,16 @@ public class ClassifierTrainer {
     }
 
     return result;
+  }
+
+  private void standardiseVector(KeywordVector vector) {
+    if (vector.keyword.phraseLemmas.size() == 1) {
+      vector.standardise(normaliserOneKeyword);
+    } else if (vector.keyword.phraseLemmas.size() == 2) {
+      vector.standardise(normaliserTwoKeywords);
+    } else if (vector.keyword.phraseLemmas.size() == 3) {
+      vector.standardise(normaliserThreeKeywords);
+    }
   }
 
   private boolean isKeywordPositive(KeywordCandidateGenerator.KeywordCandidate candidate,
