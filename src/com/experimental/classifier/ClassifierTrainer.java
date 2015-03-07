@@ -193,8 +193,8 @@ public class ClassifierTrainer {
     trainingData.cache();
 
     int numIterations = 5000;
-//    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
-    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
+    final SVMModel model = SVMWithSGD.train(trainingData.rdd(), numIterations);
+//    final LogisticRegressionModel model = LogisticRegressionWithSGD.train(trainingData.rdd(), numIterations);
 //    final NaiveBayesModel model = NaiveBayes.train(trainingData.rdd());
 //    model.clearThreshold();
 
